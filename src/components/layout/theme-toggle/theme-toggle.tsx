@@ -8,7 +8,7 @@ import { Icon } from '@/components/ui/icon'
 
 type CompProps = {}
 
-export const ThemeToggle = ({}: CompProps) => {
+const ThemeToggle = ({}: CompProps) => {
   const { setTheme } = useTheme()
   return (
     <DropdownMenu>
@@ -35,3 +35,5 @@ export const ThemeToggle = ({}: CompProps) => {
     </DropdownMenu>
   )
 }
+
+export default ThemeToggle
