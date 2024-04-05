@@ -2,7 +2,6 @@ import React from 'react'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import { Icon } from '@/components/ui/icon'
-import UserLoginForm from '@/components/forms/auth/user-login-form'
 import UserRegisterForm from '@/components/forms/auth/user-register-form'
 
 const Page = () => {

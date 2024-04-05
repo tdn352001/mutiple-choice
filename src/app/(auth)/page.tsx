@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import { cn } from '@/lib/utils'
@@ -15,7 +15,9 @@ const Page = () => {
           <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
           <p className="text-sm text-muted-foreground">Enter your email to sign in to your account</p>
         </div>
-        <UserLoginForm />
+        <Suspense>
+          <UserLoginForm />
+        </Suspense>
         <p className="px-8 text-center text-sm text-muted-foreground">
           <Link href="/register" className="hover:text-brand underline underline-offset-4">
             Don&apos;t have an account? Sign Up

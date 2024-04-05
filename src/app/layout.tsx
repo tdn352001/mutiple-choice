@@ -1,5 +1,5 @@
 import '@/assets/styles/globals.css'
-import Providers from '@/components/layout/providers'
+import AppProviders from '@/components/layout/providers/app-providers'
 import { Toaster } from '@/components/ui/toaster'
 import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
@@ -23,10 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
-        <Providers>
+        <AppProviders>
           {children}
           <Toaster />
-        </Providers>
+        </AppProviders>
       </body>
     </html>
   )

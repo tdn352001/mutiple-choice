@@ -14,8 +14,10 @@ const SvgIcon = (props: SvgIconProps) => {
   }
 }
 
+type IconName = keyof typeof icons
+
 type IconProps = LucideProps & {
-  name: keyof typeof icons
+  name: IconName
 }
 
 const Icon = ({ name, color = 'currentColor', size = 20, ...props }: IconProps) => {
@@ -24,4 +26,4 @@ const Icon = ({ name, color = 'currentColor', size = 20, ...props }: IconProps) 
   return <LucideIcon color={color} size={size} {...props} />
 }
 
-export { SvgIcon, type SvgIconProps, Icon, type IconProps }
+export { SvgIcon, type SvgIconProps, Icon, type IconProps, type IconName }

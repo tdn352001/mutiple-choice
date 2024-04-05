@@ -2,19 +2,15 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Role } from '@/configs/types/role'
+import { routers } from '@/lib/constants/routers'
+import { Role } from '@/lib/types/role'
+import { useLoginMutation } from '@/hooks/services/auth'
+import { LoginSchema, loginSchema } from '@/lib/schemas/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import * as z from 'zod'
 
-const formSchema = z.object({
-  email: z.string().email({ message: 'Enter a valid email address' }),
-  password: z.string().min(1, { message: 'Password is required' }),
-})
-
-type UserFormValue = z.infer<typeof formSchema>
+type UserFormValue = LoginSchema
 
 type UserAuthFormProps = {
   role?: Role
@@ -22,28 +18,41 @@ type UserAuthFormProps = {
 
 export default function UserLoginForm({ role = Role.User }: UserAuthFormProps) {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const callbackUrl = searchParams.get('callbackUrl')
 
-  const [loading, setLoading] = useState(false)
+  const { isPending, mutateAsync: login } = useLoginMutation()
 
   const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(loginSchema),
     shouldUseNativeValidation: false,
+    defaultValues: {
+      username: '',
+      password: '',
+    },
   })
 
-  const handleSubmit = async (data: UserFormValue) => {}
+  const handleSubmit = async (formValue: UserFormValue) => {
+    login(formValue)
+      .then((res) => {
+        console.log({ res })
+        const path = role === Role.Admin ? routers.admin.dashboard : routers.dashboard
+        router.push(callbackUrl ?? path)
+      })
+      .catch(() => {})
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
         <FormField
           control={form.control}
-          name="email"
+          name="username"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email..." disabled={loading} {...field} />
+                <Input type="email" placeholder="Enter your email..." disabled={isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -57,14 +66,14 @@ export default function UserLoginForm({ role = Role.User }: UserAuthFormProps) {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Enter your password..." disabled={loading} {...field} />
+                <Input type="password" placeholder="Enter your password..." disabled={isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button disabled={loading} className="ml-auto w-full" type="submit">
+        <Button disabled={isPending} className="ml-auto w-full" type="submit">
           Continue With Email
         </Button>
       </form>

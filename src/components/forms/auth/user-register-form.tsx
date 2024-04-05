@@ -2,32 +2,32 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useRegisterMutation } from '@/hooks/services/auth'
+import { RegisterSchema, registerSchema } from '@/lib/schemas/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import * as z from 'zod'
 
-const formSchema = z
-  .object({
-    email: z.string().email({ message: 'Enter a valid email address' }),
-    password: z.string().min(1, { message: 'Password is required' }),
-    confirmPassword: z.string().min(1, { message: 'Confirm Password is required' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'], // path of error
-  })
-
-type UserFormValue = z.infer<typeof formSchema>
+type UserRegisterFormValue = RegisterSchema
 
 export default function UserRegisterForm() {
-  const [loading, setLoading] = useState(false)
-
-  const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UserRegisterFormValue>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
   })
 
-  const handleSubmit = async (data: UserFormValue) => {}
+  const { isPending, mutateAsync: register } = useRegisterMutation()
+
+  const handleSubmit = async (formValue: UserRegisterFormValue) => {
+    register({
+      email: formValue.email,
+      password: formValue.password,
+      full_Name: '',
+    })
+  }
 
   return (
     <Form {...form}>
@@ -39,7 +39,7 @@ export default function UserRegisterForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email..." disabled={loading} {...field} />
+                <Input type="email" placeholder="Enter your email..." disabled={isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -53,7 +53,7 @@ export default function UserRegisterForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Enter your password..." disabled={loading} {...field} />
+                <Input type="password" placeholder="Enter your password..." disabled={isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -67,14 +67,14 @@ export default function UserRegisterForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Confirm your password..." disabled={loading} {...field} />
+                <Input type="password" placeholder="Confirm your password..." disabled={isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button disabled={loading} className="ml-auto w-full" type="submit">
+        <Button disabled={isPending} className="ml-auto w-full" type="submit">
           Continue With Email
         </Button>
       </form>
