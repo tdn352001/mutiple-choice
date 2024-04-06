@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { Icon } from '@/components/ui/icon'
 import UserLoginForm from '@/components/forms/auth/user-login-form'
+import { getDocumentTitle } from '@/lib/get-document-title'
+import { routers } from '@/lib/constants/routers'
 
 const Page = () => {
   return (
@@ -29,8 +31,8 @@ const Page = () => {
 }
 
 export const metadata: Metadata = {
-  title: 'Login',
-  description: 'Login to your account',
+  title: getDocumentTitle({ pathname: routers.login }),
+  description: 'Đăng nhập vào tài khoản của bạn',
 }
 
 export default Page

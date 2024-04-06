@@ -1,5 +1,8 @@
 import Header from '@/components/layout/dashboard/header'
 import Sidebar from '@/components/layout/dashboard/sidebar'
+import { routers } from '@/lib/constants/routers'
+import { getDocumentTitle } from '@/lib/get-document-title'
+import { Metadata } from 'next'
 import React, { PropsWithChildren } from 'react'
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -12,6 +15,10 @@ const Layout = ({ children }: PropsWithChildren) => {
       </div>
     </>
   )
+}
+
+export const metadata: Metadata = {
+  title: getDocumentTitle({ pathname: routers.dashboard }),
 }
 
 export default Layout

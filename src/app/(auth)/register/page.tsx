@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { Icon } from '@/components/ui/icon'
 import UserRegisterForm from '@/components/forms/auth/user-register-form'
+import { routers } from '@/lib/constants/routers'
+import { getDocumentTitle } from '@/lib/get-document-title'
 
 const Page = () => {
   return (
@@ -31,8 +33,8 @@ const Page = () => {
 }
 
 export const metadata: Metadata = {
-  title: 'Login',
-  description: 'Login to your account',
+  title: getDocumentTitle({ pathname: routers.register }),
+  description: 'Đăng nhập vào tài khoản của bạn',
 }
 
 export default Page

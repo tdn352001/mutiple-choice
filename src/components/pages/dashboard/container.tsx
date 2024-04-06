@@ -5,7 +5,7 @@ type ContainerProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElemen
 
 const Container = ({ className, children, ...props }: ContainerProps) => {
   return (
-    <div className={cn('flex-1 space-y-4  p-4 md:p-8 pt-6', className)} {...props}>
+    <div className={cn('flex-1 space-y-4 p-4 md:p-8 pt-6', className)} {...props}>
       {children}
     </div>
   )

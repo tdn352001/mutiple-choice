@@ -6,6 +6,8 @@ import { buttonVariants } from '@/components/ui/button'
 import { Icon } from '@/components/ui/icon'
 import UserLoginForm from '@/components/forms/auth/user-login-form'
 import { Role } from '@/lib/types/role'
+import { routers } from '@/lib/constants/routers'
+import { getDocumentTitle } from '@/lib/get-document-title'
 
 const Page = () => {
   return (
@@ -25,7 +27,7 @@ const Page = () => {
 }
 
 export const metadata: Metadata = {
-  title: 'Login',
+  title: getDocumentTitle({ pathname: routers.register }),
   description: 'Login to your account',
 }
 
