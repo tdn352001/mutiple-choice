@@ -7,22 +7,18 @@ import { cn } from '@/lib/utils'
 import { Dispatch, SetStateAction } from 'react'
 import { Icon } from '@/components/ui/icon'
 import { NavItem } from '@/lib/types/nav'
+import { navItems } from '@/lib/constants/nav'
 
 interface DashboardNavProps {
-  items: NavItem[]
   setOpen?: Dispatch<SetStateAction<boolean>>
 }
 
-export function DashboardNav({ items, setOpen }: DashboardNavProps) {
+export function DashboardNav({ setOpen }: DashboardNavProps) {
   const path = usePathname()
-
-  if (!items?.length) {
-    return null
-  }
 
   return (
     <nav className="grid items-start gap-2">
-      {items.map((item, index) => {
+      {navItems.map((item, index) => {
         return (
           item.href && (
             <Link

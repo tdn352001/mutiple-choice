@@ -1,40 +1,23 @@
+import { routers } from '@/lib/constants/routers'
 import { NavItem } from '@/lib/types/nav'
 
 export const navItems: NavItem[] = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
+    title: 'Trang chủ',
+    href: routers.dashboard,
     icon: 'Home',
     label: 'Dashboard',
   },
   {
-    title: 'User',
-    href: '/dashboard/user',
-    icon: 'Home',
+    title: 'Khóa học',
+    href: routers.courses,
+    icon: 'School',
     label: 'user',
   },
   {
-    title: 'Employee',
+    title: 'Thành viên',
     href: '/dashboard/employee',
-    icon: 'Home',
+    icon: 'Users',
     label: 'employee',
-  },
-  {
-    title: 'Profile',
-    href: '/dashboard/profile',
-    icon: 'Home',
-    label: 'profile',
-  },
-  {
-    title: 'Kanban',
-    href: '/dashboard/kanban',
-    icon: 'Home',
-    label: 'kanban',
-  },
-  {
-    title: 'Login',
-    href: '/',
-    icon: 'Home',
-    label: 'login',
   },
 ]
