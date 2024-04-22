@@ -1,12 +1,10 @@
-import { format } from 'path'
 import * as z from 'zod'
 
 export const courseSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  shorthand: z.string().optional(),
-  format: z.string(),
-  language: z.string(),
-  quantity: z.number(),
+  course_name: z.string().min(1, 'Required field'),
+  course_code: z.string().min(1, 'Required field'),
+  description: z.string().min(1, 'Required field'),
+  active: z.boolean().optional(),
 })
 
 export type CourseSchema = z.infer<typeof courseSchema>
