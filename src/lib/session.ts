@@ -23,6 +23,10 @@ export class SessionManager {
       deleteCookie(ACCESS_TOKEN_KEY);
     }
   }
+
+  removeAccessToken() {
+    this.accessToken = undefined;
+  }
 }
 
 export const sessionManager = new SessionManager();
