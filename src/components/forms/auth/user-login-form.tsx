@@ -1,58 +1,89 @@
-'use client'
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { routers } from '@/lib/constants/routers'
-import { Role } from '@/lib/types/role'
-import { useLoginMutation } from '@/hooks/services/auth'
-import { LoginSchema, loginSchema } from '@/lib/schemas/auth'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useForm } from 'react-hook-form'
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { routers } from "@/lib/constants/routers";
+import { useLoginMutation } from "@/hooks/services/auth";
+import { LoginSchema, loginSchema } from "@/lib/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useUserStore } from "@/store/user";
+import { sessionManager } from "@/lib/session";
+import { useClientSearchParams } from "@/hooks/next";
 
-type UserFormValue = LoginSchema
+type UserFormValue = LoginSchema;
 
-type UserAuthFormProps = {
-  role?: Role
-}
+export default function UserLoginForm() {
+  const router = useRouter();
 
-export default function UserLoginForm({ role = Role.User }: UserAuthFormProps) {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const callbackUrl = searchParams.get('callbackUrl')
+  const setUser = useUserStore((state) => state.setUser);
 
-  const { isPending, mutateAsync: login } = useLoginMutation()
+  const [error, setError] = useState("");
+  const searchParams = useClientSearchParams();
+
+  const { isPending, mutateAsync: login } = useLoginMutation();
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(loginSchema),
     shouldUseNativeValidation: false,
     defaultValues: {
-      username: '',
-      password: '',
+      email: "",
+      password: "",
     },
-  })
+  });
 
   const handleSubmit = async (formValue: UserFormValue) => {
-    login(formValue)
+    return login(formValue)
       .then((res) => {
-        console.log({ res })
-        const path = role === Role.Admin ? routers.admin.dashboard : routers.dashboard
-        router.push(callbackUrl ?? path)
+        const { token, user } = res.data;
+        if (user.active) {
+          setUser(user);
+          sessionManager.accessToken = token;
+
+          const callbackUrl = searchParams.get("callbackUrl");
+          console.log({ callbackUrl });
+          const isValidCallbackUrl = callbackUrl && callbackUrl.startsWith("/");
+          router.push(isValidCallbackUrl ? callbackUrl : routers.dashboard);
+        } else {
+          sessionManager.tempAccessToken = token;
+          router.push(
+            `${routers.verifyAccount}?email=${user.email}&isAuth=true`,
+          );
+        }
       })
-      .catch(() => {})
-  }
+      .catch((err) => {
+        setError(err.message || "Something went wrong!");
+      });
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-4 w-full"
+      >
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email..." disabled={isPending} {...field} />
+                <Input
+                  type="email"
+                  placeholder="Enter your email..."
+                  disabled={isPending}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -66,7 +97,12 @@ export default function UserLoginForm({ role = Role.User }: UserAuthFormProps) {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Enter your password..." disabled={isPending} {...field} />
+                <Input
+                  type="password"
+                  placeholder="Enter your password..."
+                  disabled={isPending}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,5 +114,5 @@ export default function UserLoginForm({ role = Role.User }: UserAuthFormProps) {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

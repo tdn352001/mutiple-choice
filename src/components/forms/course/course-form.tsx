@@ -1,52 +1,63 @@
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { courseSchema, CourseSchema } from '@/lib/schemas/course'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+"use client";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { courseSchema, CourseSchema } from "@/lib/schemas/course";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-type FormValue = CourseSchema
+type FormValue = CourseSchema;
 
 interface CourseFormProps {
-  defaultValues?: Partial<FormValue>
+  defaultValues?: Partial<FormValue>;
 }
 
 const fields = [
   {
-    name: 'course_name',
-    label: 'Course Name',
+    name: "course_name",
+    label: "Course Name",
   },
   {
-    name: 'course_code',
-    label: 'Course Code',
+    name: "course_code",
+    label: "Course Code",
   },
   {
-    name: 'description',
-    label: 'Description',
+    name: "description",
+    label: "Description",
   },
-]
+];
 
 const CourseForm = ({ defaultValues = {} }: CourseFormProps) => {
   const form = useForm<FormValue>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
-      course_name: '',
-      course_code: '',
-      description: '',
+      course_name: "",
+      course_code: "",
+      description: "",
       active: false,
       ...defaultValues,
     },
-  })
+  });
 
-  const isPending = false
+  const isPending = false;
 
-  const handleSubmit = async (formValue: FormValue) => {}
+  const handleSubmit = async (formValue: FormValue) => {};
 
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-4 w-full"
+        >
           {fields.map(({ label, name, ...inputProps }) => (
             <FormField
               key={name}
@@ -56,7 +67,11 @@ const CourseForm = ({ defaultValues = {} }: CourseFormProps) => {
                 <FormItem>
                   <FormLabel>{label}</FormLabel>
                   <FormControl>
-                    <Input invalid={invalid} {...(field as any)} {...inputProps} />
+                    <Input
+                      invalid={invalid}
+                      {...(field as any)}
+                      {...inputProps}
+                    />
                   </FormControl>
                   <FormMessage {...field} />
                 </FormItem>
@@ -74,7 +89,10 @@ const CourseForm = ({ defaultValues = {} }: CourseFormProps) => {
                   <span>Active Course: </span>
                 </FormLabel>
                 <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -86,7 +104,7 @@ const CourseForm = ({ defaultValues = {} }: CourseFormProps) => {
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};
 
-export default CourseForm
+export default CourseForm;

@@ -2,24 +2,37 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { Icon } from "@/components/ui/icon";
-import UserRegisterForm from "@/components/forms/auth/user-register-form";
 import { routers } from "@/lib/constants/routers";
 import { getDocumentTitle } from "@/lib/get-document-title";
+import UseVerifyAccountForm from "@/components/forms/auth/verify-account-form";
+import { redirect } from "next/navigation";
 
-const Page = () => {
+const Page = (props: {
+  searchParams: { email?: string | string[]; isAuth?: boolean };
+}) => {
+  const searchParams = props.searchParams;
+  const email = Array.isArray(searchParams.email)
+    ? searchParams.email[0]
+    : searchParams.email;
+
+  const isAuth = searchParams.isAuth;
+  if (!email) {
+    return redirect(routers.login);
+  }
+
   return (
     <div className="container flex min-h-dvh min-w-full py-4 flex-col items-center justify-center">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
           <Icon name="Command" className="mx-auto h-6 w-6" />
           <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back
+            Verify your account
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email to sign in to your account
+            Check your email for the verification code
           </p>
         </div>
-        <UserRegisterForm />
+        <UseVerifyAccountForm email={email} isAuth={isAuth} />
         <p className="px-8 text-center text-sm text-muted-foreground">
           <Link
             href={routers.login}
@@ -34,8 +47,8 @@ const Page = () => {
 };
 
 export const metadata: Metadata = {
-  title: getDocumentTitle({ pathname: routers.register }),
-  description: "Đăng nhập vào tài khoản của bạn",
+  title: getDocumentTitle({ pathname: routers.verifyAccount }),
+  description: "Xác thực tài khoản",
 };
 
 export default Page;

@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
-import ThemeProvider from './theme-provider'
-import QueryProvider from './query-provider'
+import ThemeProvider from "./theme-provider";
+import QueryProvider from "./query-provider";
+import AuthProvider from "@/components/layout/providers/auth-provider";
+import { PropsWithChildren } from "react";
 
-interface ProvidersProps {
-  children?: React.ReactNode
-}
-
-const AppProviders = ({ children }: ProvidersProps) => {
+const AppProviders = ({ children }: PropsWithChildren) => {
   return (
     <ThemeProvider>
-      <QueryProvider>{children}</QueryProvider>
+      <QueryProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryProvider>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default AppProviders
+export default AppProviders;
