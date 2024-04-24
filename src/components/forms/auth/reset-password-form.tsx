@@ -1,64 +1,60 @@
 'use client'
-
-import { Button } from '@/components/ui/button'
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
-
 import ErrorAlert from '@/components/custom/error-alert'
+import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useResendActiveCodeMutation, useVerifyAccountMutation } from '@/hooks/services/auth'
+import { Input } from '@/components/ui/input'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
+import { useForgotPasswordMutation, useResetPasswordMutation } from '@/hooks/services/auth'
 import { routers } from '@/lib/constants/routers'
-import { VerifyAccountSchema, verifyAccountSchema } from '@/lib/schemas/auth'
-import { sessionManager } from '@/lib/session'
-import { userService } from '@/services/user'
-import { useUserStore } from '@/store/user'
+import { ResetPasswordSchema, resetPasswordSchema } from '@/lib/schemas/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { router } from 'next/client'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-type VerifyAccountFormValue = VerifyAccountSchema
+type ResetPasswordFormValue = ResetPasswordSchema
 
-interface UseVerifyAccountFormProps {
+interface ResetPasswordFormProps {
   email: string
-  isAuth?: boolean
 }
 
-export default function UseVerifyAccountForm({ email, isAuth }: UseVerifyAccountFormProps) {
-  const form = useForm<VerifyAccountFormValue>({
-    resolver: zodResolver(verifyAccountSchema),
+const fields = [
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    placeholder: 'Enter your password...',
+  },
+  {
+    name: 'confirmPassword',
+    label: 'Confirm Password',
+    type: 'password',
+    placeholder: 'Confirm your password...',
+  },
+]
+
+export default function ResetPasswordForm({ email }: ResetPasswordFormProps) {
+  const form = useForm<ResetPasswordFormValue>({
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
+      password: '',
+      confirm_password: '',
       activation_code: '',
     },
   })
 
-  const setUser = useUserStore((state) => state.setUser)
-
   const [error, setError] = useState('')
   const [resendCountDown, setResendCountDown] = useState(0)
 
-  const { isPending, mutateAsync: verifyAccount } = useVerifyAccountMutation()
-  const { isPending: isResending, mutateAsync: resendActiveCode } = useResendActiveCodeMutation()
+  const { isPending, mutateAsync: resetPassword } = useResetPasswordMutation()
+  const { isPending: isResending, mutateAsync: resendCode } = useForgotPasswordMutation()
 
-  const handleSubmit = async (formValue: VerifyAccountFormValue) => {
-    return verifyAccount({ ...formValue, email })
+  const handleSubmit = async (formValue: ResetPasswordFormValue) => {
+    return resetPassword({ ...formValue, email })
       .then(() => {
-        const tempToken = sessionManager.tempAccessToken
-        if (isAuth && tempToken) {
-          sessionManager.accessToken = tempToken
-          sessionManager.tempAccessToken = ''
-          userService
-            .getMe()
-            .then((res) => {
-              setUser(res.data.user)
-              router.push(routers.dashboard)
-            })
-            .catch(() => {
-              router.push(routers.login)
-            })
-        } else {
-          router.push(routers.login)
-        }
+        toast.success('Password updated successfully!')
+        router.push(routers.login)
       })
 
       .catch((err) => {
@@ -67,7 +63,7 @@ export default function UseVerifyAccountForm({ email, isAuth }: UseVerifyAccount
   }
 
   const handleResendCode = async () => {
-    return resendActiveCode({ email })
+    return resendCode({ email })
       .then(() => {
         toast.success('OTP sent successfully!')
         setResendCountDown(60)
@@ -98,6 +94,22 @@ export default function UseVerifyAccountForm({ email, isAuth }: UseVerifyAccount
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
         <ErrorAlert show={!!error} message={error} />
+        {fields.map(({ label, name, placeholder, type }) => (
+          <FormField
+            key={name}
+            control={form.control}
+            name={name as keyof ResetPasswordFormValue}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{label}</FormLabel>
+                <FormControl>
+                  <Input placeholder={placeholder} disabled={isPending} type={type} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
         <FormField
           control={form.control}
           name="activation_code"
