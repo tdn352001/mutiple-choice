@@ -1,77 +1,64 @@
-"use client";
-import ErrorAlert from "@/components/custom/error-alert";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useClientSearchParams } from "@/hooks/next";
-import { useLoginMutation } from "@/hooks/services/auth";
-import { routers } from "@/lib/constants/routers";
-import { LoginSchema, loginSchema } from "@/lib/schemas/auth";
-import { sessionManager } from "@/lib/session";
-import { useUserStore } from "@/store/user";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { getSearchParams } from "@/lib/get-search-params";
+'use client'
+import ErrorAlert from '@/components/custom/error-alert'
+import { Button } from '@/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { useClientSearchParams } from '@/hooks/next'
+import { useLoginMutation } from '@/hooks/services/auth'
+import { routers } from '@/lib/constants/routers'
+import { LoginSchema, loginSchema } from '@/lib/schemas/auth'
+import { sessionManager } from '@/lib/session'
+import { useUserStore } from '@/store/user'
+import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { getSearchParams } from '@/lib/get-search-params'
 
-type UserFormValue = LoginSchema;
+type UserFormValue = LoginSchema
 
 export default function UserLoginForm() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const setUser = useUserStore((state) => state.setUser);
+  const setUser = useUserStore((state) => state.setUser)
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('')
 
-  const { isPending, mutateAsync: login } = useLoginMutation();
+  const { isPending, mutateAsync: login } = useLoginMutation()
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-  });
+  })
 
   const handleSubmit = async (formValue: UserFormValue) => {
     return login(formValue)
       .then((res) => {
-        const { token, user } = res.data;
+        const { token, user } = res.data
         if (user.active) {
-          setUser(user);
-          sessionManager.accessToken = token;
-          const searchParams = getSearchParams();
-          const callbackUrl = searchParams.get("callbackUrl");
-          console.log({ callbackUrl });
-          const isValidCallbackUrl = callbackUrl && callbackUrl.startsWith("/");
-          router.push(isValidCallbackUrl ? callbackUrl : routers.dashboard);
+          setUser(user)
+          sessionManager.accessToken = token
+          const searchParams = getSearchParams()
+          const callbackUrl = searchParams.get('callbackUrl')
+          const isValidCallbackUrl = callbackUrl && callbackUrl.startsWith('/')
+          router.push(isValidCallbackUrl ? callbackUrl : routers.dashboard)
         } else {
-          sessionManager.tempAccessToken = token;
-          router.push(
-            `${routers.verifyAccount}?email=${user.email}&isAuth=true`,
-          );
+          sessionManager.tempAccessToken = token
+          router.push(`${routers.verifyAccount}?email=${user.email}&isAuth=true`)
         }
       })
       .catch((err) => {
-        setError(err.message || "Something went wrong!");
-      });
-  };
+        setError(err.message || 'Something went wrong!')
+      })
+  }
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-4 w-full"
-      >
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
         <ErrorAlert show={!!error} message={error} />
         <FormField
           control={form.control}
@@ -80,11 +67,7 @@ export default function UserLoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter your email..."
-                  disabled={isPending}
-                  {...field}
-                />
+                <Input placeholder="Enter your email..." disabled={isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,12 +81,7 @@ export default function UserLoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Enter your password..."
-                  disabled={isPending}
-                  {...field}
-                />
+                <Input type="password" placeholder="Enter your password..." disabled={isPending} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -111,10 +89,7 @@ export default function UserLoginForm() {
         />
 
         <p className="text-right text-sm text-muted-foreground">
-          <Link
-            href={routers.forgotPassword}
-            className="hover:text-brand underline-offset-4 hover:underline"
-          >
+          <Link href={routers.forgotPassword} className="hover:text-brand underline-offset-4 hover:underline">
             Forgot Password?
           </Link>
         </p>
@@ -124,5 +99,5 @@ export default function UserLoginForm() {
         </Button>
       </form>
     </Form>
-  );
+  )
 }

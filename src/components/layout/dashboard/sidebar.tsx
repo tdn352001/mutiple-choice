@@ -1,9 +1,12 @@
 import { DashboardNav } from '@/components/layout/dashboard/dashboard-nav'
-import { cn } from '@/lib/utils'
 
-export default function Sidebar() {
+interface SidebarProps {
+  className?: string
+}
+
+export default function Sidebar({ className }: SidebarProps) {
   return (
-    <nav className={cn(`relative hidden h-screen border-r pt-16 lg:block w-72`)}>
+    <nav className="hidden w-64 h-full relative border-r lg:block xl:w-72 ">
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <div className="space-y-1">
