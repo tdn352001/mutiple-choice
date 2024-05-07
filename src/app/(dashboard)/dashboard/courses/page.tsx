@@ -1,18 +1,20 @@
-"use client";
+'use client'
 
-import Breadcrumb from "@/components/custom/breadcrumb";
-import { CustomLink } from "@/components/custom/link";
-import Container from "@/components/pages/dashboard/container";
-import Heading from "@/components/pages/heading";
-import { courseBreadcrumb } from "@/lib/breadcrumb/course";
-import { routers } from "@/lib/constants/routers";
-import { getDocumentTitle } from "@/lib/get-document-title";
-import { Metadata } from "next";
-import React from "react";
-import { useUserStore } from "@/store/user";
+import Breadcrumb from '@/components/custom/breadcrumb'
+import { CustomLink } from '@/components/custom/link'
+import Container from '@/components/pages/dashboard/container'
+import Heading from '@/components/pages/heading'
+import { courseBreadcrumb } from '@/lib/breadcrumb/course'
+import { routers } from '@/lib/constants/routers'
+import { getDocumentTitle } from '@/lib/get-document-title'
+import { Metadata } from 'next'
+import React, { Suspense } from 'react'
+import { useUserStore } from '@/store/user'
+import SearchCourse from '@/components/pages/dashboard/course/search-course'
+import CourseTable from '@/components/pages/dashboard/course/course-table'
 
 const Page = () => {
-  const isAdmin = useUserStore((state) => state.user?.is_admin);
+  const isAdmin = useUserStore((state) => state.user?.is_admin)
   return (
     <Container>
       <Breadcrumb items={courseBreadcrumb} />
@@ -27,12 +29,16 @@ const Page = () => {
           )
         }
       />
+      <div>
+        <Suspense>
+          <SearchCourse />
+        </Suspense>
+        <Suspense>
+          <CourseTable />
+        </Suspense>
+      </div>
     </Container>
-  );
-};
+  )
+}
 
-// export const metadata: Metadata = {
-//   title: getDocumentTitle({ pathname: routers.courses }),
-// };
-
-export default Page;
+export default Page

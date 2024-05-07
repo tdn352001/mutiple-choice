@@ -1,14 +1,25 @@
 import { BaseApiQueryParams } from '@/lib/types/query-params'
 
-export type GetCourseSortProps = 'id' | 'name' | 'created_at' | 'updated_at'
-
-export type GetCourseParams = BaseApiQueryParams<GetCourseSortProps>
-
 export type Course = {
   id: number
   course_name: string
   description: string
   active: boolean
+}
+
+export type GetCourseParams = BaseApiQueryParams
+
+export type GetCourseResponse = {
+  data: {
+    courses: Course[]
+    meta: {
+      current_page: number
+      next_page?: number
+      prev_page?: number
+      total_pages: number
+      total_items: number
+    }
+  }
 }
 
 export type CreateCourseRequest = {

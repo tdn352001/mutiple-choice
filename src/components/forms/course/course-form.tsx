@@ -69,7 +69,7 @@ const CourseForm = () => {
                 <FormItem>
                   <FormLabel>{label}</FormLabel>
                   <FormControl>
-                    <Input invalid={invalid} {...(field as any)} {...inputProps} />
+                    <Input invalid={`${invalid}`} {...(field as any)} {...inputProps} />
                   </FormControl>
                   <FormMessage {...field} />
                 </FormItem>
