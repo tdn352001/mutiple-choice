@@ -3,7 +3,6 @@ import { useApiQuery } from '@/hooks/use-api-query'
 import { useCallback, useMemo } from 'react'
 import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
-import { DataTableColumnHeader } from '@/components/ui/data-table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { SearchParams } from '@/lib/types/query-params'
@@ -20,13 +19,14 @@ import {
 } from '@tanstack/react-table'
 import clsx from 'clsx'
 import { Edit, MoreHorizontal, Trash } from 'lucide-react'
+import { DataTableColumnHeader } from '@/components/custom/data-table/column-header'
 const sortProps = ['id', 'course_name', 'course_code']
 
 const columns: ColumnDef<Course>[] = [
   {
     accessorKey: 'course_name',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Name" />
+    header: (props) => {
+      return <DataTableColumnHeader title="Name" {...props} />
     },
     cell: ({ row }) => {
       return (
@@ -38,8 +38,8 @@ const columns: ColumnDef<Course>[] = [
   },
   {
     accessorKey: 'course_code',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Code" />
+    header: (props) => {
+      return <DataTableColumnHeader title="Code" {...props} />
     },
     cell: ({ row }) => {
       return (
@@ -81,7 +81,6 @@ const columns: ColumnDef<Course>[] = [
 
 const CourseTable = () => {
   const [params, paramsUpdater] = useApiQuery({ sortProps })
-  // const [sorting, setSorting] = React.useState<SortingState>([])
 
   const { data } = useGetCoursesSuspenseQuery(params)
   const courses = data?.courses || []
@@ -103,7 +102,6 @@ const CourseTable = () => {
     (updaterOrValue: Updater<SortingState>) => {
       if (typeof updaterOrValue === 'function') {
         const newSorting = updaterOrValue(sorting)
-        console.log({ newSorting })
         paramsUpdater.setMany({
           [SearchParams.Sort]: newSorting[0].id,
           [SearchParams.Order]: newSorting[0].desc ? 'DESC' : 'ASC',
@@ -148,7 +146,6 @@ const CourseTable = () => {
     data: courses,
     rowCount: itemsCount,
     columns,
-
     manualPagination: true,
     manualSorting: true,
     autoResetPageIndex: false,

@@ -9,10 +9,13 @@ const SearchCourse = () => {
   const keyword = searchParams.get(SearchParams.Search) || ''
 
   const handleSearch = (value: string) => {
-    searchParams.update(SearchParams.Search, value)
+    searchParams.set({
+      [SearchParams.Search]: value,
+      [SearchParams.Page]: '1',
+    })
   }
 
-  return <SearchBox onChange={handleSearch} onSubmit={handleSearch} />
+  return <SearchBox value={keyword} onChange={handleSearch} onSubmit={handleSearch} />
 }
 
 export default SearchCourse

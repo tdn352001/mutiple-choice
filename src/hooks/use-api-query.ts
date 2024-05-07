@@ -61,7 +61,6 @@ export const useApiQuery = (options: UseApiQueryOptions = {}): UseApiQueryReturn
     const createNewParams = (records: { [key in SearchParams]?: string | number }) => {
       const newParams = { ...params, ...records }
       if (!lodash.isEqual(newParams, params)) {
-        console.log({ newParams, params, records })
         searchParams.set(newParams)
       }
     }

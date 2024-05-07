@@ -1,36 +1,67 @@
-import { create } from "zustand";
+import { Course } from '@/services/courses'
+import { create } from 'zustand'
 
 enum Modals {
-  LOGOUT = "logoutModal",
-  UPDATE_PASSWORD = "updatePasswordModal",
+  LOGOUT = 'LOGOUT',
+  UPDATE_PASSWORD = 'UPDATE_PASSWORD',
+  DELETE_COURSE = 'DELETE_COURSE',
+}
+
+type ModalState<T = any> = {
+  show: boolean
+  data?: T
+  zIndex?: number
 }
 
 type State = {
-  modal: Record<Modals, boolean>;
-};
+  modal: {
+    [Modals.LOGOUT]?: ModalState
+    [Modals.DELETE_COURSE]?: ModalState<{ course: Course }>
+  }
+}
+
+type ModaType = keyof State['modal']
+type ModalData<T extends ModaType> = State['modal'][T] extends object ? State['modal'][T]['data'] : undefined
 
 type Actions = {
-  openModal: (modal: Modals) => void;
-  closeModal: (modal: Modals) => void;
-  closeAllModals: () => void;
-};
+  openModal: <T extends ModaType>(modal: ModaType, data: ModalData<T>) => void
+  closeModal: (modal: Modals) => void
+  closeAllModals: () => void
+}
 
 const initialState: State = {
-  modal: {
-    [Modals.LOGOUT]: false,
-    [Modals.UPDATE_PASSWORD]: false,
-  },
-};
+  modal: {},
+}
 
 export const useModalStore = create<State & Actions>((set) => ({
   modal: initialState.modal,
-  openModal: (modal) =>
-    set((state) => ({ modal: { ...state.modal, [modal]: true } })),
-  closeModal: (modal) =>
-    set((state) => ({ modal: { ...state.modal, [modal]: false } })),
-  closeAllModals: () => {
-    set({
-      modal: initialState.modal,
-    });
+  openModal: <T extends ModaType>(modal: T, data?: State['modal'][T], zIndex?: number) => {
+    set((state) => {
+      return {
+        modal: {
+          ...state.modal,
+          [modal]: {
+            show: true,
+            data,
+            zIndex: zIndex,
+          },
+        },
+      }
+    })
   },
-}));
+  closeModal: (modal) => {
+    set((state) => {
+      return {
+        modal: {
+          ...state.modal,
+          [modal]: {
+            show: false,
+          },
+        },
+      }
+    })
+  },
+  closeAllModals: () => {
+    set(initialState)
+  },
+}))
