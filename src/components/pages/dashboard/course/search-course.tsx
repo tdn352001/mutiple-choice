@@ -15,7 +15,14 @@ const SearchCourse = () => {
     })
   }
 
-  return <SearchBox value={keyword} onChange={handleSearch} onSubmit={handleSearch} />
+  return (
+    <SearchBox
+      value={keyword}
+      onChange={handleSearch}
+      onSubmit={handleSearch}
+      placeholder="Search courses by name or code"
+    />
+  )
 }
 
 export default SearchCourse

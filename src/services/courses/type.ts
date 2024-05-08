@@ -38,3 +38,7 @@ export type CreateCourseResponse = {
 export type UpdateCourseRequest = CreateCourseRequest
 
 export type UpdateCourseResponse = CreateCourseResponse
+
+export type DeleteCourseRequest = {
+  new_course_id: string
+}

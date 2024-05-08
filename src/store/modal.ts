@@ -1,15 +1,17 @@
 import { Course } from '@/services/courses'
+import { useCallback } from 'react'
+import { NonUndefined } from 'react-hook-form'
 import { create } from 'zustand'
 
-enum Modals {
+export enum Modals {
   LOGOUT = 'LOGOUT',
   UPDATE_PASSWORD = 'UPDATE_PASSWORD',
   DELETE_COURSE = 'DELETE_COURSE',
 }
 
-type ModalState<T = any> = {
-  show: boolean
-  data?: T
+type ModalState<T = undefined> = {
+  open: boolean
+  data?: T | undefined
   zIndex?: number
 }
 
@@ -21,10 +23,13 @@ type State = {
 }
 
 type ModaType = keyof State['modal']
-type ModalData<T extends ModaType> = State['modal'][T] extends object ? State['modal'][T]['data'] : undefined
+type ModalOriginData<T extends ModaType> = NonUndefined<State['modal'][T]>['data']
+type ModalData<T extends ModaType> = NonUndefined<ModalOriginData<T>> extends undefined
+  ? any
+  : NonUndefined<ModalOriginData<T>>
 
 type Actions = {
-  openModal: <T extends ModaType>(modal: ModaType, data: ModalData<T>) => void
+  openModal: <T extends ModaType>(modal: T, data: ModalData<T>, zIndex?: number) => void
   closeModal: (modal: Modals) => void
   closeAllModals: () => void
 }
@@ -35,14 +40,15 @@ const initialState: State = {
 
 export const useModalStore = create<State & Actions>((set) => ({
   modal: initialState.modal,
-  openModal: <T extends ModaType>(modal: T, data?: State['modal'][T], zIndex?: number) => {
+  openModal: (modal, data, zIndex) => {
+    console.log({ modal, data, zIndex })
     set((state) => {
       return {
         modal: {
           ...state.modal,
           [modal]: {
-            show: true,
-            data,
+            open: true,
+            data: data,
             zIndex: zIndex,
           },
         },
@@ -65,3 +71,25 @@ export const useModalStore = create<State & Actions>((set) => ({
     set(initialState)
   },
 }))
+
+export const useOpenModal = <T extends ModaType>(modal: T) => {
+  const openModal = useModalStore((state) => state.openModal)
+  return useCallback(
+    (data: ModalData<T>, zIndex?: number) => {
+      openModal(modal, data, zIndex)
+    },
+    [modal, openModal]
+  )
+}
+
+export const useCloseModal = (modal: Modals) => {
+  const closeModal = useModalStore((state) => state.closeModal)
+  return useCallback(
+    (open: boolean) => {
+      if (!open) {
+        closeModal(modal)
+      }
+    },
+    [closeModal, modal]
+  )
+}

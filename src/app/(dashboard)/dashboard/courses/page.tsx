@@ -12,6 +12,7 @@ import React, { Suspense } from 'react'
 import { useUserStore } from '@/store/user'
 import SearchCourse from '@/components/pages/dashboard/course/search-course'
 import CourseTable from '@/components/pages/dashboard/course/course-table'
+import { DeleteCourseModal } from '@/components/pages/dashboard/course/delete-course-modal'
 
 const Page = () => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
@@ -37,6 +38,7 @@ const Page = () => {
           <CourseTable />
         </Suspense>
       </div>
+      <DeleteCourseModal />
     </Container>
   )
 }

@@ -20,64 +20,8 @@ import {
 import clsx from 'clsx'
 import { Edit, MoreHorizontal, Trash } from 'lucide-react'
 import { DataTableColumnHeader } from '@/components/custom/data-table/column-header'
+import { Modals, useModalStore, useOpenModal } from '@/store/modal'
 const sortProps = ['id', 'course_name', 'course_code']
-
-const columns: ColumnDef<Course>[] = [
-  {
-    accessorKey: 'course_name',
-    header: (props) => {
-      return <DataTableColumnHeader title="Name" {...props} />
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center space-x-2">
-          <span className="line-clamp-2">{row.getValue('course_name')}</span>
-        </div>
-      )
-    },
-  },
-  {
-    accessorKey: 'course_code',
-    header: (props) => {
-      return <DataTableColumnHeader title="Code" {...props} />
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="min-w-28 flex items-center space-x-2">
-          <span className="block whitespace-nowrap">{row.getValue('course_code')}</span>
-        </div>
-      )
-    },
-    meta: {
-      className: 'hidden md:table-cell',
-    },
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal size={16} />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="min-w-32" align="end">
-            <DropdownMenuItem>
-              <Edit className="mr-2 h-4 w-4" />
-              <span>Chỉnh sửa</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive focus:text-destructive/90">
-              <Trash className="mr-2 h-4 w-4" />
-              <span>Xóa</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
 
 const CourseTable = () => {
   const [params, paramsUpdater] = useApiQuery({ sortProps })
@@ -140,6 +84,71 @@ const CourseTable = () => {
       }
     },
     [pagination, paramsUpdater]
+  )
+
+  const openModal = useOpenModal(Modals.DELETE_COURSE)
+
+  const columns: ColumnDef<Course>[] = useMemo(
+    () => [
+      {
+        accessorKey: 'course_name',
+        header: (props) => {
+          return <DataTableColumnHeader title="Name" {...props} />
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="flex items-center space-x-2">
+              <span className="line-clamp-2">{row.getValue('course_name')}</span>
+            </div>
+          )
+        },
+      },
+      {
+        accessorKey: 'course_code',
+        header: (props) => {
+          return <DataTableColumnHeader title="Code" {...props} />
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap">{row.getValue('course_code')}</span>
+            </div>
+          )
+        },
+        meta: {
+          className: 'hidden md:table-cell',
+        },
+      },
+      {
+        id: 'actions',
+        cell: ({ row }) => {
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <MoreHorizontal size={16} />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="min-w-32" align="end">
+                <DropdownMenuItem>
+                  <Edit className="mr-2 h-4 w-4" />
+                  <span>Chỉnh sửa</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive/90"
+                  onClick={() => openModal({ course: row.original })}
+                >
+                  <Trash className="mr-2 h-4 w-4" />
+                  <span>Xóa</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )
+        },
+      },
+    ],
+    [openModal]
   )
 
   const table = useReactTable({

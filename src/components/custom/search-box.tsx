@@ -10,9 +10,11 @@ interface SearchBoxProps {
   value?: string
   onChange?: (value: string) => void
   onSubmit?: (value: string) => void
+  autoFocus?: boolean
+  placeholder?: string
 }
 
-const SearchBox = ({ className, value, onChange }: SearchBoxProps) => {
+const SearchBox = ({ className, value, onChange, autoFocus, placeholder }: SearchBoxProps) => {
   const [keyword, setKeyword] = useState(value || '')
 
   const propagateChange = useDebouncedCallback((value: string) => {
@@ -41,7 +43,8 @@ const SearchBox = ({ className, value, onChange }: SearchBoxProps) => {
         className="pl-9 w-full !ring-transparent focus-visible:border-black/50"
         value={keyword}
         onChange={handleInputChange}
-        placeholder="Search courses by name or code"
+        placeholder={placeholder}
+        autoFocus={autoFocus}
       />
     </form>
   )

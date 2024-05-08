@@ -1,7 +1,8 @@
-import { getApi, postApi, putApi } from '@/lib/axios'
+import { deleteApi, getApi, postApi, putApi } from '@/lib/axios'
 import {
   CreateCourseRequest,
   CreateCourseResponse,
+  DeleteCourseRequest,
   GetCourseParams,
   GetCourseResponse,
   UpdateCourseRequest,
@@ -22,5 +23,10 @@ export const courseService = {
 
   updateCourse(id: string, request: UpdateCourseRequest) {
     return putApi<UpdateCourseResponse>(`/course/${id}`, request)
+  },
+  deleteCourse(id: string, request?: DeleteCourseRequest) {
+    return deleteApi(`/course/${id}`, {
+      params: request,
+    })
   },
 }
