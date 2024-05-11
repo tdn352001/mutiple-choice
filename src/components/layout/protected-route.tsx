@@ -1,5 +1,5 @@
+'use client'
 import { routers } from '@/lib/constants/routers'
-import { UserRole } from '@/lib/types/userRole'
 import { useUserStore } from '@/store/user'
 import { redirect } from 'next/navigation'
 import { ReactNode } from 'react'
@@ -7,26 +7,33 @@ import { ReactNode } from 'react'
 const IS_SERVER = typeof window === 'undefined'
 
 interface ProtectedRouteProps {
-  role?: UserRole
+  admin?: boolean
   children: ReactNode
 }
 
-const ProtectedRoute = ({ children, role = UserRole.User }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children, admin }: ProtectedRouteProps) => {
   const isCheckedAuth = useUserStore((state) => state.isCheckedAuth)
   const user = useUserStore.getState().user
+  console.log({ user })
 
   if (isCheckedAuth) {
-    if (!user) {
-      const callbackUrl = IS_SERVER ? routers.dashboard : window.location.pathname
-      return redirect(`${routers.login}?callbackUrl=${callbackUrl}`)
+    const havePermission = admin ? user?.is_admin : user
+
+    if (havePermission) {
+      return children
     }
 
-    if (role === UserRole.Admin && user?.is_admin) {
-      return redirect(routers.dashboard)
+    if (!user) {
+      const callbackUrl = IS_SERVER ? routers.dashboard : window.location.pathname
+      redirect(`${routers.login}?callbackUrl=${callbackUrl}`)
+    }
+
+    if (!havePermission) {
+      redirect(routers.dashboard)
     }
   }
 
-  return children
+  return <></>
 }
 
 export default ProtectedRoute
