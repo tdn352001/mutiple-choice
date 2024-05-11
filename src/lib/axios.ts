@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { sessionManager } from '@/lib/session'
+import { API_URL } from '@/lib/constants/api'
 
 export interface ApiError {
   code?: number | string
@@ -8,7 +9,7 @@ export interface ApiError {
 }
 
 const axiosClient = axios.create({
-  baseURL: 'https://duane1804.info.vn/api',
+  baseURL: API_URL,
 })
 
 axiosClient.interceptors.request.use((config) => {

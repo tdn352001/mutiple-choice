@@ -1,12 +1,15 @@
-import { useGetCoursesSuspenseQuery } from '@/hooks/services/courses'
-import { useApiQuery } from '@/hooks/use-api-query'
-import { useCallback, useMemo } from 'react'
+import { DataTableColumnHeader } from '@/components/custom/data-table/column-header'
 import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useGetCoursesSuspenseQuery } from '@/hooks/services/courses'
+import { useApiQuery } from '@/hooks/use-api-query'
+import { dynamicRouters } from '@/lib/constants/routers'
 import { SearchParams } from '@/lib/types/query-params'
 import { Course } from '@/services/courses'
+import { Modals, useOpenModal } from '@/store/modal'
+import { useUserStore } from '@/store/user'
 import {
   ColumnDef,
   OnChangeFn,
@@ -18,13 +21,14 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import clsx from 'clsx'
-import { Edit, MoreHorizontal, Trash } from 'lucide-react'
-import { DataTableColumnHeader } from '@/components/custom/data-table/column-header'
-import { Modals, useModalStore, useOpenModal } from '@/store/modal'
+import { Edit, Eye, MoreHorizontal, Trash } from 'lucide-react'
+import Link from 'next/link'
+import { useCallback, useMemo } from 'react'
 const sortProps = ['id', 'course_name', 'course_code']
 
 const CourseTable = () => {
   const [params, paramsUpdater] = useApiQuery({ sortProps })
+  const isAdmin = useUserStore((state) => state.user?.is_admin)
 
   const { data } = useGetCoursesSuspenseQuery(params)
   const courses = data?.courses || []
@@ -96,9 +100,12 @@ const CourseTable = () => {
           return <DataTableColumnHeader title="Name" {...props} />
         },
         cell: ({ row }) => {
+          const { id, course_name } = row.original
           return (
             <div className="flex items-center space-x-2">
-              <span className="line-clamp-2">{row.getValue('course_name')}</span>
+              <Link className="line-clamp-2" href={dynamicRouters.courseById(id)}>
+                {course_name}
+              </Link>
             </div>
           )
         },
@@ -132,23 +139,31 @@ const CourseTable = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="min-w-32" align="end">
                 <DropdownMenuItem>
-                  <Edit className="mr-2 h-4 w-4" />
-                  <span>Chỉnh sửa</span>
+                  <Eye className="mr-2 h-4 w-4" />
+                  <span>View</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive/90"
-                  onClick={() => openModal({ course: row.original })}
-                >
-                  <Trash className="mr-2 h-4 w-4" />
-                  <span>Xóa</span>
-                </DropdownMenuItem>
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem>
+                      <Edit className="mr-2 h-4 w-4" />
+                      <span>Chỉnh sửa</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive/90"
+                      onClick={() => openModal({ course: row.original })}
+                    >
+                      <Trash className="mr-2 h-4 w-4" />
+                      <span>Xóa</span>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           )
         },
       },
     ],
-    [openModal]
+    [openModal, isAdmin]
   )
 
   const table = useReactTable({

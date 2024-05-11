@@ -1,22 +1,32 @@
-import { PropsWithChildren } from "react";
-import { useUserStore } from "@/store/user";
-import { routers } from "@/lib/constants/routers";
-import { redirect } from "next/navigation";
+import { routers } from '@/lib/constants/routers'
+import { UserRole } from '@/lib/types/userRole'
+import { useUserStore } from '@/store/user'
+import { redirect } from 'next/navigation'
+import { ReactNode } from 'react'
 
-const IS_SERVER = typeof window === "undefined";
+const IS_SERVER = typeof window === 'undefined'
 
-const ProtectedRoute = ({ children }: PropsWithChildren) => {
-  const isCheckedAuth = useUserStore((state) => state.isCheckedAuth);
-  const user = useUserStore.getState().user;
+interface ProtectedRouteProps {
+  role?: UserRole
+  children: ReactNode
+}
 
-  if (isCheckedAuth && !user) {
-    const callbackUrl = IS_SERVER
-      ? routers.dashboard
-      : window.location.pathname;
-    redirect(`${routers.login}?callbackUrl=${callbackUrl}`);
+const ProtectedRoute = ({ children, role = UserRole.User }: ProtectedRouteProps) => {
+  const isCheckedAuth = useUserStore((state) => state.isCheckedAuth)
+  const user = useUserStore.getState().user
+
+  if (isCheckedAuth) {
+    if (!user) {
+      const callbackUrl = IS_SERVER ? routers.dashboard : window.location.pathname
+      return redirect(`${routers.login}?callbackUrl=${callbackUrl}`)
+    }
+
+    if (role === UserRole.Admin && user?.is_admin) {
+      return redirect(routers.dashboard)
+    }
   }
 
-  return children;
-};
+  return children
+}
 
-export default ProtectedRoute;
+export default ProtectedRoute

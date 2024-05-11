@@ -1,24 +1,14 @@
-import Breadcrumb from '@/components/custom/breadcrumb'
-import CourseForm from '@/components/forms/course/course-form'
-import Container from '@/components/pages/dashboard/container'
-import Heading from '@/components/pages/heading'
-import { createCourseBreadcrumb } from '@/lib/breadcrumb/course'
-import { routers } from '@/lib/constants/routers'
-import { getDocumentTitle } from '@/lib/get-document-title'
+import CreateCoursePage from '@/components/pages/dashboard/course/create-couse'
+import { DOCUMENTS_DESCRIPTIONS, DOCUMENT_TITLES } from '@/lib/constants/seo'
 import { Metadata } from 'next'
 
 const Page = () => {
-  return (
-    <Container>
-      <Breadcrumb items={createCourseBreadcrumb} />
-      <Heading title={getDocumentTitle({ pathname: routers.createCourse })} description="Tạo mới một khóa học" />
-      <CourseForm />
-    </Container>
-  )
+  return <CreateCoursePage />
 }
 
 export const metadata: Metadata = {
-  title: getDocumentTitle({ pathname: routers.createCourse }),
+  title: DOCUMENT_TITLES.DASHBOARD.COURSES.CREATE,
+  description: DOCUMENTS_DESCRIPTIONS.DASHBOARD.COURSES.CREATE,
 }
 
 export default Page

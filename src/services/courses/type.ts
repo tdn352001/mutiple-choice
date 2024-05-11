@@ -42,3 +42,10 @@ export type UpdateCourseResponse = CreateCourseResponse
 export type DeleteCourseRequest = {
   new_course_id: string
 }
+
+export type GetCourseByIdResponse = {
+  data: {
+    course: Course
+    topics: any[]
+  }
+}

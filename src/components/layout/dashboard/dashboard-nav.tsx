@@ -2,12 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
+import { Icon } from '@/components/ui/icon'
+import { navItems } from '@/lib/constants/nav'
 import { cn } from '@/lib/utils'
 import { Dispatch, SetStateAction } from 'react'
-import { Icon } from '@/components/ui/icon'
-import { NavItem } from '@/lib/types/nav'
-import { navItems } from '@/lib/constants/nav'
 
 interface DashboardNavProps {
   setOpen?: Dispatch<SetStateAction<boolean>>

@@ -1,9 +1,7 @@
-import ResetPasswordForm from '@/components/forms/auth/reset-password-form'
-import { Icon } from '@/components/ui/icon'
+import ResetPasswordPage from '@/components/pages/auth/reset-password/page'
 import { routers } from '@/lib/constants/routers'
-import { getDocumentTitle } from '@/lib/get-document-title'
+import { DOCUMENTS_DESCRIPTIONS, DOCUMENT_TITLES } from '@/lib/constants/seo'
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 const Page = (props: { searchParams: { email?: string | string[] } }) => {
@@ -14,28 +12,12 @@ const Page = (props: { searchParams: { email?: string | string[] } }) => {
     return redirect(routers.login)
   }
 
-  return (
-    <div className="container flex min-h-dvh min-w-full py-4 flex-col items-center justify-center">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <div className="flex flex-col space-y-2 text-center">
-          <Icon name="Command" className="mx-auto h-6 w-6" />
-          <h1 className="text-2xl font-semibold tracking-tight">Reset your password</h1>
-          <p className="text-sm text-muted-foreground">Check your email for the verification code</p>
-        </div>
-        <ResetPasswordForm email={email} />
-        <p className="px-8 text-center text-sm text-muted-foreground">
-          <Link href={routers.login} className="hover:text-brand underline underline-offset-4">
-            Already have an account? Sign In
-          </Link>
-        </p>
-      </div>
-    </div>
-  )
+  return <ResetPasswordPage email={email} />
 }
 
 export const metadata: Metadata = {
-  title: getDocumentTitle({ pathname: routers.resetPassword }),
-  description: 'Đặt lại mật khẩu',
+  title: DOCUMENT_TITLES.AUTH.RESET_PASSWORD,
+  description: DOCUMENTS_DESCRIPTIONS.AUTH.RESET_PASSWORD,
 }
 
 export default Page

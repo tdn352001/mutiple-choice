@@ -3,19 +3,19 @@ import { NavItem } from '@/lib/types/nav'
 
 export const navItems: NavItem[] = [
   {
-    title: 'Trang chủ',
+    title: 'Dashboard',
     href: routers.dashboard,
     icon: 'Home',
     label: 'Dashboard',
   },
   {
-    title: 'Khóa học',
+    title: 'Courses',
     href: routers.courses,
     icon: 'School',
     label: 'user',
   },
   {
-    title: 'Thành viên',
+    title: 'Members',
     href: '/dashboard/employee',
     icon: 'Users',
     label: 'employee',

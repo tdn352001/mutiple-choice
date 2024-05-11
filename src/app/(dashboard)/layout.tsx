@@ -1,14 +1,9 @@
-"use client";
+'use client'
 
-import { PropsWithChildren } from "react";
-import { useUserStore } from "@/store/user";
-import { redirect } from "next/navigation";
-import { routers } from "@/lib/constants/routers";
-
-const IS_SERVER = typeof window === "undefined";
+import { PropsWithChildren } from 'react'
 
 const Layout = ({ children }: PropsWithChildren) => {
-  return children;
-};
+  return children
+}
 
-export default Layout;
+export default Layout

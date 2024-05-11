@@ -3,6 +3,7 @@ import {
   CreateCourseRequest,
   CreateCourseResponse,
   DeleteCourseRequest,
+  GetCourseByIdResponse,
   GetCourseParams,
   GetCourseResponse,
   UpdateCourseRequest,
@@ -17,6 +18,11 @@ export const courseService = {
       params,
     })
   },
+
+  getCourseById(id: string) {
+    return getApi<GetCourseByIdResponse>(`/course/${id}`)
+  },
+
   createCourse(request: CreateCourseRequest) {
     return postApi<CreateCourseResponse>('/course', request)
   },
@@ -24,6 +30,7 @@ export const courseService = {
   updateCourse(id: string, request: UpdateCourseRequest) {
     return putApi<UpdateCourseResponse>(`/course/${id}`, request)
   },
+
   deleteCourse(id: string, request?: DeleteCourseRequest) {
     return deleteApi(`/course/${id}`, {
       params: request,

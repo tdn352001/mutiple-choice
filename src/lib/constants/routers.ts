@@ -14,6 +14,10 @@ export const routers = {
   },
 } as const
 
+export const dynamicRouters = {
+  courseById: (id: string | number) => `/dashboard/courses/detail/${id}`,
+}
+
 export const nameRouters = {
   [routers.login]: 'Đăng nhập',
   [routers.register]: 'Đăng ký',
