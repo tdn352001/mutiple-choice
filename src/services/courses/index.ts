@@ -14,12 +14,13 @@ export * from './type'
 
 export const courseService = {
   getCourses(params?: GetCourseParams) {
+    console.log({ recevve: params })
     return getApi<GetCourseResponse>('/course', {
       params,
     })
   },
 
-  getCourseById(id: string) {
+  getCourseById(id: string | number) {
     return getApi<GetCourseByIdResponse>(`/course/${id}`)
   },
 
@@ -27,11 +28,11 @@ export const courseService = {
     return postApi<CreateCourseResponse>('/course', request)
   },
 
-  updateCourse(id: string, request: UpdateCourseRequest) {
+  updateCourse(id: string | number, request: UpdateCourseRequest) {
     return putApi<UpdateCourseResponse>(`/course/${id}`, request)
   },
 
-  deleteCourse(id: string, request?: DeleteCourseRequest) {
+  deleteCourse(id: string | number, request?: DeleteCourseRequest) {
     return deleteApi(`/course/${id}`, {
       params: request,
     })

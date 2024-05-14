@@ -1,4 +1,5 @@
 import { Course } from '@/services/courses'
+import { Topic } from '@/services/topics'
 import { useCallback } from 'react'
 import { NonUndefined } from 'react-hook-form'
 import { create } from 'zustand'
@@ -7,6 +8,7 @@ export enum Modals {
   LOGOUT = 'LOGOUT',
   UPDATE_PASSWORD = 'UPDATE_PASSWORD',
   DELETE_COURSE = 'DELETE_COURSE',
+  DELETE_TOPIC = 'DELETE_TOPIC',
 }
 
 type ModalState<T = undefined> = {
@@ -19,6 +21,7 @@ type State = {
   modal: {
     [Modals.LOGOUT]?: ModalState
     [Modals.DELETE_COURSE]?: ModalState<{ course: Course }>
+    [Modals.DELETE_TOPIC]?: ModalState<{ topic: Topic }>
   }
 }
 

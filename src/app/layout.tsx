@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import React from 'react'
+import WebVitals from '@/components/layout/web-vitals'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+        <WebVitals />
         <AppProviders>
           {children}
           <Toaster richColors />

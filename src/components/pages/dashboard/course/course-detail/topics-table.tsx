@@ -3,12 +3,13 @@ import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGetCoursesQuery } from '@/hooks/services/courses'
+import { useGetTopicsByCourseQuery } from '@/hooks/services/topics'
 import { useApiQuery } from '@/hooks/use-api-query'
-import { COURSE_SORTABLE_PROPS } from '@/lib/constants/api'
+import { TOPICS_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { SearchParams } from '@/lib/types/query-params'
 import { Course } from '@/services/courses'
+import { Topic } from '@/services/topics'
 import { Modals, useOpenModal } from '@/store/modal'
 import { useUserStore } from '@/store/user'
 import {
@@ -26,15 +27,17 @@ import { Edit, Eye, MoreHorizontal, Trash } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useMemo } from 'react'
 
-const CourseTable = () => {
-  const [params, paramsUpdater] = useApiQuery({ sortProps: COURSE_SORTABLE_PROPS })
+interface TopicTableProps {
+  course: Course
+}
+
+const TopicTable = ({ course }: TopicTableProps) => {
+  const [params, paramsUpdater] = useApiQuery({ sortProps: TOPICS_SORTABLE_PROPS })
   const isAdmin = useUserStore((state) => state.user?.is_admin)
 
-  console.log({ clientParams: params })
+  const { data } = useGetTopicsByCourseQuery(course.id, params)
 
-  const { data } = useGetCoursesQuery(params)
-
-  const courses = data?.courses || []
+  const topics = data?.topic || []
 
   const page = params.page
   const perPage = params.per_page
@@ -78,7 +81,6 @@ const CourseTable = () => {
     (updaterOrValue: Updater<PaginationState>) => {
       if (typeof updaterOrValue === 'function') {
         const newPagination = updaterOrValue(pagination)
-        console.log({ newPagination })
         paramsUpdater.setMany({
           [SearchParams.Page]: newPagination.pageIndex + 1,
           [SearchParams.Limit]: newPagination.pageSize,
@@ -93,35 +95,35 @@ const CourseTable = () => {
     [pagination, paramsUpdater]
   )
 
-  const openModal = useOpenModal(Modals.DELETE_COURSE)
+  const openModal = useOpenModal(Modals.DELETE_TOPIC)
 
-  const columns: ColumnDef<Course>[] = useMemo(
+  const columns: ColumnDef<Topic>[] = useMemo(
     () => [
       {
-        accessorKey: 'course_name',
+        accessorKey: 'topic_name',
         header: (props) => {
           return <DataTableColumnHeader title="Name" {...props} />
         },
         cell: ({ row }) => {
-          const { id, course_name } = row.original
+          const { id, topic_name } = row.original
           return (
             <div className="flex items-center space-x-2">
               <Link className="line-clamp-2" href={dynamicRouters.courseById(id)}>
-                {course_name}
+                {topic_name}
               </Link>
             </div>
           )
         },
       },
       {
-        accessorKey: 'course_code',
+        accessorKey: 'topic_code',
         header: (props) => {
           return <DataTableColumnHeader title="Code" {...props} />
         },
         cell: ({ row }) => {
           return (
             <div className="min-w-28 flex items-center space-x-2">
-              <span className="block whitespace-nowrap">{row.getValue('course_code')}</span>
+              <span className="block whitespace-nowrap">{row.getValue('topic_code')}</span>
             </div>
           )
         },
@@ -148,14 +150,14 @@ const CourseTable = () => {
                 {isAdmin && (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href={dynamicRouters.updateCourse(row.original.id)}>
+                      <Link href={dynamicRouters.updateTopic(row.original.id)}>
                         <Edit className="mr-2 h-4 w-4" />
                         <span>Edit</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-destructive focus:text-destructive/90"
-                      onClick={() => openModal({ course: row.original })}
+                      onClick={() => openModal({ topic: row.original })}
                     >
                       <Trash className="mr-2 h-4 w-4" />
                       <span>Delete</span>
@@ -172,7 +174,7 @@ const CourseTable = () => {
   )
 
   const table = useReactTable({
-    data: courses,
+    data: topics,
     rowCount: itemsCount,
     columns,
     manualPagination: true,
@@ -242,4 +244,4 @@ const CourseTable = () => {
   )
 }
 
-export default CourseTable
+export default TopicTable

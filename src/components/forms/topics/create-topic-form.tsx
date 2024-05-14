@@ -5,50 +5,54 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useCreateCourseMutation } from '@/hooks/services/courses/use-create-course-mutation'
-import { routers } from '@/lib/constants/routers'
-import { courseSchema, CourseSchema } from '@/lib/schemas/course'
+import { useCreateTopicMutation } from '@/hooks/services/topics/use-create-topics-mutation'
+import { dynamicRouters } from '@/lib/constants/routers'
+import { TopicSchema, topicSchema } from '@/lib/schemas/topics'
+import { Course } from '@/services/courses'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-type FormValue = CourseSchema
+type FormValue = TopicSchema
 
 const fields = [
   {
-    name: 'course_name',
-    label: 'Course Name',
+    name: 'topic_name',
+    label: 'Topic Name',
   },
   {
-    name: 'course_code',
-    label: 'Course Code',
+    name: 'topic_code',
+    label: 'Topic Code',
   },
 ]
 
-const CourseForm = () => {
+const CreateTopicForm = ({ course }: { course: Course }) => {
   const [error, setError] = useState('')
 
-  const { mutateAsync: createCourse, isPending } = useCreateCourseMutation()
+  const { mutateAsync: createTopic, isPending } = useCreateTopicMutation()
 
   const router = useRouter()
 
   const form = useForm<FormValue>({
-    resolver: zodResolver(courseSchema),
+    resolver: zodResolver(topicSchema),
     defaultValues: {
-      course_name: '',
-      course_code: '',
+      topic_name: '',
+      topic_code: '',
       description: '',
       active: false,
     },
   })
 
   const handleSubmit = async (formValue: FormValue) => {
-    return createCourse(formValue)
+    return createTopic({
+      ...formValue,
+      course_id: course.id,
+    })
       .then(() => {
-        toast.success('Create course successfully!')
-        router.push(routers.courses)
+        toast.success('Create topic successfully!')
+        router.push(dynamicRouters.courseById(course.id))
       })
       .catch((err) => {
         setError(err.message || 'Something went wrong!')
@@ -102,14 +106,14 @@ const CourseForm = () => {
                 </FormControl>
 
                 <FormLabel>
-                  <span>Active Course</span>
+                  <span>Active topic</span>
                 </FormLabel>
               </FormItem>
             )}
           />
 
           <Button disabled={isPending} className="ml-auto w-full" type="submit">
-            Continue With Email
+            Submit
           </Button>
         </form>
       </Form>
@@ -117,4 +121,4 @@ const CourseForm = () => {
   )
 }
 
-export default CourseForm
+export default CreateTopicForm

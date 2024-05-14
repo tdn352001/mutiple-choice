@@ -1,12 +1,10 @@
 import { useAppSearchParams } from '@/hooks/next'
-import { PER_PAGE_OPTIONS } from '@/lib/constants/api'
 import { BaseApiQueryParams, OrderParam, SearchParams } from '@/lib/types/query-params'
-import { useMemo } from 'react'
+import { ValidateSearchParamsOptions, validateSearchParams } from '@/lib/validate-search-params'
 import lodash from 'lodash'
+import { useMemo } from 'react'
 
-export type UseApiQueryOptions = {
-  sortProps?: string[]
-}
+export type UseApiQueryOptions = ValidateSearchParamsOptions
 
 type ParamsUpdater = {
   getParams: () => Required<BaseApiQueryParams>
@@ -24,39 +22,17 @@ export const useApiQuery = (options: UseApiQueryOptions = {}): UseApiQueryReturn
 
   return useMemo(() => {
     const params = (function () {
-      const search = searchParams.get(SearchParams.Search) || ''
-
-      let page = Number(searchParams.get(SearchParams.Page))
-      if (isNaN(page) || page < 1) {
-        page = 1
-      }
-
-      let per_page = Number(searchParams.get(SearchParams.Limit))
-      if (isNaN(per_page) || !PER_PAGE_OPTIONS.includes(per_page)) {
-        per_page = PER_PAGE_OPTIONS[0]
-      }
-
-      let sort_by = searchParams.get(SearchParams.Sort)
-
-      if (sort_by && options.sortProps && !options.sortProps.includes(sort_by)) {
-        sort_by = options.sortProps[0]
-      } else {
-        sort_by = 'id'
-      }
-
-      let order_by = searchParams.get(SearchParams.Order)?.toUpperCase() as OrderParam
-      if (order_by !== OrderParam.Desc && order_by !== OrderParam.Asc) {
-        order_by = OrderParam.Desc
-      }
-
-      return {
-        search,
-        page,
-        per_page,
-        sort_by,
-        order_by,
-      }
-    })() as Required<BaseApiQueryParams>
+      return validateSearchParams(
+        {
+          [SearchParams.Search]: searchParams.get(SearchParams.Search),
+          [SearchParams.Page]: searchParams.get(SearchParams.Page),
+          [SearchParams.Limit]: searchParams.get(SearchParams.Limit),
+          [SearchParams.Sort]: searchParams.get(SearchParams.Sort),
+          [SearchParams.Order]: searchParams.get(SearchParams.Order),
+        },
+        options
+      )
+    })()
 
     const createNewParams = (records: { [key in SearchParams]?: string | number }) => {
       const newParams = { ...params, ...records }
@@ -85,5 +61,6 @@ export const useApiQuery = (options: UseApiQueryOptions = {}): UseApiQueryReturn
     }
 
     return [params, paramsUpdater]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options.sortProps, searchParams])
 }

@@ -20,7 +20,6 @@ import { Modals, useModalStore } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { ChevronsUpDown } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
 
 export function DeleteCourseModal() {
   const open = useModalStore((state) => state.modal.DELETE_COURSE?.open)
@@ -34,7 +33,7 @@ export function DeleteCourseModal() {
   const { data, isPending } = useGetCoursesQuery(
     { search },
     {
-      enabled: open,
+      enabled: !!open,
     }
   )
 

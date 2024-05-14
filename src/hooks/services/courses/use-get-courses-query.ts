@@ -8,36 +8,11 @@ const defaultParams: BaseApiQueryParams = {
   per_page: 10,
 }
 
-export const useGetCoursesQuery = (
-  params: BaseApiQueryParams = defaultParams,
-  options: AppQueryOptions<
-    {
-      courses: Course[]
-      meta: {
-        current_page: number
-        next_page?: number | undefined
-        prev_page?: number | undefined
-        total_pages: number
-        total_items: number
-      }
-    },
-    Error,
-    {
-      courses: Course[]
-      meta: {
-        current_page: number
-        next_page?: number | undefined
-        prev_page?: number | undefined
-        total_pages: number
-        total_items: number
-      }
-    },
-    (string | BaseApiQueryParams)[]
-  > = {}
-) => {
+export const useGetCoursesQuery = (params: BaseApiQueryParams = defaultParams, options: AppQueryOptions = {}) => {
   return useQuery({
     queryKey: ['courses', params],
     queryFn: async () => {
+      console.log({ queryData: params })
       return courseService
         .getCourses(params)
         .then((res) => res.data)
@@ -53,24 +28,5 @@ export const useGetCoursesQuery = (
         })
     },
     ...options,
-  })
-}
-
-export const useGetCoursesSuspenseQuery = (params: BaseApiQueryParams = defaultParams) => {
-  return useSuspenseQuery({
-    queryKey: ['courses', params],
-    queryFn: async () => {
-      return courseService
-        .getCourses(params)
-        .then((res) => res.data)
-        .catch(() => {
-          return {
-            courses: [],
-            meta: {
-              total_items: 0,
-            },
-          }
-        })
-    },
   })
 }

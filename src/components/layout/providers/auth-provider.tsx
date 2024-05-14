@@ -3,6 +3,7 @@ import Loading from '@/components/templates/loading'
 import { useCurrentUser } from '@/hooks/services/user/use-current-user'
 import { useUserStore } from '@/store/user'
 import { PropsWithChildren, useEffect } from 'react'
+import { RemoveScroll } from 'react-remove-scroll'
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const setUser = useUserStore((state) => state.setUser)
@@ -21,7 +22,11 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   return (
     <>
       {children}
-      {isLoading && <Loading />}
+      {isLoading && (
+        <RemoveScroll>
+          <Loading className="fixed inset-0" />
+        </RemoveScroll>
+      )}
     </>
   )
 }

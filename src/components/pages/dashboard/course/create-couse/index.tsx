@@ -1,5 +1,5 @@
 import Breadcrumb from '@/components/custom/breadcrumb'
-import CourseForm from '@/components/forms/course/course-form'
+import CreateCourseForm from '@/components/forms/course/create-course-form'
 import ProtectedRoute from '@/components/layout/protected-route'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
@@ -15,7 +15,7 @@ const CreateCoursePage = () => {
           title={DOCUMENT_TITLES.DASHBOARD.COURSES.CREATE}
           description={DOCUMENTS_DESCRIPTIONS.DASHBOARD.COURSES.CREATE}
         />
-        <CourseForm />
+        <CreateCourseForm />
       </Container>
     </ProtectedRoute>
   )

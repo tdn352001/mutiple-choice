@@ -3,6 +3,7 @@ import { BaseApiQueryParams } from '@/lib/types/query-params'
 export type Course = {
   id: number
   course_name: string
+  course_code: string
   description: string
   active: boolean
 }

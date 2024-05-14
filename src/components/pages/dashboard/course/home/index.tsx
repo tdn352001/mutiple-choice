@@ -24,7 +24,7 @@ const CoursePage = () => {
         action={
           isAdmin && (
             <CustomLink href={routers.createCourse} icon="Plus">
-              Thêm khóa học
+              Create Course
             </CustomLink>
           )
         }

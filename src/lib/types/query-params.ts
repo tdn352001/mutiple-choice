@@ -7,14 +7,22 @@ export type BaseApiQueryParams<T = string> = {
   search?: string
   page?: number
   per_page?: number
-  order_by?: OrderParam
   sort_by?: T
+  order_by?: OrderParam
 }
 
 export enum SearchParams {
   Search = 'search',
-  Sort = 'sort_by',
   Page = 'page',
-  Order = 'order_by',
   Limit = 'per_page',
+  Sort = 'sort_by',
+  Order = 'order_by',
+}
+
+export type PageParams = {
+  [SearchParams.Search]?: string
+  [SearchParams.Page]?: string
+  [SearchParams.Limit]?: string
+  [SearchParams.Sort]?: string
+  [SearchParams.Order]?: string
 }

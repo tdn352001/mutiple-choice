@@ -11,6 +11,12 @@ export const DOCUMENT_TITLES = {
     COURSES: {
       HOME: 'Courses',
       CREATE: 'Create Course',
+      UPDATE: 'Update Course',
+    },
+    TOPICS: {
+      HOME: 'Topics',
+      CREATE: 'Create Topic',
+      UPDATE: 'Update Topic',
     },
   },
 }
@@ -28,6 +34,12 @@ export const DOCUMENTS_DESCRIPTIONS = {
     COURSES: {
       HOME: 'All courses in your system',
       CREATE: 'Create a new course',
+      UPDATE: 'Update a course',
+    },
+    TOPICS: {
+      HOME: 'All topics',
+      CREATE: 'Create a new topic',
+      UPDATE: 'Update a topic',
     },
   },
 }

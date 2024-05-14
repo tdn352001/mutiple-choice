@@ -2,7 +2,7 @@ import CoursePage from '@/components/pages/dashboard/course/home'
 import { DOCUMENT_TITLES, DOCUMENTS_DESCRIPTIONS } from '@/lib/constants/seo'
 import { Metadata } from 'next'
 
-const Page = () => {
+const Page = async () => {
   return <CoursePage />
 }
 

@@ -1,9 +1,9 @@
 import { courseService } from '@/services/courses'
 import { useQuery } from '@tanstack/react-query'
 
-export const useGetCourseByIdQuuery = (id: string) => {
+export const useGetCourseByIdQuery = (id: string) => {
   return useQuery({
-    queryKey: ['course', id],
+    queryKey: ['course-detail', id],
     queryFn: () => courseService.getCourseById(id),
   })
 }

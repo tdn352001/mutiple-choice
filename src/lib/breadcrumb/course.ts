@@ -1,4 +1,4 @@
-import { routers } from '@/lib/constants/routers'
+import { dynamicRouters, routers } from '@/lib/constants/routers'
 import { DOCUMENT_TITLES } from '@/lib/constants/seo'
 
 export const courseBreadcrumb = [
@@ -17,5 +17,29 @@ export const createCourseBreadcrumb = [
   {
     title: DOCUMENT_TITLES.DASHBOARD.COURSES.CREATE,
     href: routers.createCourse,
+  },
+]
+
+export const updateCourseBreadcrumb = [
+  ...courseBreadcrumb,
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.COURSES.UPDATE,
+    href: routers.courses,
+  },
+]
+
+export const getTopicsBreadcrumb = (courseId: number) => [
+  ...courseBreadcrumb,
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
+    href: dynamicRouters.courseById(courseId),
+  },
+]
+
+export const getCreateTopicsBreadcrumb = (courseId: number) => [
+  ...getTopicsBreadcrumb(courseId),
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.CREATE,
+    href: dynamicRouters.createTopic(courseId),
   },
 ]
