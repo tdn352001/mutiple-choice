@@ -56,12 +56,20 @@ const getApi = <T = any, D = any>(url: string, config?: AxiosRequestConfig<D>): 
 
 const postApi = <T = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<T> =>
   axiosClient.post<T, T, D>(url, data, config).catch((error) => Promise.reject(handleError(error)))
+const postFormApi = <T = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<T> =>
+  axiosClient.post<T, T, D>(url, data, config).catch((error) => Promise.reject(handleError(error)))
 
 const putApi = <T = any, R = AxiosResponse<T>, D = any>(
   url: string,
   data?: D,
   config?: AxiosRequestConfig<D>
 ): Promise<R> => axiosClient.put<T, R, D>(url, data, config).catch((error) => Promise.reject(handleError(error)))
+
+const putFormApi = <T = any, R = AxiosResponse<T>, D = any>(
+  url: string,
+  data?: D,
+  config?: AxiosRequestConfig<D>
+): Promise<R> => axiosClient.putForm<T, R, D>(url, data, config).catch((error) => Promise.reject(handleError(error)))
 
 const patchApi = <T = any, R = AxiosResponse<T>, D = any>(
   url: string,
@@ -72,5 +80,5 @@ const patchApi = <T = any, R = AxiosResponse<T>, D = any>(
 const deleteApi = <T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R> =>
   axiosClient.delete<T, R, D>(url, config).catch((error) => Promise.reject(handleError(error)))
 
-export { getApi, postApi, putApi, patchApi, deleteApi }
+export { getApi, postApi, postFormApi, putApi, putFormApi, patchApi, deleteApi }
 export default axiosClient
