@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateTopicMutation } from "@/hooks/services/topics/use-create-topic-mutation";
 import { dynamicRouters } from "@/lib/constants/routers";
 import { TopicSchema, topicSchema } from "@/lib/schemas/topics";
-import { Course } from "@/services/courses";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { Topic } from "@/services/topics";
+import { useUpdateTopicMutation } from "@/hooks/services/topics";
 
 type FormValue = TopicSchema;
 
@@ -35,10 +35,12 @@ const fields = [
   },
 ];
 
-const CreateTopicForm = ({ course }: { course: Course }) => {
+const UpdateTopicForm = ({ topic }: { topic: Topic }) => {
   const [error, setError] = useState("");
 
-  const { mutateAsync: createTopic, isPending } = useCreateTopicMutation();
+  const { mutateAsync: updateTopic, isPending } = useUpdateTopicMutation(
+    topic.id,
+  );
 
   const router = useRouter();
 
@@ -53,13 +55,10 @@ const CreateTopicForm = ({ course }: { course: Course }) => {
   });
 
   const handleSubmit = async (formValue: FormValue) => {
-    return createTopic({
-      ...formValue,
-      course_id: course.id,
-    })
+    return updateTopic(formValue)
       .then(() => {
         toast.success("Create topic successfully!");
-        router.push(dynamicRouters.courseById(course.id));
+        router.push(dynamicRouters.courseById(topic.course_id));
       })
       .catch((err) => {
         setError(err.message || "Something went wrong!");
@@ -138,4 +137,4 @@ const CreateTopicForm = ({ course }: { course: Course }) => {
   );
 };
 
-export default CreateTopicForm;
+export default UpdateTopicForm;
