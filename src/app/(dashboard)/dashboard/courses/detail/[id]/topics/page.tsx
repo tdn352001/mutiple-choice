@@ -1,4 +1,4 @@
-import CreateTopicPage from '@/components/pages/dashboard/topics/create-topics'
+import CreateTopicPage from '@/components/pages/dashboard/topics/create-topic'
 import { DOCUMENTS_DESCRIPTIONS, DOCUMENT_TITLES } from '@/lib/constants/seo'
 import { Metadata } from 'next'
 import React from 'react'

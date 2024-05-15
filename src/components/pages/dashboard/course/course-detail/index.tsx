@@ -9,10 +9,14 @@ import { getTopicsBreadcrumb } from '@/lib/breadcrumb/course'
 import { Suspense } from 'react'
 import SearchTopic from '@/components/pages/dashboard/course/course-detail/search-topics'
 import TopicTable from '@/components/pages/dashboard/course/course-detail/topics-table'
+import { useUserStore } from '@/store/user'
+import { CustomLink } from '@/components/custom/link'
+import { dynamicRouters } from '@/lib/constants/routers'
 
 const CourseDetailPage = ({ id }: { id: string }) => {
+  const isAdmin = useUserStore((state) => state.user?.is_admin)
   const { data, isPending } = useGetCourseByIdQuery(id)
-  const course = data?.data.course
+  const course = data?.data
 
   if (isPending) {
     return (
@@ -29,7 +33,17 @@ const CourseDetailPage = ({ id }: { id: string }) => {
   return (
     <Container>
       <Breadcrumb items={getTopicsBreadcrumb(course.id)} />
-      <Heading title={course.course_name} description={course.description} />
+      <Heading
+        title={course.course_name}
+        description={course.description}
+        action={
+          isAdmin && (
+            <CustomLink href={dynamicRouters.createTopic(course.id)} icon="Plus">
+              Create Topic
+            </CustomLink>
+          )
+        }
+      />
       <div>
         <Suspense>
           <SearchTopic />

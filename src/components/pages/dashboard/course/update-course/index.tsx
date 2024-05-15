@@ -13,7 +13,7 @@ import { notFound } from 'next/navigation'
 const UpdateCoursePage = ({ id }: { id: string }) => {
   const { data, isPending } = useGetCourseByIdQuery(id)
 
-  const course = data?.data?.course
+  const course = data?.data
 
   if (isPending) {
     return (

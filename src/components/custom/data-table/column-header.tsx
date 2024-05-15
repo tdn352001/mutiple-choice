@@ -1,4 +1,5 @@
 import { ArrowDownIcon, ArrowUpIcon, CaretSortIcon } from '@radix-ui/react-icons'
+import cx from 'clsx'
 import { Column, HeaderContext, Table } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
@@ -21,24 +22,28 @@ export function DataTableColumnHeader<TData, TValue>({
     return <div className={cn(className)}>{title}</div>
   }
 
+  const isDisabledSort = table.getRowCount() <= 1
+
   return (
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            disabled={table.getRowCount() <= 1}
+            disabled={isDisabledSort}
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent text-foreground font-medium"
+            className="-ml-3 h-8 data-[state=open]:bg-accent text-foreground font-medium disabled:opacity-100"
           >
             <span>{title}</span>
-            {column.getIsSorted() === 'desc' ? (
-              <ArrowDownIcon className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === 'asc' ? (
-              <ArrowUpIcon className="ml-2 h-4 w-4" />
-            ) : (
-              <CaretSortIcon className="ml-2 h-4 w-4" />
-            )}
+            <span className={cx(isDisabledSort && 'opacity-50')}>
+              {column.getIsSorted() === 'desc' ? (
+                <ArrowDownIcon className="ml-2 h-4 w-4" />
+              ) : column.getIsSorted() === 'asc' ? (
+                <ArrowUpIcon className="ml-2 h-4 w-4" />
+              ) : (
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              )}
+            </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

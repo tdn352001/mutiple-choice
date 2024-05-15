@@ -23,7 +23,7 @@ export default function RootLayout({
         <WebVitals />
         <AppProviders>
           {children}
-          <Toaster richColors />
+          <Toaster richColors position="top-right" />
         </AppProviders>
       </body>
     </html>

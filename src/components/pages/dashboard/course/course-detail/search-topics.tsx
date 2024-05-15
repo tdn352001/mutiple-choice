@@ -20,7 +20,7 @@ const SearchTopic = () => {
       value={keyword}
       onChange={handleSearch}
       onSubmit={handleSearch}
-      placeholder="Search courses by name or code"
+      placeholder="Search topics by name or code"
     />
   )
 }

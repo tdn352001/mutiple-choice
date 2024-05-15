@@ -45,8 +45,5 @@ export type DeleteCourseRequest = {
 }
 
 export type GetCourseByIdResponse = {
-  data: {
-    course: Course
-    topics: any[]
-  }
+  data: Course
 }

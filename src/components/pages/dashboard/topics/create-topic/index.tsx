@@ -14,7 +14,7 @@ import { notFound } from 'next/navigation'
 const CreateTopicPage = ({ courseId }: { courseId: string }) => {
   const { data, isPending } = useGetCourseByIdQuery(courseId)
 
-  const course = data?.data?.course
+  const course = data?.data
 
   if (isPending) {
     return (
