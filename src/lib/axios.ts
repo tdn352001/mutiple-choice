@@ -15,7 +15,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use((config) => {
   if (!config.headers.Authorization) {
     const accessToken = sessionManager.accessToken
-    console.log({ accessToken })
+
     if (accessToken) {
       config.headers.Authorization = 'Bearer ' + accessToken
       axiosClient.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken

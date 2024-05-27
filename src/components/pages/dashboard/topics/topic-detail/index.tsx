@@ -46,6 +46,9 @@ const CourseDetailPage = ({ id }: { id: string }) => {
       />
       <div>
         <Suspense>
+          <SearchTopic />
+        </Suspense>
+        <Suspense>
           <TopicTable course={course} />
         </Suspense>
       </div>

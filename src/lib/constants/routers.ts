@@ -21,6 +21,7 @@ export const dynamicRouters = {
   updateCourse: (id: string | number) => `/dashboard/courses/update/${id}`,
   createTopic: (id: string | number) => `/dashboard/courses/detail/${id}/topics`,
   updateTopic: (id: string | number) => `/dashboard/topics/update/${id}`,
+  topicById: (id: string | number) => `/dashboard/topics/detail/${id}`,
 }
 
 export const nameRouters = {
