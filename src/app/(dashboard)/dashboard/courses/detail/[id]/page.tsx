@@ -1,29 +1,32 @@
-import CourseDetailPage from '@/components/pages/dashboard/course/course-detail'
-import { serverFetchService } from '@/lib/http-client/server'
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import CourseDetailPage from "@/components/pages/dashboard/course/course-detail";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { courseService } from "@/services/courses";
 
 interface PageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 const Page = async ({ params: { id } }: PageProps) => {
-  return <CourseDetailPage id={id} />
-}
+  return <CourseDetailPage id={id} />;
+};
 
-export const generateMetadata = async ({ params: { id } }: PageProps): Promise<Metadata> => {
+export const generateMetadata = async ({
+  params: { id },
+}: PageProps): Promise<Metadata> => {
   try {
-    const course = await serverFetchService.getCourseById(id)
+    const res = await courseService.getCourseById(id);
+    const course = res.data;
 
     return {
       title: course?.course_name,
       description: course?.description,
-    }
+    };
   } catch (error) {
-    return notFound()
+    return notFound();
   }
-}
+};
 
-export default Page
+export default Page;

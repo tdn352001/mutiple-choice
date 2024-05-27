@@ -52,3 +52,11 @@ export const getUpdateTopicsBreadcrumb = (topic: Topic) => [
     href: dynamicRouters.updateTopic(topic.id),
   },
 ];
+
+export const getExamsBreadcrumb = (topic: Topic) => [
+  ...getTopicsBreadcrumb(topic.course_id),
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.EXAMS.HOME,
+    href: dynamicRouters.topicById(topic.id),
+  },
+];

@@ -1,19 +1,32 @@
-import UpdateCoursePage from '@/components/pages/dashboard/course/update-course'
-import { DOCUMENTS_DESCRIPTIONS, DOCUMENT_TITLES } from '@/lib/constants/seo'
+import TopicDetailPage from "@/components/pages/dashboard/topics/topic-detail";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { topicService } from "@/services/topics";
 
 interface PageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 const Page = async ({ params: { id } }: PageProps) => {
-  return <UpdateCoursePage id={id} />
-}
+  return <TopicDetailPage id={id} />;
+};
 
-export const metadata = {
-  title: DOCUMENT_TITLES.DASHBOARD.TOPICS.UPDATE,
-  description: DOCUMENTS_DESCRIPTIONS.DASHBOARD.TOPICS.UPDATE,
-}
+export const generateMetadata = async ({
+  params: { id },
+}: PageProps): Promise<Metadata> => {
+  try {
+    const res = await topicService.getTopicById(id);
+    const topic = res.data;
 
-export default Page
+    return {
+      title: topic.topic_name,
+      description: topic.description,
+    };
+  } catch (error) {
+    return notFound();
+  }
+};
+
+export default Page;
