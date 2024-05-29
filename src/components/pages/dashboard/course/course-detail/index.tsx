@@ -3,29 +3,14 @@ import { CustomLink } from '@/components/custom/link'
 import TopicTable from '@/components/pages/dashboard/course/course-detail/topics-table'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
-import Loading from '@/components/templates/loading'
-import { useGetCourseByIdQuery } from '@/hooks/services/courses'
+import { useGetCourseByIdSuspenseQuery } from '@/hooks/services/courses'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { useUserStore } from '@/store/user'
-import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
 
 const CourseDetailPage = ({ id }: { id: string }) => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
-  const { data, isPending } = useGetCourseByIdQuery(id)
+  const { data, isPending } = useGetCourseByIdSuspenseQuery(id)
   const course = data?.data
-
-  if (isPending) {
-    return (
-      <Container>
-        <Loading />
-      </Container>
-    )
-  }
-
-  if (!course) {
-    return notFound()
-  }
 
   return (
     <Container>
@@ -41,9 +26,7 @@ const CourseDetailPage = ({ id }: { id: string }) => {
         }
       />
       <div>
-        <Suspense>
-          <TopicTable course={course} />
-        </Suspense>
+        <TopicTable course={course} />
       </div>
     </Container>
   )

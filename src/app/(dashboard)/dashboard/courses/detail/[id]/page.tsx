@@ -1,5 +1,4 @@
-import Container from '@/components/templates/container'
-import Loading from '@/components/templates/loading'
+import CourseDetailPage from '@/components/pages/dashboard/course/course-detail'
 import { courseService } from '@/services/courses'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -11,11 +10,7 @@ interface PageProps {
 }
 
 const Page = async ({ params: { id } }: PageProps) => {
-  return (
-    <Container>
-      <Loading />
-    </Container>
-  )
+  return <CourseDetailPage id={id} />
 }
 
 export const generateMetadata = async ({ params: { id } }: PageProps): Promise<Metadata> => {

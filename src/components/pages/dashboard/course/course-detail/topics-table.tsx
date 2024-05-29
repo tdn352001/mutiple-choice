@@ -3,7 +3,7 @@ import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGetTopicsByCourseQuery } from '@/hooks/services/topics'
+import { useGetTopicsByCourseSuspenseQuery } from '@/hooks/services/topics'
 import { useApiQuery } from '@/hooks/use-api-query'
 import { TOPICS_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
@@ -37,7 +37,7 @@ const TopicTable = ({ course }: TopicTableProps) => {
   })
   const isAdmin = useUserStore((state) => state.user?.is_admin)
 
-  const { data } = useGetTopicsByCourseQuery(course.id, params)
+  const { data } = useGetTopicsByCourseSuspenseQuery(course.id, params)
 
   const topics = data?.topics || []
 
