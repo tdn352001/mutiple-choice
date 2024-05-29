@@ -1,77 +1,71 @@
-"use client";
-import ErrorAlert from "@/components/custom/error-alert";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { dynamicRouters } from "@/lib/constants/routers";
-import { TopicSchema, topicSchema } from "@/lib/schemas/topics";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Topic } from "@/services/topics";
-import { useUpdateTopicMutation } from "@/hooks/services/topics";
+'use client'
+import ErrorAlert from '@/components/custom/error-alert'
+import CourseSelect from '@/components/forms/topics/course-select'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { useUpdateTopicMutation } from '@/hooks/services/topics'
+import { dynamicRouters } from '@/lib/constants/routers'
+import { TopicSchema, topicSchema } from '@/lib/schemas/topics'
+import { Topic } from '@/services/topics'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-type FormValue = TopicSchema;
+type FormValue = TopicSchema
 
 const fields = [
   {
-    name: "topic_name",
-    label: "Topic Name",
+    name: 'topic_name',
+    label: 'Topic Name',
   },
   {
-    name: "topic_code",
-    label: "Topic Code",
+    name: 'topic_code',
+    label: 'Topic Code',
   },
-];
+]
 
-const UpdateTopicForm = ({ topic }: { topic: Topic }) => {
-  const [error, setError] = useState("");
+interface UpdateTopicFormProps {
+  topic: Topic
+}
 
-  const { mutateAsync: updateTopic, isPending } = useUpdateTopicMutation(
-    topic.id,
-  );
+const UpdateTopicForm = ({ topic }: UpdateTopicFormProps) => {
+  const [error, setError] = useState('')
 
-  const router = useRouter();
+  const { mutateAsync: updateTopic, isPending } = useUpdateTopicMutation(topic.id)
+
+  const router = useRouter()
 
   const form = useForm<FormValue>({
     resolver: zodResolver(topicSchema),
     defaultValues: {
-      topic_name: "",
-      topic_code: "",
-      description: "",
-      active: false,
+      topic_name: topic.topic_name,
+      topic_code: topic.topic_code,
+      description: topic.description,
+      course_id: topic.course_id,
+      active: topic.active,
     },
-  });
+  })
 
   const handleSubmit = async (formValue: FormValue) => {
     return updateTopic(formValue)
       .then(() => {
-        toast.success("Create topic successfully!");
-        router.push(dynamicRouters.courseById(topic.course_id));
+        toast.success('Update topic successfully!')
+        router.push(dynamicRouters.topicById(topic.id))
       })
       .catch((err) => {
-        setError(err.message || "Something went wrong!");
-      });
-  };
+        setError(err.message || 'Something went wrong!')
+      })
+  }
 
   return (
     <div>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="space-y-5 w-full max-w-[32rem]"
-        >
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5 w-full max-w-[32rem]">
           <ErrorAlert show={!!error} message={error} />
           {fields.map(({ label, name, ...inputProps }) => (
             <FormField
@@ -82,17 +76,26 @@ const UpdateTopicForm = ({ topic }: { topic: Topic }) => {
                 <FormItem>
                   <FormLabel>{label}</FormLabel>
                   <FormControl>
-                    <Input
-                      invalid={`${invalid}`}
-                      {...(field as any)}
-                      {...inputProps}
-                    />
+                    <Input invalid={`${invalid}`} {...(field as any)} {...inputProps} />
                   </FormControl>
                   <FormMessage {...field} />
                 </FormItem>
               )}
             />
           ))}
+
+          <FormField
+            control={form.control}
+            name="course_id"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Course</FormLabel>
+                  <CourseSelect onValueChange={field.onChange} value={field.value} />
+                </FormItem>
+              )
+            }}
+          />
 
           <FormField
             control={form.control}
@@ -115,10 +118,7 @@ const UpdateTopicForm = ({ topic }: { topic: Topic }) => {
             render={({ field }) => (
               <FormItem checkbox>
                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
 
                 <FormLabel>
@@ -134,7 +134,7 @@ const UpdateTopicForm = ({ topic }: { topic: Topic }) => {
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default UpdateTopicForm;
+export default UpdateTopicForm

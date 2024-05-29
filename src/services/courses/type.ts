@@ -1,3 +1,4 @@
+import { BaseApiResponse } from '@/lib/axios'
 import { BaseApiQueryParams } from '@/lib/types/query-params'
 
 export type Course = {
@@ -10,18 +11,17 @@ export type Course = {
 
 export type GetCourseParams = BaseApiQueryParams
 
-export type GetCourseResponse = {
-  data: {
-    courses: Course[]
-    meta: {
-      current_page: number
-      next_page?: number
-      prev_page?: number
-      total_pages: number
-      total_items: number
-    }
+export type GetCourseResponseData = {
+  courses: Course[]
+  meta: {
+    current_page: number
+    next_page?: number
+    prev_page?: number
+    total_pages: number
+    total_items: number
   }
 }
+export type GetCourseResponse = BaseApiResponse<GetCourseResponseData>
 
 export type CreateCourseRequest = {
   course_name: string

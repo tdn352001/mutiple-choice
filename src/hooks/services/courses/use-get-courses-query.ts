@@ -1,6 +1,6 @@
-import { AppQueryOptions } from '@/lib/types/queries'
+import { AppQueryOptionsV2 } from '@/lib/types/queries'
 import { BaseApiQueryParams } from '@/lib/types/query-params'
-import { Course, GetCourseResponse, courseService } from '@/services/courses'
+import { GetCourseResponse, GetCourseResponseData, courseService } from '@/services/courses'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 
 const defaultParams: BaseApiQueryParams = {
@@ -8,11 +8,42 @@ const defaultParams: BaseApiQueryParams = {
   per_page: 10,
 }
 
-export const useGetCoursesQuery = (params: BaseApiQueryParams = defaultParams, options: AppQueryOptions = {}) => {
+type UseGetCoursesQuery = AppQueryOptionsV2<
+  GetCourseResponseData,
+  Error,
+  GetCourseResponseData,
+  (string | BaseApiQueryParams)[]
+>
+
+export const useGetCoursesQuery = (params: BaseApiQueryParams = defaultParams, options: UseGetCoursesQuery = {}) => {
   return useQuery({
     queryKey: ['courses', params],
     queryFn: async () => {
-      console.log({ queryData: params })
+      return courseService
+        .getCourses(params)
+        .then((res) => res.data)
+        .catch((): GetCourseResponse['data'] => {
+          return {
+            courses: [],
+            meta: {
+              current_page: 1,
+              total_pages: 0,
+              total_items: 0,
+            },
+          }
+        })
+    },
+    ...options,
+  })
+}
+
+export const useGetCoursesSuspenseQuery = (
+  params: BaseApiQueryParams = defaultParams,
+  options: UseGetCoursesQuery = {}
+) => {
+  return useSuspenseQuery({
+    queryKey: ['courses', params],
+    queryFn: async () => {
       return courseService
         .getCourses(params)
         .then((res) => res.data)

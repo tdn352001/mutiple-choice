@@ -1,5 +1,3 @@
-import { update } from 'lodash'
-
 export const routers = {
   login: '/login',
   register: '/register',
@@ -19,7 +17,7 @@ export const routers = {
 export const dynamicRouters = {
   courseById: (id: string | number) => `/dashboard/courses/detail/${id}`,
   updateCourse: (id: string | number) => `/dashboard/courses/update/${id}`,
-  createTopic: (id: string | number) => `/dashboard/courses/detail/${id}/topics`,
+  createTopic: (id: string | number) => `/dashboard/topics/create?course_id=${id}`,
   updateTopic: (id: string | number) => `/dashboard/topics/update/${id}`,
   topicById: (id: string | number) => `/dashboard/topics/detail/${id}`,
 }

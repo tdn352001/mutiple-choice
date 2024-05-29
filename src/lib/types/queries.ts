@@ -1,4 +1,10 @@
-import { MutationOptions, NotifyOnChangeProps } from '@tanstack/react-query'
+import {
+  DefaultError,
+  MutationOptions,
+  NotifyOnChangeProps,
+  QueryKey,
+  UndefinedInitialDataOptions,
+} from '@tanstack/react-query'
 
 export type AppMutationOptions = Pick<
   MutationOptions,
@@ -17,3 +23,10 @@ export type AppQueryOptions = {
   notifyOnChangeProps?: NotifyOnChangeProps
   throwOnError?: any
 }
+
+export type AppQueryOptionsV2<
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey
+> = Partial<UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>>

@@ -1,17 +1,14 @@
 'use client'
-import Container from '@/components/templates/container'
-import { useGetCourseByIdQuery } from '@/hooks/services/courses'
-import Loading from '@/components/templates/loading'
-import { notFound } from 'next/navigation'
-import Breadcrumb from '@/components/custom/breadcrumb'
-import Heading from '@/components/templates/heading'
-import { getTopicsBreadcrumb } from '@/lib/breadcrumb/course'
-import { Suspense } from 'react'
-import SearchTopic from '@/components/pages/dashboard/course/course-detail/search-topics'
-import TopicTable from '@/components/pages/dashboard/course/course-detail/topics-table'
-import { useUserStore } from '@/store/user'
 import { CustomLink } from '@/components/custom/link'
+import TopicTable from '@/components/pages/dashboard/course/course-detail/topics-table'
+import Container from '@/components/templates/container'
+import Heading from '@/components/templates/heading'
+import Loading from '@/components/templates/loading'
+import { useGetCourseByIdQuery } from '@/hooks/services/courses'
 import { dynamicRouters } from '@/lib/constants/routers'
+import { useUserStore } from '@/store/user'
+import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 const CourseDetailPage = ({ id }: { id: string }) => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
@@ -32,7 +29,6 @@ const CourseDetailPage = ({ id }: { id: string }) => {
 
   return (
     <Container>
-      <Breadcrumb items={getTopicsBreadcrumb(course.id)} />
       <Heading
         title={course.course_name}
         description={course.description}

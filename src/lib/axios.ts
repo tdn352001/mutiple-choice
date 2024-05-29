@@ -1,11 +1,17 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { sessionManager } from '@/lib/session'
 import { API_URL } from '@/lib/constants/api'
+import { sessionManager } from '@/lib/session'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export interface ApiError {
   code?: number | string
   message?: string
   status?: number
+}
+
+export type BaseApiResponse<T = any> = {
+  data: T
+  message: string
+  status: string
 }
 
 const axiosClient = axios.create({
@@ -80,5 +86,5 @@ const patchApi = <T = any, R = AxiosResponse<T>, D = any>(
 const deleteApi = <T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R> =>
   axiosClient.delete<T, R, D>(url, config).catch((error) => Promise.reject(handleError(error)))
 
-export { getApi, postApi, postFormApi, putApi, putFormApi, patchApi, deleteApi }
+export { deleteApi, getApi, patchApi, postApi, postFormApi, putApi, putFormApi }
 export default axiosClient

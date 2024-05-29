@@ -3,7 +3,7 @@ import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGetCoursesQuery } from '@/hooks/services/courses'
+import { useGetCoursesSuspenseQuery } from '@/hooks/services/courses'
 import { useApiQuery } from '@/hooks/use-api-query'
 import { COURSE_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
@@ -30,9 +30,7 @@ const CourseTable = () => {
   const [params, paramsUpdater] = useApiQuery({ sortProps: COURSE_SORTABLE_PROPS })
   const isAdmin = useUserStore((state) => state.user?.is_admin)
 
-  console.log({ clientParams: params })
-
-  const { data } = useGetCoursesQuery(params)
+  const { data } = useGetCoursesSuspenseQuery(params)
 
   const courses = data?.courses || []
 
@@ -100,7 +98,7 @@ const CourseTable = () => {
       {
         accessorKey: 'course_name',
         header: (props) => {
-          return <DataTableColumnHeader title="Name" {...props} />
+          return <DataTableColumnHeader title="Course name" {...props} />
         },
         cell: ({ row }) => {
           const { id, course_name } = row.original
@@ -116,7 +114,7 @@ const CourseTable = () => {
       {
         accessorKey: 'course_code',
         header: (props) => {
-          return <DataTableColumnHeader title="Code" {...props} />
+          return <DataTableColumnHeader title="Course code" {...props} />
         },
         cell: ({ row }) => {
           return (
