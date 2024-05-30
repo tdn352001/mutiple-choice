@@ -1,6 +1,6 @@
-import { dynamicRouters, routers } from "@/lib/constants/routers";
-import { DOCUMENT_TITLES } from "@/lib/constants/seo";
-import { Topic } from "@/services/topics";
+import { dynamicRouters, routers } from '@/lib/constants/routers'
+import { DOCUMENT_TITLES } from '@/lib/constants/seo'
+import { Topic } from '@/services/topics'
 
 export const courseBreadcrumb = [
   {
@@ -11,7 +11,7 @@ export const courseBreadcrumb = [
     title: DOCUMENT_TITLES.DASHBOARD.COURSES.HOME,
     href: routers.courses,
   },
-];
+]
 
 export const createCourseBreadcrumb = [
   ...courseBreadcrumb,
@@ -19,7 +19,7 @@ export const createCourseBreadcrumb = [
     title: DOCUMENT_TITLES.DASHBOARD.COURSES.CREATE,
     href: routers.createCourse,
   },
-];
+]
 
 export const updateCourseBreadcrumb = [
   ...courseBreadcrumb,
@@ -27,7 +27,7 @@ export const updateCourseBreadcrumb = [
     title: DOCUMENT_TITLES.DASHBOARD.COURSES.UPDATE,
     href: routers.courses,
   },
-];
+]
 
 export const getTopicsBreadcrumb = (courseId: number) => [
   ...courseBreadcrumb,
@@ -35,28 +35,53 @@ export const getTopicsBreadcrumb = (courseId: number) => [
     title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
     href: dynamicRouters.courseById(courseId),
   },
-];
+]
 
 export const getCreateTopicsBreadcrumb = (courseId: number) => [
-  ...getTopicsBreadcrumb(courseId),
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.HOME,
+    href: routers.dashboard,
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
+    href: dynamicRouters.courseById(courseId),
+  },
   {
     title: DOCUMENT_TITLES.DASHBOARD.TOPICS.CREATE,
-    href: dynamicRouters.createTopic(courseId),
+    href: '#',
   },
-];
+]
 
 export const getUpdateTopicsBreadcrumb = (topic: Topic) => [
-  ...getTopicsBreadcrumb(topic.course_id),
   {
-    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.UPDATE,
-    href: dynamicRouters.updateTopic(topic.id),
+    title: DOCUMENT_TITLES.DASHBOARD.HOME,
+    href: routers.dashboard,
   },
-];
-
-export const getExamsBreadcrumb = (topic: Topic) => [
-  ...getTopicsBreadcrumb(topic.course_id),
   {
-    title: DOCUMENT_TITLES.DASHBOARD.EXAMS.HOME,
+    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
+    href: dynamicRouters.courseById(topic.course_id),
+  },
+  {
+    title: topic.topic_name,
     href: dynamicRouters.topicById(topic.id),
   },
-];
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.UPDATE,
+    href: '#',
+  },
+]
+
+export const getExamsBreadcrumb = (topic: Topic) => [
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.HOME,
+    href: routers.dashboard,
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
+    href: dynamicRouters.courseById(topic.course_id),
+  },
+  {
+    title: topic.topic_name,
+    href: dynamicRouters.topicById(topic.id),
+  },
+]
