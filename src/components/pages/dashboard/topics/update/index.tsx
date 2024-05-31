@@ -1,30 +1,21 @@
-"use client";
+'use client'
 
-import Breadcrumb from "@/components/custom/breadcrumb";
-import ProtectedRoute from "@/components/layout/protected-route";
-import Container from "@/components/templates/container";
-import Heading from "@/components/templates/heading";
-import Loading from "@/components/templates/loading";
-import { getUpdateTopicsBreadcrumb } from "@/lib/breadcrumb/course";
-import { notFound } from "next/navigation";
-import { useGetTopicByIdQuery } from "@/hooks/services/topics";
-import UpdateTopicForm from "@/components/forms/topics/update-topic-form";
+import Breadcrumb from '@/components/custom/breadcrumb'
+import UpdateTopicForm from '@/components/forms/topics/update-topic-form'
+import ProtectedRoute from '@/components/layout/protected-route'
+import Container from '@/components/templates/container'
+import Heading from '@/components/templates/heading'
+import { useGetTopicByIdSuspenseQuery } from '@/hooks/services/topics'
+import { getUpdateTopicsBreadcrumb } from '@/lib/breadcrumb/course'
+import { notFound } from 'next/navigation'
 
 const UpdateTopicPage = ({ id }: { id: string }) => {
-  const { data, isPending } = useGetTopicByIdQuery(id);
+  const { data, isPending } = useGetTopicByIdSuspenseQuery(id)
 
-  const topic = data?.data;
-
-  if (isPending) {
-    return (
-      <Container>
-        <Loading />
-      </Container>
-    );
-  }
+  const topic = data?.data
 
   if (!topic) {
-    return notFound();
+    return notFound()
   }
 
   return (
@@ -35,7 +26,7 @@ const UpdateTopicPage = ({ id }: { id: string }) => {
         <UpdateTopicForm topic={topic} />
       </Container>
     </ProtectedRoute>
-  );
-};
+  )
+}
 
-export default UpdateTopicPage;
+export default UpdateTopicPage
