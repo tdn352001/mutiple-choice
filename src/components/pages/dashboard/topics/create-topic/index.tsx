@@ -25,7 +25,7 @@ const CreateTopicPage = () => {
     <ProtectedRoute admin>
       <ScrollArea className="size-full">
         <Container>
-          {course && <Breadcrumb items={getCreateTopicsBreadcrumb(course.id)} />}
+          <Breadcrumb items={getCreateTopicsBreadcrumb()} />
           <Heading
             title={DOCUMENT_TITLES.DASHBOARD.TOPICS.CREATE}
             description={DOCUMENTS_DESCRIPTIONS.DASHBOARD.TOPICS.CREATE}

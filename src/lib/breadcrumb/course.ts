@@ -37,14 +37,14 @@ export const getTopicsBreadcrumb = (courseId: number) => [
   },
 ]
 
-export const getCreateTopicsBreadcrumb = (courseId: number) => [
+export const getCreateTopicsBreadcrumb = () => [
   {
     title: DOCUMENT_TITLES.DASHBOARD.HOME,
     href: routers.dashboard,
   },
   {
     title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
-    href: dynamicRouters.courseById(courseId),
+    href: routers.courses,
   },
   {
     title: DOCUMENT_TITLES.DASHBOARD.TOPICS.CREATE,

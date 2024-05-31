@@ -172,7 +172,7 @@ const ExamsTable = ({ topic }: ExamsTableProps) => {
         },
       },
     ],
-    [openModal, isAdmin]
+    [isAdmin]
   )
 
   const table = useReactTable({

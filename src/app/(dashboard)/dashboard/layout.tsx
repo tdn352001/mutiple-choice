@@ -1,4 +1,5 @@
 import Header from '@/components/layout/dashboard/header'
+import DashboardGlobalModals from '@/components/layout/dashboard/modals'
 import Sidebar from '@/components/layout/dashboard/sidebar'
 import { routers } from '@/lib/constants/routers'
 import { getDocumentTitle } from '@/lib/get-document-title'
@@ -14,6 +15,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         <Sidebar />
         <main className="w-full h-full">{children}</main>
       </div>
+      <DashboardGlobalModals />
     </div>
   )
 }

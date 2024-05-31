@@ -1,5 +1,6 @@
 'use client'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CustomLink } from '@/components/custom/link'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -8,18 +9,21 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useUserStore } from '@/store/user'
-import { CustomLink } from '@/components/custom/link'
 import { routers } from '@/lib/constants/routers'
 import { sessionManager } from '@/lib/session'
+import { Modals, useOpenModal } from '@/store/modal'
+import { useUserStore } from '@/store/user'
 import Link from 'next/link'
 
 export function UserNav() {
   const user = useUserStore((state) => state.user)
   const setUser = useUserStore((state) => state.setUser)
+
+  const openChangePasswordModal = useOpenModal(Modals.CHANGE_PASSWORD)
+
+  const handleChangePassword = () => openChangePasswordModal()
 
   const handleSignOut = () => {
     setUser(undefined)
@@ -52,10 +56,9 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Billing</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">New Team</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer" onClick={handleChangePassword}>
+            Change password
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer">

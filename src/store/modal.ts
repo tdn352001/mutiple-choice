@@ -6,6 +6,7 @@ import { create } from 'zustand'
 
 export enum Modals {
   LOGOUT = 'LOGOUT',
+  CHANGE_PASSWORD = 'CHANGE_PASSWORD',
   UPDATE_PASSWORD = 'UPDATE_PASSWORD',
   DELETE_COURSE = 'DELETE_COURSE',
   DELETE_TOPIC = 'DELETE_TOPIC',
@@ -20,6 +21,7 @@ type ModalState<T = undefined> = {
 type State = {
   modal: {
     [Modals.LOGOUT]?: ModalState
+    [Modals.CHANGE_PASSWORD]?: ModalState
     [Modals.DELETE_COURSE]?: ModalState<{ course: Course }>
     [Modals.DELETE_TOPIC]?: ModalState<{ topic: Topic }>
   }
@@ -28,11 +30,11 @@ type State = {
 type ModaType = keyof State['modal']
 type ModalOriginData<T extends ModaType> = NonUndefined<State['modal'][T]>['data']
 type ModalData<T extends ModaType> = NonUndefined<ModalOriginData<T>> extends undefined
-  ? any
+  ? never
   : NonUndefined<ModalOriginData<T>>
 
 type Actions = {
-  openModal: <T extends ModaType>(modal: T, data: ModalData<T>, zIndex?: number) => void
+  openModal: <T extends ModaType>(modal: T, data?: ModalData<T>, zIndex?: number) => void
   closeModal: (modal: Modals) => void
   closeAllModals: () => void
 }
@@ -78,21 +80,28 @@ export const useModalStore = create<State & Actions>((set) => ({
 export const useOpenModal = <T extends ModaType>(modal: T) => {
   const openModal = useModalStore((state) => state.openModal)
   return useCallback(
-    (data: ModalData<T>, zIndex?: number) => {
+    (data?: ModalData<T>, zIndex?: number) => {
       openModal(modal, data, zIndex)
     },
     [modal, openModal]
   )
 }
 
+export const useIsModalOpen = <T extends ModaType>(modal: T) => {
+  return useModalStore((state) => state.modal[modal]?.open)
+}
+
+export const useModalData = <T extends ModaType>(modal: T) => {
+  return useModalStore((state) => state.modal[modal]?.data) as ModalData<T>
+}
+
 export const useCloseModal = (modal: Modals) => {
   const closeModal = useModalStore((state) => state.closeModal)
-  return useCallback(
-    (open: boolean) => {
-      if (!open) {
-        closeModal(modal)
-      }
-    },
-    [closeModal, modal]
-  )
+  return useCallback(() => {
+    closeModal(modal)
+  }, [closeModal, modal])
+}
+
+export const getModalData = <T extends ModaType>(modal: T) => {
+  return useModalStore.getState().modal[modal]?.data as ModalData<T>
 }
