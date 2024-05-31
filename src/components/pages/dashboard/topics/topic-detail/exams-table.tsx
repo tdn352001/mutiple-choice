@@ -104,7 +104,7 @@ const ExamsTable = ({ topic }: ExamsTableProps) => {
       {
         accessorKey: 'exam_name',
         header: (props) => {
-          return <DataTableColumnHeader title="Name" {...props} />
+          return <DataTableColumnHeader title="Exam name" {...props} />
         },
         cell: ({ row }) => {
           const { id, exam_name } = row.original
@@ -120,7 +120,7 @@ const ExamsTable = ({ topic }: ExamsTableProps) => {
       {
         accessorKey: 'exam_code',
         header: (props) => {
-          return <DataTableColumnHeader title="Code" {...props} />
+          return <DataTableColumnHeader title="Exam code" {...props} />
         },
         cell: ({ row }) => {
           return (

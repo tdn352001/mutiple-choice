@@ -25,7 +25,7 @@ const TopicDetailPage = ({ id }: { id: string }) => {
           action={
             isAdmin && (
               <CustomLink href={dynamicRouters.createTopic(topic.id)} icon="Plus">
-                Create Topic
+                Create Exam
               </CustomLink>
             )
           }
