@@ -8,6 +8,8 @@ import { useGetCourseByIdSuspenseQuery } from '@/hooks/services/courses'
 import { courseBreadcrumb } from '@/lib/breadcrumb/course'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { useUserStore } from '@/store/user'
+import { Suspense } from 'react'
+import SearchTopic from './search-topics'
 
 const CourseDetailPage = ({ id }: { id: string }) => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
@@ -39,6 +41,9 @@ const CourseDetailPage = ({ id }: { id: string }) => {
         }
       />
       <div>
+        <Suspense>
+          <SearchTopic />
+        </Suspense>
         <TopicTable course={course} />
       </div>
     </Container>

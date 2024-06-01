@@ -85,3 +85,18 @@ export const getExamsBreadcrumb = (topic: Topic) => [
     href: dynamicRouters.topicById(topic.id),
   },
 ]
+
+export const createExamsBreadcrumb = [
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.HOME,
+    href: routers.dashboard,
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.EXAMS.HOME,
+    href: routers.courses,
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.EXAMS.CREATE,
+    href: routers.createExam,
+  },
+]

@@ -40,7 +40,7 @@ const SearchBox = ({ className, value, onChange, autoFocus, placeholder }: Searc
     <form className={cn('relative w-full max-w-96', className)} onSubmit={handleFormSubmit}>
       <Search className="size-4 absolute top-1/2 left-2 -translate-y-1/2" />
       <Input
-        className="pl-9 w-full !ring-transparent focus-visible:border-black/50"
+        className="pl-9 w-full !ring-transparent focus-visible:border-foreground/50"
         value={keyword}
         onChange={handleInputChange}
         placeholder={placeholder}

@@ -1,63 +1,87 @@
 'use client'
 import ErrorAlert from '@/components/custom/error-alert'
+import ProtectField from '@/components/forms/exams/protect-field'
 import CourseSelect from '@/components/forms/topics/course-select'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useCreateTopicMutation } from '@/hooks/services/topics/use-create-topic-mutation'
+import { useCreateExamMutation } from '@/hooks/services/exam'
 import { dynamicRouters } from '@/lib/constants/routers'
-import { TopicSchema, topicSchema } from '@/lib/schemas/topics'
-import { Course } from '@/services/courses'
+import { ExamSchema, examSchema } from '@/lib/schemas/exams'
+import { Topic } from '@/services/topics'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-type FormValue = TopicSchema
+type FormValue = ExamSchema
 
 const fields = [
   {
-    name: 'topic_name',
-    label: 'Topic Name',
+    name: 'exam_name',
+    label: 'Exam Name',
   },
   {
-    name: 'topic_code',
-    label: 'Topic Code',
+    name: 'exam_code',
+    label: 'Exam Name',
+  },
+  {
+    name: 'number_of_questions',
+    label: 'Number of Questions',
+  },
+  {
+    name: 'number_attempts',
+    label: 'Number of Attempts',
+  },
+  {
+    name: 'time_limit',
+    label: 'Time Limit',
   },
 ]
 
-interface CreateTopicFormProps {
-  initialCourse?: Course
+interface CreateExamFormProps {
+  initialTopic?: Topic
 }
 
-const CreateTopicForm = ({ initialCourse }: CreateTopicFormProps) => {
+const CreateExamForm = ({ initialTopic }: CreateExamFormProps) => {
   const [error, setError] = useState('')
 
-  const { mutateAsync: createTopic, isPending } = useCreateTopicMutation()
+  const { mutateAsync: createExam, isPending } = useCreateExamMutation()
 
   const router = useRouter()
 
+  const [animationParent] = useAutoAnimate()
+
   const form = useForm<FormValue>({
-    resolver: zodResolver(topicSchema),
+    resolver: zodResolver(examSchema),
     defaultValues: {
-      topic_name: '',
-      topic_code: '',
+      exam_name: '',
+      exam_code: '',
       description: '',
-      course_id: initialCourse?.id,
-      active: false,
+      number_of_questions: 1,
+      number_attempts: 1,
+      time_limit: 1,
+      protect: false,
+      password: '',
+      course_id: initialTopic?.course_id,
+      topic_id: initialTopic?.id,
+      onsite_scoring: false,
+      active: true,
     },
   })
 
   const handleSubmit = async (formValue: FormValue) => {
-    return createTopic({
+    return createExam({
       ...formValue,
+      password: formValue.protect ? formValue.password : undefined,
     })
       .then(() => {
-        toast.success('Create topic successfully!')
-        router.push(dynamicRouters.courseById(formValue.course_id))
+        toast.success('Create exam successfully!')
+        router.push(dynamicRouters.topicById(formValue.topic_id))
       })
       .catch((err) => {
         setError(err.message || 'Something went wrong!')
@@ -67,7 +91,11 @@ const CreateTopicForm = ({ initialCourse }: CreateTopicFormProps) => {
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5 w-full max-w-[32rem]">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-5 w-full max-w-[32rem]"
+          ref={animationParent}
+        >
           <ErrorAlert show={!!error} message={error} />
           {fields.map(({ label, name, ...inputProps }) => (
             <FormField
@@ -98,6 +126,8 @@ const CreateTopicForm = ({ initialCourse }: CreateTopicFormProps) => {
               )
             }}
           />
+
+          <ProtectField form={form} />
 
           <FormField
             control={form.control}
@@ -139,4 +169,4 @@ const CreateTopicForm = ({ initialCourse }: CreateTopicFormProps) => {
   )
 }
 
-export default CreateTopicForm
+export default CreateExamForm

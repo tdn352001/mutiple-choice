@@ -1,7 +1,6 @@
 import SearchBox from '@/components/custom/search-box'
 import { useAppSearchParams } from '@/hooks/next'
 import { SearchParams } from '@/lib/types/query-params'
-import React from 'react'
 
 const SearchTopic = () => {
   const searchParams = useAppSearchParams()

@@ -7,7 +7,7 @@ export const routers = {
   dashboard: '/dashboard',
   courses: '/dashboard/courses',
   createCourse: '/dashboard/courses/create',
-
+  createExam: '/dashboard/exams/create',
   admin: {
     login: '/admin/login',
     dashboard: '/admin/dashboard',
@@ -20,6 +20,7 @@ export const dynamicRouters = {
   createTopic: (id: string | number) => `/dashboard/topics/create?course_id=${id}`,
   updateTopic: (id: string | number) => `/dashboard/topics/update/${id}`,
   topicById: (id: string | number) => `/dashboard/topics/detail/${id}`,
+  examById: (id: string | number) => `/dashboard/exams/detail/${id}`,
 }
 
 export const nameRouters = {
