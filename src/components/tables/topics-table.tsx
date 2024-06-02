@@ -3,12 +3,11 @@ import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGetTopicsByCourseSuspenseQuery } from '@/hooks/services/topics'
+import { useGetTopicsSuspenseQuery } from '@/hooks/services/topics/use-get-topics-query'
 import { useApiQuery } from '@/hooks/use-api-query'
 import { TOPICS_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { SearchParams } from '@/lib/types/query-params'
-import { Course } from '@/services/courses'
 import { Topic } from '@/services/topics'
 import { Modals, useOpenModal } from '@/store/modal'
 import { useUserStore } from '@/store/user'
@@ -28,16 +27,19 @@ import Link from 'next/link'
 import { useCallback, useMemo } from 'react'
 
 interface TopicTableProps {
-  course: Course
+  courseId?: string | number
 }
 
-const TopicTable = ({ course }: TopicTableProps) => {
+const TopicTable = ({ courseId }: TopicTableProps) => {
   const [params, paramsUpdater] = useApiQuery({
     sortProps: TOPICS_SORTABLE_PROPS,
   })
   const isAdmin = useUserStore((state) => state.user?.is_admin)
 
-  const { data } = useGetTopicsByCourseSuspenseQuery(course.id, params)
+  const { data } = useGetTopicsSuspenseQuery({
+    params,
+    courseId,
+  })
 
   const topics = data?.topics || []
 
@@ -99,8 +101,8 @@ const TopicTable = ({ course }: TopicTableProps) => {
 
   const openModal = useOpenModal(Modals.DELETE_TOPIC)
 
-  const columns: ColumnDef<Topic>[] = useMemo(
-    () => [
+  const columns: ColumnDef<Topic>[] = useMemo(() => {
+    const columns: ColumnDef<Topic>[] = [
       {
         accessorKey: 'topic_name',
         header: (props) => {
@@ -159,7 +161,7 @@ const TopicTable = ({ course }: TopicTableProps) => {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-destructive focus:text-destructive/90"
-                      onClick={() => openModal({ topic: row.original })}
+                      onClick={() => openModal({ topic: row.original, courseId })}
                     >
                       <Trash className="mr-2 h-4 w-4" />
                       <span>Delete</span>
@@ -171,9 +173,31 @@ const TopicTable = ({ course }: TopicTableProps) => {
           )
         },
       },
-    ],
-    [openModal, isAdmin]
-  )
+    ]
+
+    if (isAdmin) {
+      columns.splice(2, 0, {
+        accessorKey: 'active',
+        header: (props) => {
+          return <DataTableColumnHeader title="Active" {...props} />
+        },
+        cell: ({ row }) => {
+          const { active } = row.original
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap first-letter:uppercase">{`${active}`}</span>
+            </div>
+          )
+        },
+        meta: {
+          className: 'hidden md:table-cell',
+        },
+        enableSorting: false,
+      })
+    }
+
+    return columns
+  }, [isAdmin, openModal, courseId])
 
   const table = useReactTable({
     data: topics,

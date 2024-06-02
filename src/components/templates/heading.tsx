@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 interface HeadingProps {
   className?: string
@@ -17,7 +17,7 @@ const Heading = ({ className, title, description, action }: HeadingProps) => {
           <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
           {description && <p className="text-sm text-muted-foreground">{description}</p>}
         </div>
-        {action && <div>{action}</div>}
+        <div className="min-h-10">{action}</div>
       </div>
       <Separator className="mt-4" />
     </div>

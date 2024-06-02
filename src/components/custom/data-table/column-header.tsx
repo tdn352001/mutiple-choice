@@ -1,6 +1,6 @@
 import { ArrowDownIcon, ArrowUpIcon, CaretSortIcon } from '@radix-ui/react-icons'
+import { HeaderContext } from '@tanstack/react-table'
 import cx from 'clsx'
-import { Column, HeaderContext, Table } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -19,7 +19,7 @@ export function DataTableColumnHeader<TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     console.log(title, ' cannot sort')
-    return <div className={cn(className)}>{title}</div>
+    return <div className={cn('text-foreground font-medium', className)}>{title}</div>
   }
 
   const isDisabledSort = table.getRowCount() <= 1

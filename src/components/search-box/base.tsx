@@ -1,9 +1,12 @@
-import SearchBox from '@/components/custom/search-box'
+import SearchBoxPrimitive from '@/components/custom/search-box'
 import { useAppSearchParams } from '@/hooks/next'
 import { SearchParams } from '@/lib/types/query-params'
-import React from 'react'
 
-const SearchCourse = () => {
+interface SearchBoxApiProps {
+  placeholder: string
+}
+
+const SearchBoxApi = ({ placeholder }: SearchBoxApiProps) => {
   const searchParams = useAppSearchParams()
 
   const keyword = searchParams.get(SearchParams.Search) || ''
@@ -16,13 +19,8 @@ const SearchCourse = () => {
   }
 
   return (
-    <SearchBox
-      value={keyword}
-      onChange={handleSearch}
-      onSubmit={handleSearch}
-      placeholder="Search courses by name or code"
-    />
+    <SearchBoxPrimitive value={keyword} onChange={handleSearch} onSubmit={handleSearch} placeholder={placeholder} />
   )
 }
 
-export default SearchCourse
+export default SearchBoxApi

@@ -11,7 +11,7 @@ export const useGetTopicByIdQuery = (id: string, enabled = true) => {
 
 export const useGetTopicByIdSuspenseQuery = (id: string, enabled = true) => {
   return useSuspenseQuery({
-    queryKey: ['topic-by-id', id],
+    queryKey: ['topic', id],
     queryFn: () => topicService.getTopicById(id),
   })
 }

@@ -6,7 +6,7 @@ import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useGetTopicByIdSuspenseQuery } from '@/hooks/services/topics'
-import { getExamsBreadcrumb } from '@/lib/breadcrumb/course'
+import { topicListBreadcrumb } from '@/lib/breadcrumb/course'
 import { routers } from '@/lib/constants/routers'
 import { useCreateExamStore } from '@/store/site/create-exam'
 import { useUserStore } from '@/store/user'
@@ -23,7 +23,15 @@ const TopicDetailPage = ({ id }: { id: string }) => {
   return (
     <ScrollArea className="size-full">
       <Container>
-        <Breadcrumb items={getExamsBreadcrumb(topic)} />
+        <Breadcrumb
+          items={[
+            ...topicListBreadcrumb,
+            {
+              title: topic.topic_name,
+              href: '#',
+            },
+          ]}
+        />
         <Heading
           title={topic.topic_name}
           description={topic.description}

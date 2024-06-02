@@ -14,7 +14,7 @@ export const useGetTopicsByCourseQuery = (
   options: AppQueryOptions = {}
 ) => {
   return useQuery({
-    queryKey: ['topics-by-course', courseId, params],
+    queryKey: ['topics', { courseId }, params],
     queryFn: async () => {
       return topicService.getTopicsByCourse(courseId, params).then((res) => res.data)
     },

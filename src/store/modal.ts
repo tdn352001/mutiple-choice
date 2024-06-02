@@ -23,7 +23,7 @@ type State = {
     [Modals.LOGOUT]?: ModalState
     [Modals.CHANGE_PASSWORD]?: ModalState
     [Modals.DELETE_COURSE]?: ModalState<{ course: Course }>
-    [Modals.DELETE_TOPIC]?: ModalState<{ topic: Topic }>
+    [Modals.DELETE_TOPIC]?: ModalState<{ topic: Topic; courseId?: string | number }>
   }
 }
 
@@ -104,4 +104,12 @@ export const useCloseModal = (modal: Modals) => {
 
 export const getModalData = <T extends ModaType>(modal: T) => {
   return useModalStore.getState().modal[modal]?.data as ModalData<T>
+}
+
+export const useModalState = <T extends ModaType>(modal: T) => {
+  const open = useIsModalOpen(modal)
+  const data = getModalData(modal) as ModalData<T> | undefined
+  const closeModal = useCloseModal(modal)
+
+  return { open, data, closeModal }
 }

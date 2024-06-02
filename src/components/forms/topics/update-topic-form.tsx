@@ -92,6 +92,7 @@ const UpdateTopicForm = ({ topic }: UpdateTopicFormProps) => {
                 <FormItem>
                   <FormLabel>Course</FormLabel>
                   <CourseSelect onValueChange={field.onChange} value={field.value} />
+                  <FormMessage />
                 </FormItem>
               )
             }}

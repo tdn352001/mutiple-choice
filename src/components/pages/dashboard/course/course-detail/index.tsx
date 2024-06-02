@@ -1,18 +1,23 @@
 'use client'
+
 import Breadcrumb from '@/components/custom/breadcrumb'
 import { CustomLink } from '@/components/custom/link'
-import TopicTable from '@/components/pages/dashboard/course/course-detail/topics-table'
+import { DeleteTopicModal } from '@/components/modals/topic/delete-topic-modal'
+import SearchTopic from '@/components/search-box/search-topics'
+import TopicTable from '@/components/tables/topics-table'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
 import { useGetCourseByIdSuspenseQuery } from '@/hooks/services/courses'
-import { courseBreadcrumb } from '@/lib/breadcrumb/course'
-import { dynamicRouters } from '@/lib/constants/routers'
+import { courseListBreadcrumb } from '@/lib/breadcrumb/course'
+import { dynamicRouters, routers } from '@/lib/constants/routers'
+import { useCreateTopicStore } from '@/store/site/create-topic'
 import { useUserStore } from '@/store/user'
 import { Suspense } from 'react'
-import SearchTopic from './search-topics'
 
 const CourseDetailPage = ({ id }: { id: string }) => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
+
+  const setCourse = useCreateTopicStore((state) => state.setCourse)
 
   const {
     data: { data: course },
@@ -22,7 +27,7 @@ const CourseDetailPage = ({ id }: { id: string }) => {
     <Container>
       <Breadcrumb
         items={[
-          ...courseBreadcrumb,
+          ...courseListBreadcrumb,
           {
             title: course.course_name,
             href: dynamicRouters.courseById(course.id),
@@ -34,7 +39,7 @@ const CourseDetailPage = ({ id }: { id: string }) => {
         description={course.description}
         action={
           isAdmin && (
-            <CustomLink href={dynamicRouters.createTopic(course.id)} icon="Plus">
+            <CustomLink href={routers.createTopic} icon="Plus" onClick={setCourse.bind(this, course)}>
               Create Topic
             </CustomLink>
           )
@@ -44,8 +49,9 @@ const CourseDetailPage = ({ id }: { id: string }) => {
         <Suspense>
           <SearchTopic />
         </Suspense>
-        <TopicTable course={course} />
+        <TopicTable courseId={id} />
       </div>
+      <DeleteTopicModal />
     </Container>
   )
 }

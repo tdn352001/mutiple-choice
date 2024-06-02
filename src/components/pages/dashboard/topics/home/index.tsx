@@ -1,9 +1,9 @@
 'use client'
 
 import { CustomLink } from '@/components/custom/link'
-import { DeleteCourseModal } from '@/components/modals/course/delete-course-modal'
-import SearchCourse from '@/components/search-box/search-course'
-import CourseTable from '@/components/tables/course-table'
+import { DeleteTopicModal } from '@/components/modals/topic/delete-topic-modal'
+import SearchTopic from '@/components/search-box/search-topics'
+import TopicTable from '@/components/tables/topics-table'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -12,32 +12,32 @@ import { DOCUMENTS_DESCRIPTIONS, DOCUMENT_TITLES } from '@/lib/constants/seo'
 import { useUserStore } from '@/store/user'
 import { Suspense } from 'react'
 
-const CoursePage = () => {
+const TopicsPage = () => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
   return (
     <ScrollArea className="w-full h-full">
       <Container>
         <Heading
-          title={DOCUMENT_TITLES.DASHBOARD.COURSES.HOME}
-          description={DOCUMENTS_DESCRIPTIONS.DASHBOARD.COURSES.HOME}
+          title={DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME}
+          description={DOCUMENTS_DESCRIPTIONS.DASHBOARD.TOPICS.HOME}
           action={
             isAdmin && (
-              <CustomLink href={routers.createCourse} icon="Plus">
-                Create Course
+              <CustomLink href={routers.createTopic} icon="Plus">
+                Create Topic
               </CustomLink>
             )
           }
         />
         <div>
           <Suspense>
-            <SearchCourse />
+            <SearchTopic />
           </Suspense>
-          <CourseTable />
+          <TopicTable />
         </div>
-        <DeleteCourseModal />
+        <DeleteTopicModal />
       </Container>
     </ScrollArea>
   )
 }
 
-export default CoursePage
+export default TopicsPage

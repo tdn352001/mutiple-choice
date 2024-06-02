@@ -6,7 +6,10 @@ export const routers = {
   resetPassword: '/reset-password',
   dashboard: '/dashboard',
   courses: '/dashboard/courses',
+  topics: '/dashboard/topics',
+  exams: '/dashboard/exams',
   createCourse: '/dashboard/courses/create',
+  createTopic: '/dashboard/topics/create',
   createExam: '/dashboard/exams/create',
   admin: {
     login: '/admin/login',

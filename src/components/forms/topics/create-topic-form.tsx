@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useCreateTopicMutation } from '@/hooks/services/topics/use-create-topic-mutation'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { TopicSchema, topicSchema } from '@/lib/schemas/topics'
-import { Course } from '@/services/courses'
+import { useCreateTopicStore } from '@/store/site/create-topic'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -29,11 +29,9 @@ const fields = [
   },
 ]
 
-interface CreateTopicFormProps {
-  initialCourse?: Course
-}
+const CreateTopicForm = () => {
+  const initialCourse = useCreateTopicStore((state) => state.course)
 
-const CreateTopicForm = ({ initialCourse }: CreateTopicFormProps) => {
   const [error, setError] = useState('')
 
   const { mutateAsync: createTopic, isPending } = useCreateTopicMutation()
@@ -94,6 +92,7 @@ const CreateTopicForm = ({ initialCourse }: CreateTopicFormProps) => {
                 <FormItem>
                   <FormLabel>Course</FormLabel>
                   <CourseSelect onValueChange={field.onChange} value={field.value} />
+                  <FormMessage />
                 </FormItem>
               )
             }}

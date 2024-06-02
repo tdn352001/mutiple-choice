@@ -93,8 +93,8 @@ const CourseTable = () => {
 
   const openModal = useOpenModal(Modals.DELETE_COURSE)
 
-  const columns: ColumnDef<Course>[] = useMemo(
-    () => [
+  const columns: ColumnDef<Course>[] = useMemo(() => {
+    const columns: ColumnDef<Course>[] = [
       {
         accessorKey: 'course_name',
         header: (props) => {
@@ -127,6 +127,7 @@ const CourseTable = () => {
           className: 'hidden md:table-cell',
         },
       },
+
       {
         id: 'actions',
         cell: ({ row }) => {
@@ -165,9 +166,28 @@ const CourseTable = () => {
           )
         },
       },
-    ],
-    [openModal, isAdmin]
-  )
+    ]
+
+    if (isAdmin) {
+      columns.splice(2, 0, {
+        accessorKey: 'active',
+        header: (props) => {
+          return <DataTableColumnHeader title="Active" {...props} />
+        },
+        cell: ({ row }) => {
+          const { active } = row.original
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap first-letter:uppercase">{`${active}`}</span>
+            </div>
+          )
+        },
+        enableSorting: false,
+      })
+    }
+
+    return columns
+  }, [openModal, isAdmin])
 
   const table = useReactTable({
     data: courses,

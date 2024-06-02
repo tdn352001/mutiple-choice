@@ -2,7 +2,7 @@ import { dynamicRouters, routers } from '@/lib/constants/routers'
 import { DOCUMENT_TITLES } from '@/lib/constants/seo'
 import { Topic } from '@/services/topics'
 
-export const courseBreadcrumb = [
+export const courseListBreadcrumb = [
   {
     title: DOCUMENT_TITLES.DASHBOARD.HOME,
     href: routers.dashboard,
@@ -13,8 +13,19 @@ export const courseBreadcrumb = [
   },
 ]
 
+export const topicListBreadcrumb = [
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.HOME,
+    href: routers.dashboard,
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
+    href: routers.topics,
+  },
+]
+
 export const createCourseBreadcrumb = [
-  ...courseBreadcrumb,
+  ...courseListBreadcrumb,
   {
     title: DOCUMENT_TITLES.DASHBOARD.COURSES.CREATE,
     href: routers.createCourse,
@@ -22,7 +33,7 @@ export const createCourseBreadcrumb = [
 ]
 
 export const updateCourseBreadcrumb = [
-  ...courseBreadcrumb,
+  ...courseListBreadcrumb,
   {
     title: DOCUMENT_TITLES.DASHBOARD.COURSES.UPDATE,
     href: routers.courses,
@@ -30,7 +41,7 @@ export const updateCourseBreadcrumb = [
 ]
 
 export const getTopicsBreadcrumb = (courseId: number) => [
-  ...courseBreadcrumb,
+  ...courseListBreadcrumb,
   {
     title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
     href: dynamicRouters.courseById(courseId),
@@ -53,14 +64,7 @@ export const getCreateTopicsBreadcrumb = () => [
 ]
 
 export const getUpdateTopicsBreadcrumb = (topic: Topic) => [
-  {
-    title: DOCUMENT_TITLES.DASHBOARD.HOME,
-    href: routers.dashboard,
-  },
-  {
-    title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
-    href: dynamicRouters.courseById(topic.course_id),
-  },
+  ...topicListBreadcrumb,
   {
     title: topic.topic_name,
     href: dynamicRouters.topicById(topic.id),
