@@ -7,9 +7,24 @@ export const examSchema = z
     exam_name: z.string().min(1, 'Required field'),
     exam_code: z.string().min(1, 'Required field'),
     description: z.string().optional(),
-    number_of_questions: z.number().min(1, 'Number of questions must be at least 1'),
-    number_attempts: z.number().min(1, 'Number of attempts must be at least 1'),
-    time_limit: z.number().min(1, 'Time must be at least 1'),
+    number_of_questions: z.coerce
+      .number({
+        invalid_type_error: 'Number of questions must be an integer number',
+      })
+      .int()
+      .min(1, 'Number of questions must be at least 1'),
+    number_attempts: z.coerce
+      .number({
+        invalid_type_error: 'Number of attempts must be an integer number',
+      })
+      .int()
+      .min(1, 'Number of attempts must be at least 1'),
+    time_limit: z.coerce
+      .number({
+        invalid_type_error: 'Time limit must be an integer number',
+      })
+      .int()
+      .min(1, 'Time limit must be at least 1'),
     protect: z.boolean(),
     password: z.string().optional(),
     onsite_scoring: z.boolean(),

@@ -16,7 +16,7 @@ export const useGetExamsByTopicQuery = (
   return useQuery({
     queryKey: ['topics-by-course', topicId, params],
     queryFn: async () => {
-      return examService.getExamByTopic(topicId, params).then((res) => res.data)
+      return examService.getExamsByTopic(topicId, params).then((res) => res.data)
     },
     ...options,
   })
@@ -30,7 +30,7 @@ export const useGetExamsByTopicSuspenseQuery = (
   return useSuspenseQuery({
     queryKey: ['topics-by-course', topicId, params],
     queryFn: async () => {
-      return examService.getExamByTopic(topicId, params).then((res) => res.data)
+      return examService.getExamsByTopic(topicId, params).then((res) => res.data)
     },
     ...options,
   })

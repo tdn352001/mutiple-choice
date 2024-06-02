@@ -1,3 +1,4 @@
+import { BaseApiResponse } from '@/lib/axios'
 import { BaseApiQueryParams } from '@/lib/types/query-params'
 
 export type Topic = {
@@ -11,18 +12,17 @@ export type Topic = {
 
 export type GetTopicsQueryParams = BaseApiQueryParams
 
-export type GetTopicsResponse = {
-  data: {
-    topics: Topic[]
-    meta: {
-      current_page: number
-      next_page?: number
-      prev_page?: number
-      total_pages: number
-      total_items: number
-    }
+export type GetTopicsResponseData = {
+  topics: Topic[]
+  meta: {
+    current_page: number
+    next_page?: number
+    prev_page?: number
+    total_pages: number
+    total_items: number
   }
 }
+export type GetTopicsResponse = BaseApiResponse<GetTopicsResponseData>
 
 export type CreateTopicRequest = {
   course_id: string | number

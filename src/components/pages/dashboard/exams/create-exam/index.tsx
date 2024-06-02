@@ -8,11 +8,8 @@ import Heading from '@/components/templates/heading'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { createExamsBreadcrumb } from '@/lib/breadcrumb/course'
 import { DOCUMENTS_DESCRIPTIONS, DOCUMENT_TITLES } from '@/lib/constants/seo'
-import { useCreateExamStore } from '@/store/site/create-exam'
 
 const CreateExamPage = () => {
-  const initialTopic = useCreateExamStore((state) => state.topic)
-
   return (
     <ProtectedRoute admin>
       <ScrollArea className="size-full">
@@ -22,7 +19,7 @@ const CreateExamPage = () => {
             title={DOCUMENT_TITLES.DASHBOARD.TOPICS.CREATE}
             description={DOCUMENTS_DESCRIPTIONS.DASHBOARD.TOPICS.CREATE}
           />
-          <CreateExamForm initialTopic={initialTopic} />
+          <CreateExamForm />
         </Container>
       </ScrollArea>
     </ProtectedRoute>

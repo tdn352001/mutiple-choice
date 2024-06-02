@@ -1,10 +1,10 @@
-import { getApi, postApi, putApi, deleteApi } from '@/lib/axios'
+import { deleteApi, getApi, postApi, putApi } from '@/lib/axios'
 import {
+  CreateExamRequest,
+  CreateExamResponse,
   GetExamByIdResponse,
   GetExamQueryParams,
   GetExamsResponse,
-  CreateExamRequest,
-  CreateExamResponse,
   UpdateExamRequest,
   UpdateExamResponse,
 } from './type'
@@ -12,7 +12,12 @@ import {
 export * from './type'
 
 export const examService = {
-  getExamByTopic(topic_id: string | number, params?: GetExamQueryParams) {
+  getExams(params?: GetExamQueryParams) {
+    return getApi<GetExamsResponse>('/exam', {
+      params,
+    })
+  },
+  getExamsByTopic(topic_id: string | number, params?: GetExamQueryParams) {
     return getApi<GetExamsResponse>(`/exam/topic/${topic_id}`, {
       params,
     })

@@ -3,13 +3,12 @@ import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGetExamsByTopicSuspenseQuery } from '@/hooks/services/exam'
+import { useGetExamsSuspenseQuery } from '@/hooks/services/exam/use-get-exam-query'
 import { useApiQuery } from '@/hooks/use-api-query'
 import { TOPICS_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { SearchParams } from '@/lib/types/query-params'
 import { Exam } from '@/services/exams'
-import { Topic } from '@/services/topics'
 import { Modals, useOpenModal } from '@/store/modal'
 import { useUserStore } from '@/store/user'
 import {
@@ -28,16 +27,16 @@ import Link from 'next/link'
 import { useCallback, useMemo } from 'react'
 
 interface ExamsTableProps {
-  topic: Topic
+  topicId?: string | number
 }
 
-const ExamsTable = ({ topic }: ExamsTableProps) => {
+const ExamsTable = ({ topicId }: ExamsTableProps) => {
   const [params, paramsUpdater] = useApiQuery({
     sortProps: TOPICS_SORTABLE_PROPS,
   })
   const isAdmin = useUserStore((state) => state.user?.is_admin)
 
-  const { data } = useGetExamsByTopicSuspenseQuery(topic.id, params)
+  const { data } = useGetExamsSuspenseQuery({ topicId, params })
 
   const exams = data?.exams || []
 

@@ -1,7 +1,6 @@
 'use client'
 import ErrorAlert from '@/components/custom/error-alert'
 import ProtectField from '@/components/forms/exams/protect-field'
-import CourseSelect from '@/components/forms/topics/course-select'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -11,12 +10,14 @@ import { useCreateExamMutation } from '@/hooks/services/exam'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { ExamSchema, examSchema } from '@/lib/schemas/exams'
 import { Topic } from '@/services/topics'
+import { useCreateExamStore } from '@/store/site/create-exam'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import RelationShipField from './relationship-field'
 
 type FormValue = ExamSchema
 
@@ -27,7 +28,7 @@ const fields = [
   },
   {
     name: 'exam_code',
-    label: 'Exam Name',
+    label: 'Exam Code',
   },
   {
     name: 'number_of_questions',
@@ -47,7 +48,9 @@ interface CreateExamFormProps {
   initialTopic?: Topic
 }
 
-const CreateExamForm = ({ initialTopic }: CreateExamFormProps) => {
+const CreateExamForm = () => {
+  const initialTopic = useCreateExamStore((state) => state.topic)
+
   const [error, setError] = useState('')
 
   const { mutateAsync: createExam, isPending } = useCreateExamMutation()
@@ -72,6 +75,7 @@ const CreateExamForm = ({ initialTopic }: CreateExamFormProps) => {
       onsite_scoring: false,
       active: true,
     },
+    mode: 'all',
   })
 
   const handleSubmit = async (formValue: FormValue) => {
@@ -114,18 +118,7 @@ const CreateExamForm = ({ initialTopic }: CreateExamFormProps) => {
             />
           ))}
 
-          <FormField
-            control={form.control}
-            name="course_id"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Course</FormLabel>
-                  <CourseSelect onValueChange={field.onChange} value={field.value} />
-                </FormItem>
-              )
-            }}
-          />
+          <RelationShipField form={form} />
 
           <ProtectField form={form} />
 
@@ -154,7 +147,7 @@ const CreateExamForm = ({ initialTopic }: CreateExamFormProps) => {
                 </FormControl>
 
                 <FormLabel>
-                  <span>Active topic</span>
+                  <span>Active exam</span>
                 </FormLabel>
               </FormItem>
             )}

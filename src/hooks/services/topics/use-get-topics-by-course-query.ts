@@ -1,6 +1,6 @@
-import { AppQueryOptions } from '@/lib/types/queries'
+import { AppQueryOptions, AppQueryOptionsV2 } from '@/lib/types/queries'
 import { BaseApiQueryParams } from '@/lib/types/query-params'
-import { topicService } from '@/services/topics'
+import { GetTopicsResponseData, topicService } from '@/services/topics'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 
 const defaultParams: BaseApiQueryParams = {
@@ -8,10 +8,17 @@ const defaultParams: BaseApiQueryParams = {
   per_page: 10,
 }
 
+type UseGetTopicsByCourseQuery = AppQueryOptionsV2<
+  GetTopicsResponseData,
+  Error,
+  GetTopicsResponseData,
+  (string | object)[]
+>
+
 export const useGetTopicsByCourseQuery = (
   courseId: string | number,
   params: BaseApiQueryParams = defaultParams,
-  options: AppQueryOptions = {}
+  options: UseGetTopicsByCourseQuery = {}
 ) => {
   return useQuery({
     queryKey: ['topics', { courseId }, params],

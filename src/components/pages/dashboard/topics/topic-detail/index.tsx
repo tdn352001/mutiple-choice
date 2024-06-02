@@ -1,7 +1,8 @@
 'use client'
 import Breadcrumb from '@/components/custom/breadcrumb'
 import { CustomLink } from '@/components/custom/link'
-import ExamsTable from '@/components/pages/dashboard/topics/topic-detail/exams-table'
+import SearchTopic from '@/components/search-box/search-topics'
+import ExamsTable from '@/components/tables/exams-table'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -11,7 +12,6 @@ import { routers } from '@/lib/constants/routers'
 import { useCreateExamStore } from '@/store/site/create-exam'
 import { useUserStore } from '@/store/user'
 import { Suspense } from 'react'
-import SearchTopic from './search-topics'
 
 const TopicDetailPage = ({ id }: { id: string }) => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
@@ -47,7 +47,7 @@ const TopicDetailPage = ({ id }: { id: string }) => {
           <Suspense>
             <SearchTopic />
           </Suspense>
-          <ExamsTable topic={topic} />
+          <ExamsTable topicId={id} />
         </div>
       </Container>
     </ScrollArea>

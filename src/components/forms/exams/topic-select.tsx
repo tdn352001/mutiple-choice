@@ -1,7 +1,7 @@
 import SearchBox from '@/components/custom/search-box'
 import { FormControl } from '@/components/ui/form'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useGetTopicsByCourseQuery } from '@/hooks/services/topics'
+import { useGetTopicByIdQuery, useGetTopicsByCourseQuery } from '@/hooks/services/topics'
 import { cn } from '@/lib/utils'
 import { Topic } from '@/services/topics'
 import {
@@ -18,11 +18,11 @@ import {
   useRole,
 } from '@floating-ui/react'
 import { ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface CourseSelectProps {
   className?: string
-  courseId?: string
+  courseId?: string | number
   value?: number
   onValueChange?: (value: number) => void
 }
@@ -31,8 +31,10 @@ const TopicSelect = ({ className, courseId, value, onValueChange }: CourseSelect
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedTopic, setSelectedTopic] = useState<Topic>()
+  const [enabledFetchTopic, setEnableFetchTopic] = useState(true)
+  console.log({ courseId })
 
-  const { data: resData } = useGetTopicsByCourseQuery(
+  const getTopicsQuery = useGetTopicsByCourseQuery(
     courseId!,
     {
       search,
@@ -41,10 +43,34 @@ const TopicSelect = ({ className, courseId, value, onValueChange }: CourseSelect
     },
     {
       enabled: !!courseId,
+      placeholderData: (prev) => {
+        return prev
+      },
     }
   )
 
-  const topics = resData?.topics || []
+  const topics = getTopicsQuery.data?.topics || []
+
+  const isMatched = Number(value) === selectedTopic?.id
+
+  const topicQuery = useGetTopicByIdQuery(String(value), {
+    enabled: enabledFetchTopic && !!value,
+  })
+
+  useEffect(() => {
+    const topic = topicQuery.data?.data
+    if (topic) {
+      setSelectedTopic(topic)
+      setEnableFetchTopic(false)
+    }
+  }, [topicQuery.data])
+
+  useEffect(() => {
+    if (selectedTopic?.course_id !== courseId) {
+      setSelectedTopic(undefined)
+      setEnableFetchTopic(true)
+    }
+  }, [selectedTopic, courseId, value])
 
   const handleSearch = (value: string) => {
     setSearch(value)
