@@ -4,7 +4,7 @@ import Loading from './loading'
 const LoadingPage = () => {
   return (
     <Container className="w-full h-full">
-      <Loading />
+      <Loading className="h-full" />
     </Container>
   )
 }
