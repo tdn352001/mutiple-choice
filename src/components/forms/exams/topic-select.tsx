@@ -53,7 +53,7 @@ const TopicSelect = ({ className, courseId, value, onValueChange }: CourseSelect
 
   const isMatched = Number(value) === selectedTopic?.id
 
-  const topicQuery = useGetTopicByIdQuery(String(value), {
+  const topicQuery = useGetTopicByIdQuery(value!, {
     enabled: enabledFetchTopic && !!value,
   })
 
@@ -119,7 +119,7 @@ const TopicSelect = ({ className, courseId, value, onValueChange }: CourseSelect
           {...getReferenceProps()}
         >
           {courseId ? (
-            <span>{selectedTopic ? selectedTopic.topic_name : 'Select a course'}</span>
+            <span>{selectedTopic ? selectedTopic.topic_name : 'Select a topic'}</span>
           ) : (
             <span>Select a course first</span>
           )}

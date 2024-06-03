@@ -1,7 +1,7 @@
 'use client'
 
 import { CustomLink } from '@/components/custom/link'
-import { DeleteTopicModal } from '@/components/modals/topic/delete-topic-modal'
+import { DeleteExamModal } from '@/components/modals/exam/delete-exam-modal'
 import SearchExam from '@/components/search-box/search-exam'
 import ExamsTable from '@/components/tables/exams-table'
 import Container from '@/components/templates/container'
@@ -34,7 +34,7 @@ const ExamsPage = () => {
           </Suspense>
           <ExamsTable />
         </div>
-        <DeleteTopicModal />
+        <DeleteExamModal />
       </Container>
     </ScrollArea>
   )

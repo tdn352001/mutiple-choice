@@ -14,7 +14,6 @@ export * from './type'
 
 export const courseService = {
   getCourses(params?: GetCourseParams) {
-    console.log({ recevve: params })
     return getApi<GetCourseResponse>('/course', {
       params,
     })

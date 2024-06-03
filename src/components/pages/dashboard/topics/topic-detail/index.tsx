@@ -1,6 +1,7 @@
 'use client'
 import Breadcrumb from '@/components/custom/breadcrumb'
 import { CustomLink } from '@/components/custom/link'
+import { DeleteExamModal } from '@/components/modals/exam/delete-exam-modal'
 import SearchTopic from '@/components/search-box/search-topics'
 import ExamsTable from '@/components/tables/exams-table'
 import Container from '@/components/templates/container'
@@ -48,6 +49,7 @@ const TopicDetailPage = ({ id }: { id: string }) => {
             <SearchTopic />
           </Suspense>
           <ExamsTable topicId={id} />
+          <DeleteExamModal />
         </div>
       </Container>
     </ScrollArea>

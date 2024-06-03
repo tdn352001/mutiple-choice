@@ -14,7 +14,7 @@ type GetTopicsQuery = {
 }
 
 const getQueryOptions = ({ courseId, params = defaultParams }: GetTopicsQuery) => {
-  const queryKey = courseId ? ['topics', { courseId }, params] : ['topics']
+  const queryKey = courseId ? ['topics', { courseId }, params] : ['topics', params]
   return {
     queryKey,
     queryFn: async () => {

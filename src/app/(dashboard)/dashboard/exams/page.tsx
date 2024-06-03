@@ -1,9 +1,9 @@
-import TopicsPage from '@/components/pages/dashboard/topics/home'
+import ExamsPage from '@/components/pages/dashboard/exams/home'
 import { DOCUMENT_TITLES, DOCUMENTS_DESCRIPTIONS } from '@/lib/constants/seo'
 import { Metadata } from 'next'
 
 const Page = () => {
-  return <TopicsPage />
+  return <ExamsPage />
 }
 
 export const metadata: Metadata = {

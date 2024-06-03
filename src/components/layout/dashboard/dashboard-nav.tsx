@@ -1,11 +1,40 @@
 'use client'
 
+import { Icon, IconName } from '@/components/ui/icon'
+import { routers } from '@/lib/constants/routers'
+import { cn } from '@/lib/utils'
+import { useUserStore } from '@/store/user'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Icon } from '@/components/ui/icon'
-import { navItems } from '@/lib/constants/nav'
-import { cn } from '@/lib/utils'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useMemo } from 'react'
+
+export interface NavItem {
+  title: string
+  href?: string
+  disabled?: boolean
+  external?: boolean
+  icon?: IconName
+  label?: string
+  description?: string
+}
+
+const baseNavItems: NavItem[] = [
+  {
+    title: 'Courses',
+    href: routers.courses,
+    icon: 'School',
+  },
+  {
+    title: 'Topics',
+    href: routers.topics,
+    icon: 'Layers3',
+  },
+  {
+    title: 'Exams',
+    href: routers.exams,
+    icon: 'SquareMenu',
+  },
+]
 
 interface DashboardNavProps {
   setOpen?: Dispatch<SetStateAction<boolean>>
@@ -13,6 +42,22 @@ interface DashboardNavProps {
 
 export function DashboardNav({ setOpen }: DashboardNavProps) {
   const path = usePathname()
+
+  const isAdmin = useUserStore((state) => state.user?.is_admin)
+
+  const navItems = useMemo(() => {
+    const items = [...baseNavItems]
+
+    if (isAdmin) {
+      items.push({
+        title: 'Users',
+        href: routers.users,
+        icon: 'Users',
+      })
+    }
+
+    return items
+  }, [isAdmin])
 
   return (
     <nav className="grid items-start gap-2">

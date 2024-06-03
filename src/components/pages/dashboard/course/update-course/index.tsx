@@ -22,7 +22,7 @@ const UpdateCoursePage = ({ id }: { id: string }) => {
 
   return (
     <ProtectedRoute admin>
-      <ScrollArea className="w-full h-full">
+      <ScrollArea className="size-full">
         <Container>
           <Breadcrumb items={updateCourseBreadcrumb} />
           <Heading

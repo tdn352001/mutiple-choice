@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   Breadcrumb as BreadCrumbRoot,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,

@@ -1,5 +1,6 @@
 import { dynamicRouters, routers } from '@/lib/constants/routers'
 import { DOCUMENT_TITLES } from '@/lib/constants/seo'
+import { Exam } from '@/services/exams'
 import { Topic } from '@/services/topics'
 
 export const courseListBreadcrumb = [
@@ -21,6 +22,17 @@ export const topicListBreadcrumb = [
   {
     title: DOCUMENT_TITLES.DASHBOARD.TOPICS.HOME,
     href: routers.topics,
+  },
+]
+
+export const examListBreadcrumb = [
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.HOME,
+    href: routers.dashboard,
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.EXAMS.HOME,
+    href: routers.exams,
   },
 ]
 
@@ -87,6 +99,18 @@ export const getExamsBreadcrumb = (topic: Topic) => [
   {
     title: topic.topic_name,
     href: dynamicRouters.topicById(topic.id),
+  },
+]
+
+export const getUpdateExamsBreadcrumb = (exam: Exam) => [
+  ...topicListBreadcrumb,
+  {
+    title: exam.exam_name,
+    href: dynamicRouters.examById(exam.id),
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.EXAMS.UPDATE,
+    href: '#',
   },
 ]
 

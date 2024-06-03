@@ -140,9 +140,11 @@ const CourseTable = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="min-w-32" align="end">
-                <DropdownMenuItem>
-                  <Eye className="mr-2 h-4 w-4" />
-                  <span>View</span>
+                <DropdownMenuItem asChild>
+                  <Link href={dynamicRouters.courseById(row.original.id)}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    <span>View</span>
+                  </Link>
                 </DropdownMenuItem>
                 {isAdmin && (
                   <>

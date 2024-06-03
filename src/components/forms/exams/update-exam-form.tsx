@@ -6,15 +6,15 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useCreateExamMutation } from '@/hooks/services/exam'
+import { useUpdateExamMutation } from '@/hooks/services/exam'
+import { useGetTopicByIdQuery } from '@/hooks/services/topics'
 import { routers } from '@/lib/constants/routers'
 import { ExamSchema, examSchema } from '@/lib/schemas/exams'
-import { Topic } from '@/services/topics'
-import { useCreateExamStore } from '@/store/site/create-exam'
+import { Exam } from '@/services/exams'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import RelationShipField from './relationship-field'
@@ -44,16 +44,16 @@ const fields = [
   },
 ]
 
-interface CreateExamFormProps {
-  initialTopic?: Topic
+interface UpdateExamFormProps {
+  exam: Exam
 }
 
-const CreateExamForm = () => {
-  const initialTopic = useCreateExamStore((state) => state.topic)
-
+const UpdateExamForm = ({ exam }: UpdateExamFormProps) => {
   const [error, setError] = useState('')
 
-  const { mutateAsync: createExam, isPending } = useCreateExamMutation()
+  const { mutateAsync: udpateExam, isPending } = useUpdateExamMutation(exam.id)
+
+  const getTopicQuery = useGetTopicByIdQuery(exam.topic_id)
 
   const router = useRouter()
 
@@ -61,36 +61,30 @@ const CreateExamForm = () => {
 
   const form = useForm<FormValue>({
     resolver: zodResolver(examSchema),
-    defaultValues: {
-      exam_name: '',
-      exam_code: '',
-      description: '',
-      number_of_questions: 1,
-      number_attempts: 1,
-      time_limit: 1,
-      protect: false,
-      password: '',
-      course_id: initialTopic?.course_id,
-      topic_id: initialTopic?.id,
-      onsite_scoring: false,
-      active: true,
-    },
+    defaultValues: exam,
     mode: 'all',
   })
 
   const handleSubmit = async (formValue: FormValue) => {
-    return createExam({
+    return udpateExam({
       ...formValue,
       password: formValue.protect ? formValue.password : undefined,
     })
       .then(() => {
-        toast.success('Create exam successfully!')
+        toast.success('Update exam successfully!')
         router.push(routers.exams)
       })
       .catch((err) => {
         setError(err.message || 'Something went wrong!')
       })
   }
+
+  useEffect(() => {
+    if (getTopicQuery.data?.data.id) {
+      form.setValue('course_id', getTopicQuery.data?.data.course_id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getTopicQuery.data])
 
   return (
     <div>
@@ -162,4 +156,4 @@ const CreateExamForm = () => {
   )
 }
 
-export default CreateExamForm
+export default UpdateExamForm

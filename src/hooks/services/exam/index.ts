@@ -1,2 +1,6 @@
 export * from './use-create-exam-mutation'
+export * from './use-delete-exam-mutation'
+export * from './use-get-exam-by-id-query'
 export * from './use-get-exams-by-topic-query'
+export * from './use-get-exams-query'
+export * from './use-update-exam-mutation'

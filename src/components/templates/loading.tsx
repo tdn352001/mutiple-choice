@@ -6,7 +6,7 @@ interface LoadingProps {
 }
 const Loading = ({ className }: LoadingProps) => {
   return (
-    <div className={cn('w-full h-full bg-background flex items-center justify-center', className)}>
+    <div className={cn('w-full h-dvh bg-background flex items-center justify-center', className)}>
       <div>
         <svg
           aria-hidden="true"

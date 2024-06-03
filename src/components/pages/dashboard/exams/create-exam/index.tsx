@@ -16,8 +16,8 @@ const CreateExamPage = () => {
         <Container>
           <Breadcrumb items={createExamsBreadcrumb} />
           <Heading
-            title={DOCUMENT_TITLES.DASHBOARD.TOPICS.CREATE}
-            description={DOCUMENTS_DESCRIPTIONS.DASHBOARD.TOPICS.CREATE}
+            title={DOCUMENT_TITLES.DASHBOARD.EXAMS.CREATE}
+            description={DOCUMENTS_DESCRIPTIONS.DASHBOARD.EXAMS.CREATE}
           />
           <CreateExamForm />
         </Container>

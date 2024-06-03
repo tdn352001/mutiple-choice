@@ -14,6 +14,7 @@ import { Suspense } from 'react'
 
 const TopicsPage = () => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
+
   return (
     <ScrollArea className="w-full h-full">
       <Container>

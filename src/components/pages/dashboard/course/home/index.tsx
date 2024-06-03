@@ -15,7 +15,7 @@ import { Suspense } from 'react'
 const CoursePage = () => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
   return (
-    <ScrollArea className="w-full h-full">
+    <ScrollArea className="size-full">
       <Container>
         <Heading
           title={DOCUMENT_TITLES.DASHBOARD.COURSES.HOME}

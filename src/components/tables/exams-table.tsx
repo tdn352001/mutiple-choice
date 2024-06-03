@@ -3,7 +3,7 @@ import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGetExamsSuspenseQuery } from '@/hooks/services/exam/use-get-exam-query'
+import { useGetExamsSuspenseQuery } from '@/hooks/services/exam/use-get-exams-query'
 import { useApiQuery } from '@/hooks/use-api-query'
 import { TOPICS_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
@@ -96,7 +96,7 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
     [pagination, paramsUpdater]
   )
 
-  const openModal = useOpenModal(Modals.DELETE_TOPIC)
+  const openModal = useOpenModal(Modals.DELETE_EXAM)
 
   const columns: ColumnDef<Exam>[] = useMemo(
     () => [
@@ -109,7 +109,7 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
           const { id, exam_name } = row.original
           return (
             <div className="flex items-center space-x-2">
-              <Link className="line-clamp-2" href={dynamicRouters.courseById(id)}>
+              <Link className="line-clamp-2" href={dynamicRouters.examById(id)}>
                 {exam_name}
               </Link>
             </div>
@@ -144,21 +144,23 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="min-w-32" align="end">
-                <DropdownMenuItem>
-                  <Eye className="mr-2 h-4 w-4" />
-                  <span>View</span>
+                <DropdownMenuItem asChild>
+                  <Link href={dynamicRouters.examById(row.original.id)}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    <span>View</span>
+                  </Link>
                 </DropdownMenuItem>
                 {isAdmin && (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href={dynamicRouters.updateTopic(row.original.id)}>
+                      <Link href={dynamicRouters.updateExam(row.original.id)}>
                         <Edit className="mr-2 h-4 w-4" />
                         <span>Edit</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-destructive focus:text-destructive/90"
-                      // onClick={() => openModal({ : row.original })}
+                      onClick={() => openModal({ exam: row.original, topicId })}
                     >
                       <Trash className="mr-2 h-4 w-4" />
                       <span>Delete</span>
