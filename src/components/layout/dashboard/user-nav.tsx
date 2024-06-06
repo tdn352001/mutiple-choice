@@ -16,6 +16,7 @@ import { sessionManager } from '@/lib/session'
 import { Modals, useOpenModal } from '@/store/modal'
 import { useUserStore } from '@/store/user'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export function UserNav() {
   const user = useUserStore((state) => state.user)
@@ -25,6 +26,8 @@ export function UserNav() {
 
   const handleChangePassword = () => openChangePasswordModal()
 
+  const pathname = usePathname()
+
   const handleSignOut = () => {
     setUser(undefined)
     sessionManager.removeAccessToken()
@@ -32,7 +35,7 @@ export function UserNav() {
 
   if (!user) {
     return (
-      <CustomLink variant="ghost" href={routers.login}>
+      <CustomLink variant="ghost" href={`${routers.login}?callbackUrl=${pathname}`}>
         Login
       </CustomLink>
     )

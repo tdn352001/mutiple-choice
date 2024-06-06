@@ -1,5 +1,6 @@
 'use client'
 import Breadcrumb from '@/components/custom/breadcrumb'
+import ExamEditView from '@/components/pages/dashboard/exams/exam-detail/edit-view'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -25,7 +26,8 @@ const ExamDetailPage = ({ id }: { id: string }) => {
           ]}
         />
         <Heading title={exam.exam_name} description={exam.description} />
-        <div></div>
+        {/* <ExamNormalView exam={exam} /> */}
+        <ExamEditView exam={exam} />
       </Container>
     </ScrollArea>
   )
