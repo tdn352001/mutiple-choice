@@ -1,5 +1,6 @@
 import { Course } from '@/services/courses'
 import { Exam } from '@/services/exams'
+import { Question } from '@/services/questions'
 import { Topic } from '@/services/topics'
 import { useCallback } from 'react'
 import { NonUndefined } from 'react-hook-form'
@@ -12,6 +13,8 @@ export enum Modals {
   DELETE_COURSE = 'DELETE_COURSE',
   DELETE_TOPIC = 'DELETE_TOPIC',
   DELETE_EXAM = 'DELETE_EXAM',
+  DELETE_QUESTION = 'DELETE_QUESTION',
+  ADD_QUESTION = 'ADD_QUESTION',
 }
 
 type ModalState<T = undefined> = {
@@ -27,6 +30,8 @@ type State = {
     [Modals.DELETE_COURSE]?: ModalState<{ course: Course }>
     [Modals.DELETE_TOPIC]?: ModalState<{ topic: Topic; courseId?: string | number }>
     [Modals.DELETE_EXAM]?: ModalState<{ exam: Exam; topicId?: string | number }>
+    [Modals.DELETE_QUESTION]?: ModalState<{ question: Question; examId?: string | number }>
+    [Modals.ADD_QUESTION]?: ModalState<{ examId: string | number; type: 'manually' | 'file' }>
   }
 }
 
@@ -40,6 +45,7 @@ type Actions = {
   openModal: <T extends ModaType>(modal: T, data?: ModalData<T>, zIndex?: number) => void
   closeModal: (modal: Modals) => void
   closeAllModals: () => void
+  updateModalData: <T extends ModaType>(modal: T, data: ModalData<T>) => void
 }
 
 const initialState: State = {
@@ -78,6 +84,19 @@ export const useModalStore = create<State & Actions>((set) => ({
   closeAllModals: () => {
     set(initialState)
   },
+  updateModalData: (modal, data) => {
+    set((state) => {
+      return {
+        modal: {
+          ...state.modal,
+          [modal]: {
+            ...state.modal[modal],
+            data: data,
+          },
+        },
+      }
+    })
+  },
 }))
 
 export const useOpenModal = <T extends ModaType>(modal: T) => {
@@ -96,6 +115,17 @@ export const useIsModalOpen = <T extends ModaType>(modal: T) => {
 
 export const useModalData = <T extends ModaType>(modal: T) => {
   return useModalStore((state) => state.modal[modal]?.data) as ModalData<T>
+}
+
+// TODO: This hook has not been tested yet
+export const useUpdateModalData = <T extends ModaType>(modal: T) => {
+  const updateModalData = useModalStore((state) => state.updateModalData)
+  return useCallback(
+    (data: ModalData<T>) => {
+      updateModalData(modal, data)
+    },
+    [modal, updateModalData]
+  )
 }
 
 export const useCloseModal = (modal: Modals) => {

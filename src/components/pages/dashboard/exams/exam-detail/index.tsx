@@ -26,7 +26,6 @@ const ExamDetailPage = ({ id }: { id: string }) => {
           ]}
         />
         <Heading title={exam.exam_name} description={exam.description} />
-        {/* <ExamNormalView exam={exam} /> */}
         <ExamEditView exam={exam} />
       </Container>
     </ScrollArea>

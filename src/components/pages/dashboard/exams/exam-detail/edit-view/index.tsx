@@ -13,10 +13,10 @@ const ExamEditView = ({ exam }: ExamEditViewProps) => {
       <Tabs defaultValue="questions" className="space-y-4">
         <TabsList>
           <TabsTrigger className="min-w-24" value="questions">
-            Overview
+            Questions
           </TabsTrigger>
           <TabsTrigger className="min-w-24" value="images">
-            Analytics
+            Images
           </TabsTrigger>
         </TabsList>
         <TabsContent value="questions">
