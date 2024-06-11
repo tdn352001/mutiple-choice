@@ -12,6 +12,7 @@ export type BaseApiResponse<T = any> = {
   data: T
   message: string
   status: string
+  success: boolean
 }
 
 const axiosClient = axios.create({
@@ -63,7 +64,7 @@ const getApi = <T = any, D = any>(url: string, config?: AxiosRequestConfig<D>): 
 const postApi = <T = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<T> =>
   axiosClient.post<T, T, D>(url, data, config).catch((error) => Promise.reject(handleError(error)))
 const postFormApi = <T = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<T> =>
-  axiosClient.post<T, T, D>(url, data, config).catch((error) => Promise.reject(handleError(error)))
+  axiosClient.postForm<T, T, D>(url, data, config).catch((error) => Promise.reject(handleError(error)))
 
 const putApi = <T = any, R = AxiosResponse<T>, D = any>(
   url: string,

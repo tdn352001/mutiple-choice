@@ -41,9 +41,10 @@ export function DeleteTopicModal() {
       <Dialog open={open} onOpenChange={closeModal}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Delete course</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete the topic <strong>{topic?.topic_name}</strong>?
+            <DialogTitle>Delete Topic</DialogTitle>
+            <DialogDescription className="line-clamp-3">
+              Are you sure you want to delete the topic&nbsp;
+              <strong>{topic?.topic_name}</strong>?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

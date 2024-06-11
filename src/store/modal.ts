@@ -43,7 +43,7 @@ type ModalData<T extends ModaType> = NonUndefined<ModalOriginData<T>> extends un
 
 type Actions = {
   openModal: <T extends ModaType>(modal: T, data?: ModalData<T>, zIndex?: number) => void
-  closeModal: (modal: Modals) => void
+  closeModal: <T extends ModaType>(modal: T) => void
   closeAllModals: () => void
   updateModalData: <T extends ModaType>(modal: T, data: ModalData<T>) => void
 }
@@ -55,7 +55,6 @@ const initialState: State = {
 export const useModalStore = create<State & Actions>((set) => ({
   modal: initialState.modal,
   openModal: (modal, data, zIndex) => {
-    console.log({ modal, data, zIndex })
     set((state) => {
       return {
         modal: {
@@ -75,7 +74,8 @@ export const useModalStore = create<State & Actions>((set) => ({
         modal: {
           ...state.modal,
           [modal]: {
-            show: false,
+            ...state.modal[modal],
+            open: false,
           },
         },
       }
@@ -128,7 +128,7 @@ export const useUpdateModalData = <T extends ModaType>(modal: T) => {
   )
 }
 
-export const useCloseModal = (modal: Modals) => {
+export const useCloseModal = <T extends ModaType>(modal: T) => {
   const closeModal = useModalStore((state) => state.closeModal)
   return useCallback(() => {
     closeModal(modal)

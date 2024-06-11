@@ -40,7 +40,7 @@ export function DeleteQuestionModal() {
     <Dialog open={open} onOpenChange={closeModal}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Delete course</DialogTitle>
+          <DialogTitle>Delete Question</DialogTitle>
           <DialogDescription>Are you sure you want to delete this question?</DialogDescription>
         </DialogHeader>
         <DialogFooter>

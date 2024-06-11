@@ -83,7 +83,7 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
         cell: ({ row }) => {
           return (
             <div className="min-w-28 flex items-center space-x-2">
-              <span className="block whitespace-nowrap">{row.original.type}</span>
+              <span className="block whitespace-nowrap first-letter:uppercase">{row.original.type}</span>
             </div>
           )
         },
@@ -103,14 +103,7 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
 
           return (
             <div className="min-w-28 flex flex-col items-center space-y-2">
-              {image ? (
-                <>
-                  <img src={image} alt="question" className="w-24 h-24 object-cover rounded-md" />
-                  <span className="line-clamp-1">{image}</span>
-                </>
-              ) : (
-                <span className=""> -- </span>
-              )}
+              <span className="line-clamp-1">{image || '--'}</span>
             </div>
           )
         },

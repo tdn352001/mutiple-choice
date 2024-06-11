@@ -147,7 +147,7 @@ const CreateExamForm = () => {
                 </FormControl>
 
                 <FormLabel>
-                  <span>Active exam</span>
+                  <span>Active</span>
                 </FormLabel>
               </FormItem>
             )}

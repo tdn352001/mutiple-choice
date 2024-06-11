@@ -65,3 +65,5 @@ export type CreateQuestionFromCsvRequest = {
   questions: File
   is_replace: boolean
 }
+
+export type CreateQuestionFromCsvResponse = BaseApiResponse<BaseApiResponse<{ examId: string }>[]>

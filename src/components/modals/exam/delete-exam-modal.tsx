@@ -38,22 +38,22 @@ export function DeleteExamModal() {
 
   return (
     <Dialog open={open} onOpenChange={closeModal}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Delete course</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete the exam <strong>{exam?.exam_name}</strong>?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={closeModal}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteExam} disabled={isDeleting}>
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Delete Exam</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete the exam <strong>{exam?.exam_name}</strong>?
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button variant="destructive" onClick={handleDeleteExam} disabled={isDeleting}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

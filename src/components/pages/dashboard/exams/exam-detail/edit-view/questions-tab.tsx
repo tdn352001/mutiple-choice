@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Exam } from '@/services/exams'
+import { Modals, useOpenModal } from '@/store/modal'
 import { useState } from 'react'
 
 interface QuestionsTabProps {
@@ -17,6 +18,8 @@ interface QuestionsTabProps {
 
 const QuestionsTab = ({ exam }: QuestionsTabProps) => {
   const [search, setSearch] = useState('')
+
+  const openModal = useOpenModal(Modals.ADD_QUESTION)
 
   return (
     <div>
@@ -27,9 +30,13 @@ const QuestionsTab = ({ exam }: QuestionsTabProps) => {
             <Button>Add question</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem className="items-center">From Csv</DropdownMenuItem>
+            <DropdownMenuItem className="items-center" onClick={() => openModal({ examId: exam.id, type: 'file' })}>
+              From Csv
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="items-center">Manually</DropdownMenuItem>
+            <DropdownMenuItem className="items-center" onClick={() => openModal({ examId: exam.id, type: 'manually' })}>
+              Manually
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
