@@ -1,32 +1,51 @@
+import AnswerField from '@/components/forms/questions/answer-field'
 import { Button } from '@/components/ui/button'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { useCreateQuestionV2Mutation } from '@/hooks/services/questions'
 import { QuestionSchema, questionShema } from '@/lib/schemas/question'
 import { QuestionType } from '@/lib/types/question'
-import { Modals, useCloseModal } from '@/store/modal'
+import { Modals, useCloseModal, useModalData } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 type FormValue = QuestionSchema
 
 const AddQuestionManually = () => {
   const closeModal = useCloseModal(Modals.ADD_QUESTION)
 
-  const handleSubmit = () => {}
+  const { examId } = useModalData(Modals.ADD_QUESTION)
 
   const form = useForm<FormValue>({
     resolver: zodResolver(questionShema),
     defaultValues: {
       type: QuestionType.Normal,
       question: '',
+      exam_id: Number(examId),
     },
   })
 
-  const handleFormSubmit = (formValue: FormValue) => {}
+  const queryClient = useQueryClient()
 
-  const type = form.watch('type')
+  const { mutateAsync: createQuestion, isPending } = useCreateQuestionV2Mutation()
+
+  const handleFormSubmit = async (formValue: FormValue) => {
+    return createQuestion(formValue)
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['questions', { examId }],
+        })
+        closeModal()
+        toast.success('Question added successfully')
+      })
+      .catch((err) => {
+        toast.error(err.message || 'Something went wrong. Please try again later.')
+      })
+  }
 
   return (
     <>
@@ -75,14 +94,15 @@ const AddQuestionManually = () => {
                 </FormItem>
               )}
             />
+            <AnswerField form={form} />
           </form>
         </Form>
       </div>
       <DialogFooter>
-        <Button variant="outline" onClick={closeModal}>
+        <Button variant="outline" onClick={closeModal} disabled={isPending}>
           Cancel
         </Button>
-        <Button form="create-question" onClick={handleSubmit}>
+        <Button form="create-question" disabled={isPending}>
           Submit
         </Button>
       </DialogFooter>

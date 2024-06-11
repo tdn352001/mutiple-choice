@@ -4,6 +4,7 @@ import {
   CreateQuestionFromCsvRequest,
   CreateQuestionFromCsvResponse,
   CreateQuestionRequest,
+  CreateQuestionV2Request,
   GetQuestionByIdResponse,
   GetQuestionsQueryParams,
   GetQuestionsResponse,
@@ -30,6 +31,10 @@ export const questionService = {
 
   createQuestion(request: CreateQuestionRequest) {
     return postApi('/question', request)
+  },
+
+  createQuestionV2(request: CreateQuestionV2Request) {
+    return postApi('/question/v2', request)
   },
 
   createQuestionFromCsv(exam_id: string | number, request: CreateQuestionFromCsvRequest) {

@@ -15,6 +15,7 @@ export enum Modals {
   DELETE_EXAM = 'DELETE_EXAM',
   DELETE_QUESTION = 'DELETE_QUESTION',
   ADD_QUESTION = 'ADD_QUESTION',
+  EDIT_QUESTION = 'EDIT_QUESTION',
 }
 
 type ModalState<T = undefined> = {
@@ -32,6 +33,7 @@ type State = {
     [Modals.DELETE_EXAM]?: ModalState<{ exam: Exam; topicId?: string | number }>
     [Modals.DELETE_QUESTION]?: ModalState<{ question: Question; examId?: string | number }>
     [Modals.ADD_QUESTION]?: ModalState<{ examId: string | number; type: 'manually' | 'file' }>
+    [Modals.EDIT_QUESTION]?: ModalState<{ question: Question }>
   }
 }
 

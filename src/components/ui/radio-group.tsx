@@ -35,4 +35,11 @@ const RadioGroupItem = React.forwardRef<
 })
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName
 
-export { RadioGroup, RadioGroupItem }
+const Radio = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+  ({ className, ...props }, ref) => {
+    return <input className={cn('radio')} type="radio" ref={ref} {...props} />
+  }
+)
+Radio.displayName = 'Radio'
+
+export { RadioGroup, RadioGroupItem, Radio as RadioPrimitive }

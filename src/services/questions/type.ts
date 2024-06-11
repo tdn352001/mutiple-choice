@@ -40,8 +40,16 @@ export type CreateQuestionRequest = {
   question: string
   type: string
   image?: string
-  answer: string[]
+  answer?: string[]
   correct_answer: string[]
+}
+
+export type CreateQuestionV2Request = {
+  exam_id: string | number
+  question: string
+  type: string
+  image?: string
+  answer?: Omit<Answer, 'id'>[]
 }
 
 export type UpdateQuestionRequest = {
