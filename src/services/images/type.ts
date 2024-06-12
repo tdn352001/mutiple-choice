@@ -7,18 +7,25 @@ export type ExamImage = {
   image_path: string
 }
 
+export type GetImagesQueryParams = BaseApiQueryParams
+
 export type GetImagesResponse = {
-  data: ExamImage[]
+  data: {
+    images: ExamImage[]
+    meta: {
+      current_page: number
+      next_page?: number
+      prev_page?: number
+      total_pages: number
+      total_items: number
+    }
+  }
 }
+
+export type UploadExamImagesRequest = FormData
 
 export type UploadExamImageRequest = {
-  images: File[]
-}
-
-export type UploadExamImageResponse = {
-  data: ExamImage
+  image: File
 }
 
 export type UpdateExamImageRequest = UploadExamImageRequest
-
-export type UpdateExamImageResponse = UploadExamImageResponse

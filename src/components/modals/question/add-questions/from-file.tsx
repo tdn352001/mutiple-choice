@@ -32,7 +32,7 @@ const AddQuestionFromFile = () => {
     }
   }, [])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleFileDrop,
     accept: { 'text/csv': ['.csv'] },
     multiple: false,
