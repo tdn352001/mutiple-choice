@@ -86,20 +86,12 @@
     @apply after:size-2.5 after:rounded-full after:flex-shrink-0 after:bg-current after:text-current after:opacity-0 after:transition-opacity;
     @apply checked:after:opacity-100;
   }
+}
 
-  /* .checkbox {
-    @apply appearance-none cursor-pointer;
-    @apply shrink-0 aspect-square size-4 flex items-center justify-center;
-    @apply rounded-sm border border-primary text-primary;
-    @apply ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
-    @apply disabled:cursor-not-allowed disabled:opacity-50 transition-colors;
-    @apply text-primary;
-    @apply checked:text-primary-foreground checked:bg-primary checked:after:opacity-100;
-    @apply after:shrink-0 after:bg-current after:text-current after:opacity-0 after:transition-opacity;
-  }
+::-webkit-scrollbar {
+  @apply w-[8px];
+}
 
-  .checkbox::after {
-    width: 0.6em;
-    height: 0.6em;
-  } */
+::-webkit-scrollbar-thumb {
+  @apply bg-input rounded-lg;
 }

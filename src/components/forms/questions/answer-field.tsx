@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import { PlusCircle, X } from 'lucide-react'
 import { UseFormReturn, useFieldArray, useFormState } from 'react-hook-form'
 import TextareaAutosize from 'react-textarea-autosize'
-
 interface AnswerFieldProps {
   className?: string
   form: UseFormReturn<QuestionSchema>
@@ -20,15 +19,12 @@ const AnswerField = ({ className, form }: AnswerFieldProps) => {
   const { fields, append, remove, update } = useFieldArray({
     control: form.control,
     name: 'answer',
+    keyName: 'key',
   })
 
   const formState = useFormState({
     control: form.control,
   })
-
-  if (type === QuestionType.Essay) {
-    return null
-  }
 
   const handleAddAnswer = () => {
     append({
@@ -40,16 +36,18 @@ const AnswerField = ({ className, form }: AnswerFieldProps) => {
   const answerError = formState.errors.answer
   const error = answerError?.root?.message || answerError?.message
 
-  console.log({ errors: formState.errors, answerError, error, values: form.getValues() })
+  if (type === QuestionType.Essay) {
+    return null
+  }
 
   return (
-    <div className={cn('space-y-3', className)}>
+    <div className={cn('space-y-3 pt-1', className)}>
       <p className="text-sm font-medium leading-none">Answers</p>
-      <div className="w-full flex flex-col gap-3">
+      <div className="w-full flex flex-col gap-3 overflow-hidden">
         {fields.map((field, index) => {
           return (
             <AnswerItem
-              key={field.id}
+              key={field.key}
               index={index}
               form={form}
               type={type}
@@ -76,6 +74,12 @@ const AnswerField = ({ className, form }: AnswerFieldProps) => {
             />
           )
         })}
+
+        {!!fields.length && (
+          <span className="text-xs text-muted-foreground">
+            Please select the correct answer by checking the appropriate option from the list.
+          </span>
+        )}
       </div>
 
       <Button className="-translate-x-3" type="button" variant="ghost" size="sm" onClick={handleAddAnswer}>
@@ -100,7 +104,7 @@ interface AnswerItemProps {
 
 const AnswerItem = ({ form, index, type, onRemove, checked, onCheckedChange }: AnswerItemProps) => {
   return (
-    <div className="flex gap-2 items-start">
+    <div className="flex gap-2 items-start bg-background">
       <span className="block">
         {type === QuestionType.Normal ? (
           <RadioPrimitive className="block" checked={checked} onChange={() => onCheckedChange?.(index)} />

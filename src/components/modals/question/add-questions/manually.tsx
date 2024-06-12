@@ -2,6 +2,7 @@ import AnswerField from '@/components/forms/questions/answer-field'
 import { Button } from '@/components/ui/button'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateQuestionV2Mutation } from '@/hooks/services/questions'
@@ -25,6 +26,7 @@ const AddQuestionManually = () => {
     defaultValues: {
       type: QuestionType.Normal,
       question: '',
+      image: '',
       exam_id: Number(examId),
     },
   })
@@ -51,7 +53,7 @@ const AddQuestionManually = () => {
     <>
       <div>
         <Form {...form}>
-          <form id="create-question" className="space-y-4 w-full" onSubmit={form.handleSubmit(handleFormSubmit)}>
+          <form id="create-question" className="space-y-3 w-full" onSubmit={form.handleSubmit(handleFormSubmit)}>
             <FormField
               control={form.control}
               name="type"
@@ -94,6 +96,20 @@ const AddQuestionManually = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter image name..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <AnswerField form={form} />
           </form>
         </Form>

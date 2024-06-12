@@ -12,7 +12,7 @@ export function AddQuestionModal() {
 
   return (
     <Dialog open={open} onOpenChange={closeModal}>
-      <DialogContent className="sm:max-w-[425px] max-h-[80dvh] lg:max-h-[90dvh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[425px] max-h-[80dvh] lg:max-h-[96dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add Question</DialogTitle>
         </DialogHeader>

@@ -57,7 +57,8 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
 
   const itemsCount = data?.meta?.total_items || 0
 
-  const openModal = useOpenModal(Modals.DELETE_QUESTION)
+  const openEditTable = useOpenModal(Modals.EDIT_QUESTION)
+  const openDeleteModal = useOpenModal(Modals.DELETE_QUESTION)
 
   const columns: ColumnDef<Question>[] = useMemo(() => {
     const columns: ColumnDef<Question>[] = [
@@ -127,13 +128,13 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
                   <Eye className="mr-2 h-4 w-4" />
                   <span>View</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => openEditTable({ question: row.original })}>
                   <Edit className="mr-2 h-4 w-4" />
                   <span>Edit</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="text-destructive focus:text-destructive/90"
-                  onClick={() => openModal({ question: row.original, examId })}
+                  onClick={() => openDeleteModal({ question: row.original, examId })}
                 >
                   <Trash className="mr-2 h-4 w-4" />
                   <span>Delete</span>
@@ -146,7 +147,7 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
     ]
 
     return columns
-  }, [openModal, examId])
+  }, [openDeleteModal, examId])
 
   const table = useReactTable({
     data: questions,

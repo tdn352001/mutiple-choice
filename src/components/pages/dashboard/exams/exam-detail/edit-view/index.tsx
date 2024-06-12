@@ -1,4 +1,6 @@
 import { AddQuestionModal } from '@/components/modals/question/add-questions'
+import { DeleteQuestionModal } from '@/components/modals/question/delete-question-modal'
+import { EditQuestionModal } from '@/components/modals/question/edit-question-modal'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Exam } from '@/services/exams'
 import ImagesTab from './images-tab'
@@ -28,6 +30,8 @@ const ExamEditView = ({ exam }: ExamEditViewProps) => {
         </TabsContent>
       </Tabs>
       <AddQuestionModal />
+      <EditQuestionModal />
+      <DeleteQuestionModal />
     </div>
   )
 }

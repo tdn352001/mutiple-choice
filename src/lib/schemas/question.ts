@@ -64,17 +64,17 @@ export const questionShema = z
       path: ['answer'],
     }
   )
-  .refine(
-    (data) => {
-      // check answer is unique
-      const answer = data.answer!.map((ans) => ans.answer)
-      return new Set(answer).size === answer.length
-    },
-    {
-      message: 'Answer must be unique',
-      path: ['answer'],
-    }
-  )
+  // .refine(
+  //   (data) => {
+  //     // check answer is unique
+  //     const answer = data.answer!.map((ans) => ans.answer)
+  //     return new Set(answer).size === answer.length
+  //   },
+  //   {
+  //     message: 'Answer must be unique',
+  //     path: ['answer'],
+  //   }
+  // )
   .refine(
     (data) => {
       if (data.type !== QuestionType.Essay) {
