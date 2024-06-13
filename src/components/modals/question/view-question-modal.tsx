@@ -47,7 +47,7 @@ export function ViewQuestionModal() {
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">Type</TableCell>
-                <TableCell>{question?.type}</TableCell>
+                <TableCell className="first-letter:uppercase">{question?.type}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">Image</TableCell>
@@ -80,9 +80,9 @@ export function ViewQuestionModal() {
                 <TableRow>
                   <TableCell className="font-medium">Answers</TableCell>
                   <TableCell>
-                    <ol type="A" className="[list-style-type:upper-alpha] list-inside space-y-0.5">
+                    <ol className="[list-style-type:upper-alpha] list-inside space-y-0.5">
                       {question.answer.map((answer) => (
-                        <li key={answer.id} className={cn(answer.is_correct && 'text-green-600')}>
+                        <li key={answer.id} className={cn(answer.is_correct && 'text-green-600 font-semibold')}>
                           {answer.answer}
                         </li>
                       ))}

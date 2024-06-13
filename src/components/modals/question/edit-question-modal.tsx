@@ -114,6 +114,7 @@ const EditQuestionForm = () => {
       toast.error('Something went wrong!')
     } finally {
       setIsPending(false)
+      closeModal()
       queryClient.invalidateQueries({
         queryKey: [
           'questions',

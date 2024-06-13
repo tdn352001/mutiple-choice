@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import clsx from 'clsx'
-import { Edit, Eye, Info, MoreHorizontal, Trash } from 'lucide-react'
+import { Edit, Eye, MoreHorizontal, Trash } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 interface QuestionTableProps {
@@ -125,13 +125,9 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="min-w-32" align="end">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => openDetailModal({ question: row.original })}>
                   <Eye className="mr-2 h-4 w-4" />
                   <span>View</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => openDetailModal({ question: row.original })}>
-                  <Info className="mr-2 h-4 w-4" />
-                  <span>Detail</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => openEditModal({ question: row.original })}>
                   <Edit className="mr-2 h-4 w-4" />
