@@ -17,6 +17,7 @@ export enum Modals {
   DELETE_QUESTION = 'DELETE_QUESTION',
   ADD_QUESTION = 'ADD_QUESTION',
   EDIT_QUESTION = 'EDIT_QUESTION',
+  VIEW_QUESTION = 'VIEW_QUESTION',
   PREVIEW_IMAGE = 'PREVIEW_IMAGE',
   DELETE_IMAGE = 'DELETE_IMAGE',
 }
@@ -37,6 +38,7 @@ type State = {
     [Modals.DELETE_QUESTION]?: ModalState<{ question: Question; examId?: string | number }>
     [Modals.ADD_QUESTION]?: ModalState<{ examId: string | number; type: 'manually' | 'file' }>
     [Modals.EDIT_QUESTION]?: ModalState<{ question: Question }>
+    [Modals.VIEW_QUESTION]?: ModalState<{ question: Question }>
     [Modals.PREVIEW_IMAGE]?: ModalState<{ imageUrl: string }>
     [Modals.DELETE_IMAGE]?: ModalState<{ image: ExamImage }>
   }

@@ -17,7 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import clsx from 'clsx'
-import { Edit, Eye, MoreHorizontal, Trash } from 'lucide-react'
+import { Edit, Eye, Info, MoreHorizontal, Trash } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 interface QuestionTableProps {
@@ -51,13 +51,13 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
     examId,
     params,
   })
-  console.log({ data })
 
   const questions = data?.questions || []
 
   const itemsCount = data?.meta?.total_items || 0
 
-  const openEditTable = useOpenModal(Modals.EDIT_QUESTION)
+  const openDetailModal = useOpenModal(Modals.VIEW_QUESTION)
+  const openEditModal = useOpenModal(Modals.EDIT_QUESTION)
   const openDeleteModal = useOpenModal(Modals.DELETE_QUESTION)
 
   const columns: ColumnDef<Question>[] = useMemo(() => {
@@ -103,7 +103,7 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
           }
 
           return (
-            <div className="min-w-28 flex flex-col items-center space-y-2">
+            <div className="min-w-28 flex items-center space-y-2">
               <span className="line-clamp-1">{image || '--'}</span>
             </div>
           )
@@ -111,6 +111,7 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
         meta: {
           className: 'hidden md:table-cell',
         },
+        enableSorting: false,
       },
       {
         id: 'actions',
@@ -128,7 +129,11 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
                   <Eye className="mr-2 h-4 w-4" />
                   <span>View</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => openEditTable({ question: row.original })}>
+                <DropdownMenuItem onClick={() => openDetailModal({ question: row.original })}>
+                  <Info className="mr-2 h-4 w-4" />
+                  <span>Detail</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => openEditModal({ question: row.original })}>
                   <Edit className="mr-2 h-4 w-4" />
                   <span>Edit</span>
                 </DropdownMenuItem>
@@ -147,7 +152,7 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
     ]
 
     return columns
-  }, [openDeleteModal, examId])
+  }, [openDetailModal, openEditModal, openDeleteModal, examId])
 
   const table = useReactTable({
     data: questions,

@@ -190,7 +190,7 @@ const ImageList = ({ images }: ImageListProps) => {
                       alt={image.image_name}
                     />
                     <div
-                      className="absolute inset-0 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
+                      className="absolute inset-0 light:bg-white/60  dark:bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
                       onClick={handlePreview}
                     >
                       <div

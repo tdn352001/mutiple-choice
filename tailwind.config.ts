@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { fontFamily } from 'tailwindcss/defaultTheme'
+import plugin from 'tailwindcss/plugin'
 
 const config = {
   darkMode: ['class'],
@@ -81,7 +82,15 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    plugin(function ({ addVariant }) {
+      addVariant('smu', "@media screen and (max-width: calc(theme('screens.sm') - 1px))")
+      addVariant('mdu', "@media screen and (max-width: calc(theme('screens.md') - 1px))")
+      addVariant('beter', ['&:before', '&:after'])
+      addVariant('light', ['&:not(.dark *)'])
+    }),
+  ],
 } satisfies Config
 
 export default config
