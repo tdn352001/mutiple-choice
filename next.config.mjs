@@ -1,6 +1,3 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {

@@ -1,4 +1,4 @@
-import { deleteApi, getApi, postApi, putApi } from '@/lib/axios'
+import { deleteApi, getApi, postApi, putFormApi } from '@/lib/axios'
 import { GetImagesQueryParams, GetImagesResponse, UpdateExamImageRequest, UploadExamImagesRequest } from './type'
 
 export * from './type'
@@ -18,7 +18,7 @@ export const imageService = {
   },
 
   updateImage(id: string | number, request: UpdateExamImageRequest) {
-    return putApi(`/image/${id}`, request)
+    return putFormApi(`/image/${id}`, request)
   },
 
   deleteImage(id: string | number) {

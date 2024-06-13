@@ -1,3 +1,4 @@
+import { DeleteImageModal } from '@/components/modals/image/delete-image-modal'
 import { AddQuestionModal } from '@/components/modals/question/add-questions'
 import { DeleteQuestionModal } from '@/components/modals/question/delete-question-modal'
 import { EditQuestionModal } from '@/components/modals/question/edit-question-modal'
@@ -32,6 +33,7 @@ const ExamEditView = ({ exam }: ExamEditViewProps) => {
       <AddQuestionModal />
       <EditQuestionModal />
       <DeleteQuestionModal />
+      <DeleteImageModal />
     </div>
   )
 }
