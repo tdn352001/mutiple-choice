@@ -1,5 +1,11 @@
-import { deleteApi, getApi, postApi, putFormApi } from '@/lib/axios'
-import { GetImagesQueryParams, GetImagesResponse, UpdateExamImageRequest, UploadExamImagesRequest } from './type'
+import { deleteApi, getApi, postApi, postFormApi, putFormApi } from '@/lib/axios'
+import {
+  GetImagesQueryParams,
+  GetImagesResponse,
+  UpdateExamImageRequest,
+  UploadExamImageRequest,
+  UploadExamImagesRequest,
+} from './type'
 
 export * from './type'
 
@@ -8,8 +14,11 @@ export const imageService = {
     return getApi<GetImagesResponse>(`/image/exam/${exam_id}`, { params })
   },
 
+  uploadImage(exam_id: string | number, request: UploadExamImageRequest) {
+    return postFormApi(`/image/exam/${exam_id}`, request)
+  },
+
   uploadImages(exam_id: string | number, request: UploadExamImagesRequest) {
-    console.log({ request })
     return postApi(`/image/exam/list_image/${exam_id}`, request, {
       headers: {
         'Content-Type': 'multipart/form-data',

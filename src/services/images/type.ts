@@ -22,10 +22,10 @@ export type GetImagesResponse = {
   }
 }
 
-export type UploadExamImagesRequest = FormData
-
 export type UploadExamImageRequest = {
   image: File
 }
+
+export type UploadExamImagesRequest = FormData
 
 export type UpdateExamImageRequest = UploadExamImageRequest

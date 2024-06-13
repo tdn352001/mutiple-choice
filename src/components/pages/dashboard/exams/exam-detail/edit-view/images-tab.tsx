@@ -1,8 +1,10 @@
+import Paginate from '@/components/custom/paginate'
 import SearchImages from '@/components/search-box/search-images'
 import LoadingPage from '@/components/templates/loading-page'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { useViewPortRef } from '@/components/ui/scroll-area'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useGetImagesQuery, useUpdateImageMutation, useUploadImagesMutation } from '@/hooks/services/images'
+import { useGetImagesQuery, useUpdateImageMutation, useUploadImageMutation } from '@/hooks/services/images'
 import { MAX_IMAGE_SIZE } from '@/lib/constants/api'
 import { getImagePath } from '@/lib/get-image-path'
 import { BaseApiQueryParams, OrderParam } from '@/lib/types/query-params'
@@ -12,7 +14,8 @@ import { ExamImage } from '@/services/images'
 import { Modals, useOpenModal } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { Copy, Download, Edit, Trash } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import pMap from 'p-map'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FileRejection, FileWithPath, useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
 import { useCopyToClipboard } from 'usehooks-ts'
@@ -39,8 +42,24 @@ const ImagesTab = ({ exam }: ImagesTabProps) => {
     }
   }, [page, search])
 
-  const { data, isPending } = useGetImagesQuery({ examId: exam.id, params })
+  const { data, isPending } = useGetImagesQuery(
+    { examId: exam.id, params },
+    {
+      staleTime: 1000 * 15,
+    }
+  )
   const images = data?.images || []
+  const totalPages = data?.meta.total_pages ?? 1
+
+  const shouldChangePage = images.length === 0 && page > 0
+
+  const viewportRef = useViewPortRef()
+
+  useEffect(() => {
+    if (shouldChangePage) {
+      setPage(0)
+    }
+  }, [shouldChangePage])
 
   return (
     <div>
@@ -58,12 +77,23 @@ const ImagesTab = ({ exam }: ImagesTabProps) => {
           <ImageList images={images} />
         )}
       </div>
+      <Paginate
+        forcePage={page}
+        pageCount={totalPages}
+        onPageChange={({ selected }) => {
+          console.log({ viewportRef })
+          if (viewportRef.current) {
+            viewportRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+          }
+          setPage(selected)
+        }}
+      />
     </div>
   )
 }
 
 const UploadImage = ({ examId }: { examId: string | number }) => {
-  const { mutateAsync: uploadImages } = useUploadImagesMutation(examId)
+  const { mutateAsync: uploadImage } = useUploadImageMutation(examId)
 
   const queryClient = useQueryClient()
 
@@ -75,24 +105,32 @@ const UploadImage = ({ examId }: { examId: string | number }) => {
       }
 
       if (acceptedFiles.length) {
-        const formData = new FormData()
-        acceptedFiles.forEach((file) => {
-          formData.append('images', file)
+        const uploadImages = pMap(acceptedFiles, (file) => uploadImage({ image: file }), {
+          concurrency: 2,
+          stopOnError: false,
         })
-        toast.promise(uploadImages(formData), {
-          loading: 'Uploading images...',
-          success: () => {
+
+        toast.promise(uploadImages, {
+          loading: `Uploading ${acceptedFiles.length} images...`,
+          success: (result) => {
+            console.log({ result })
             queryClient.invalidateQueries({
               queryKey: ['images'],
             })
 
             return 'Images uploaded successfully'
           },
-          error: 'Failed to upload images',
+          error: (error) => {
+            queryClient.invalidateQueries({
+              queryKey: ['images'],
+            })
+            const failedFailed = error?.errors?.length
+            return failedFailed ? `Failed to upload ${failedFailed} images` : 'Failed to upload images'
+          },
         })
       }
     },
-    [queryClient, uploadImages]
+    [queryClient, uploadImage]
   )
 
   const { getRootProps, getInputProps } = useDropzone({
