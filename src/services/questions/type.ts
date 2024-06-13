@@ -53,7 +53,7 @@ export type CreateQuestionV2Request = {
 }
 
 export type UpdateQuestionRequest = {
-  exam_id: string
+  exam_id: string | number
   question: string
   type: string
   image?: string

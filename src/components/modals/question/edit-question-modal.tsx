@@ -5,14 +5,18 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { useCreateAnswerMutation, useUpdateQuestionMutation } from '@/hooks/services/questions'
 import { QuestionSchema, questionShema } from '@/lib/schemas/question'
-import { QuestionType } from '@/lib/types/question'
+import { questionService } from '@/services/questions'
 import { Modals, useCloseModal, useModalData, useModalState } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import lodash from 'lodash'
+import PQueue from 'p-queue'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-
+import { toast } from 'sonner'
 export function EditQuestionModal() {
   const { open, closeModal } = useModalState(Modals.EDIT_QUESTION)
 
@@ -34,48 +38,98 @@ const EditQuestionForm = () => {
   const { question } = useModalData(Modals.EDIT_QUESTION)
   const closeModal = useCloseModal(Modals.EDIT_QUESTION)
 
+  const [isPending, setIsPending] = useState(false)
   const form = useForm<FormValue>({
     resolver: zodResolver(questionShema),
     defaultValues: question,
   })
 
-  console.log({ question })
+  const { mutateAsync: updateQuestion } = useUpdateQuestionMutation(question.id)
+  const { mutateAsync: createAnswer } = useCreateAnswerMutation(question.id)
 
-  const handleFormSubmit = async (formValue: FormValue) => {}
+  const queryClient = useQueryClient()
+
+  const handleFormSubmit = async (formValue: FormValue) => {
+    try {
+      setIsPending(true)
+      if (question.question !== formValue.question || question.image !== formValue.image) {
+        await updateQuestion({
+          exam_id: question.exam_id,
+          type: question.type,
+          question: formValue.question,
+          image: formValue.image,
+        })
+      }
+
+      const newAnswer = formValue.answer
+      const oldAnswer = question.answer
+      const checkedAnswer: Record<string, any> = {}
+      const queue = new PQueue({ concurrency: 3, autoStart: false })
+
+      if (newAnswer && newAnswer.length) {
+        for (const ans of newAnswer) {
+          if (ans.id) {
+            const originAnswer = question.answer.find((a) => a.id === ans.id)
+            if (originAnswer) {
+              checkedAnswer[originAnswer.id] = true
+              if (!lodash.isEqual(originAnswer, ans)) {
+                queue.add(() =>
+                  questionService.updateAnswer(ans?.id!, {
+                    answer: ans.answer,
+                    is_correct: ans.is_correct,
+                  })
+                )
+              }
+            }
+          } else {
+            // create answer
+            queue.add(() =>
+              createAnswer({
+                answer: ans.answer,
+                is_correct: ans.is_correct,
+              })
+            )
+          }
+        }
+      }
+
+      if (oldAnswer && oldAnswer.length) {
+        for (const ans of oldAnswer) {
+          if (!checkedAnswer[ans.id]) {
+            queue.add(() => questionService.deleteAnswer(ans.id), {
+              priority: 10,
+            })
+          }
+        }
+      }
+
+      if (queue.size) {
+        const { promise, resolve } = Promise.withResolvers()
+        queue.onIdle().then(resolve)
+        queue.start()
+        await promise
+      }
+      toast.success('Question updated successfully')
+    } catch (error) {
+      toast.error('Something went wrong!')
+    } finally {
+      setIsPending(false)
+      queryClient.invalidateQueries({
+        queryKey: [
+          'questions',
+          {
+            examId: question.exam_id,
+          },
+        ],
+      })
+    }
+  }
 
   return (
     <>
       <div>
         <Form {...form}>
           <form id="edit-question" className="space-y-3 w-full" onSubmit={form.handleSubmit(handleFormSubmit)}>
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <Select
-                    defaultValue={field.value}
-                    onValueChange={(...e) => {
-                      field.onChange(...e)
-                      form.setValue('answer', [])
-                    }}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a type of question" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value={QuestionType.Normal}>Normal</SelectItem>
-                      <SelectItem value={QuestionType.Multiple}>Multiple Selection</SelectItem>
-                      <SelectItem value={QuestionType.Essay}>Essay</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="question"
@@ -109,10 +163,12 @@ const EditQuestionForm = () => {
         </Form>
       </div>
       <DialogFooter>
-        <Button variant="outline" onClick={closeModal}>
+        <Button variant="outline" onClick={closeModal} disabled={isPending}>
           Cancel
         </Button>
-        <Button form="edit-question">Submit</Button>
+        <Button form="edit-question" disabled={isPending}>
+          Submit
+        </Button>
       </DialogFooter>
     </>
   )
