@@ -261,7 +261,7 @@ const ImageList = ({ images }: ImageListProps) => {
                       </div>
                     </div>
                   </div>
-                  <p>{image.image_name}</p>
+                  <p className="line-clamp-3 break-all">{image.image_name}</p>
                 </div>
               </li>
             )

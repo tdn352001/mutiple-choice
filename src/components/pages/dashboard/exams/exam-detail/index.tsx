@@ -11,6 +11,7 @@ import { useRef } from 'react'
 
 const ExamDetailPage = ({ id }: { id: string }) => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
+
   const { data } = useGetExamByIdSuspenseQuery(id)
   const exam = data.data!
 
@@ -29,7 +30,9 @@ const ExamDetailPage = ({ id }: { id: string }) => {
           ]}
         />
         <Heading title={exam.exam_name} description={exam.description} />
-        <ExamEditView exam={exam} />
+        <div className="relative">
+          <ExamEditView exam={exam} />
+        </div>
       </Container>
     </ScrollAreaV2>
   )
