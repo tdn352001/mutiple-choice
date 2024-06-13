@@ -20,10 +20,8 @@ export const validateSearchParams = (searchParams: PageParams, options: Validate
 
   let sort_by = searchParams[SearchParams.Sort]
 
-  if (sort_by && options.sortProps && !options.sortProps.includes(sort_by)) {
-    sort_by = options.sortProps[0]
-  } else {
-    sort_by = 'id'
+  if (!sort_by || !options.sortProps?.includes(sort_by)) {
+    sort_by = options.sortProps ? options.sortProps[0] : 'id'
   }
 
   let order_by = searchParams[SearchParams.Order]?.toUpperCase() as OrderParam

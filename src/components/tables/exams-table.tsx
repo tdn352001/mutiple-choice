@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useGetExamsSuspenseQuery } from '@/hooks/services/exam/use-get-exams-query'
 import { useApiQuery } from '@/hooks/use-api-query'
-import { TOPICS_SORTABLE_PROPS } from '@/lib/constants/api'
+import { EXAM_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { SearchParams } from '@/lib/types/query-params'
 import { Exam } from '@/services/exams'
@@ -32,10 +32,11 @@ interface ExamsTableProps {
 
 const ExamsTable = ({ topicId }: ExamsTableProps) => {
   const [params, paramsUpdater] = useApiQuery({
-    sortProps: TOPICS_SORTABLE_PROPS,
+    sortProps: EXAM_SORTABLE_PROPS,
   })
   const isAdmin = useUserStore((state) => state.user?.is_admin)
 
+  console.log({ params })
   const { data } = useGetExamsSuspenseQuery({ topicId, params })
 
   const exams = data?.exams || []
@@ -98,8 +99,8 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
 
   const openModal = useOpenModal(Modals.DELETE_EXAM)
 
-  const columns: ColumnDef<Exam>[] = useMemo(
-    () => [
+  const columns: ColumnDef<Exam>[] = useMemo(() => {
+    const columns: ColumnDef<Exam>[] = [
       {
         accessorKey: 'exam_name',
         header: (props) => {
@@ -131,6 +132,71 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
         meta: {
           className: 'hidden md:table-cell',
         },
+      },
+      {
+        accessorKey: 'number_of_questions',
+        header: (props) => {
+          return <DataTableColumnHeader title="Questions" {...props} />
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap">{row.original.number_of_questions}</span>
+            </div>
+          )
+        },
+        meta: {
+          className: 'hidden xl:table-cell',
+        },
+      },
+      {
+        accessorKey: 'number_attempts',
+        header: (props) => {
+          return <DataTableColumnHeader title="Attempts" {...props} />
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap">{row.original.number_of_questions}</span>
+            </div>
+          )
+        },
+        meta: {
+          className: 'hidden lg:table-cell',
+        },
+      },
+      {
+        accessorKey: 'time_limit',
+        header: (props) => {
+          return <DataTableColumnHeader title="Time limit (min)" {...props} />
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap first-letter:uppercase">{row.original.time_limit}</span>
+            </div>
+          )
+        },
+        meta: {
+          className: 'hidden lg:table-cell',
+        },
+      },
+      {
+        accessorKey: 'Protect',
+        header: (props) => {
+          return <DataTableColumnHeader title="Protection" {...props} />
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap first-letter:uppercase">{`${row.original.protect}`}</span>
+            </div>
+          )
+        },
+        meta: {
+          className: 'hidden md:table-cell',
+        },
+        enableSorting: false,
       },
       {
         id: 'actions',
@@ -172,9 +238,9 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
           )
         },
       },
-    ],
-    [isAdmin]
-  )
+    ]
+    return columns
+  }, [isAdmin, openModal, topicId])
 
   const table = useReactTable({
     data: exams,
