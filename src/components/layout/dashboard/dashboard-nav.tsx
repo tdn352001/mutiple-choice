@@ -50,8 +50,8 @@ export function DashboardNav({ setOpen }: DashboardNavProps) {
 
     if (isAdmin) {
       items.push({
-        title: 'Users',
-        href: routers.users,
+        title: 'Members',
+        href: routers.members,
         icon: 'Users',
       })
     }

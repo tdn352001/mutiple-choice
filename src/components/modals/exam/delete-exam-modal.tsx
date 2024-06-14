@@ -12,6 +12,7 @@ import {
 import { useDeleteExamMutation } from '@/hooks/services/exam'
 import { Modals, useModalState } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 export function DeleteExamModal() {
   const { open, closeModal, data } = useModalState(Modals.DELETE_EXAM)
@@ -24,16 +25,20 @@ export function DeleteExamModal() {
   const queryClient = useQueryClient()
 
   const handleDeleteExam = async () => {
-    return deleteExam(exam?.id!).then(() => {
-      closeModal()
-      const queryKey: any[] = ['exams']
-      if (topicId) {
-        queryKey.push({ topicId })
-      }
-      queryClient.invalidateQueries({
-        queryKey,
+    return deleteExam(exam?.id!)
+      .then(() => {
+        const queryKey: any[] = ['exams']
+        if (topicId) {
+          queryKey.push({ topicId })
+        }
+        queryClient.invalidateQueries({
+          queryKey,
+        })
       })
-    })
+      .catch((err) => toast.error(err.message))
+      .finally(() => {
+        closeModal()
+      })
   }
 
   return (

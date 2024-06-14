@@ -11,7 +11,7 @@ export const routers = {
   createCourse: '/dashboard/courses/create',
   createTopic: '/dashboard/topics/create',
   createExam: '/dashboard/exams/create',
-  users: '/dashboard/users',
+  members: '/dashboard/members',
   admin: {
     login: '/admin/login',
     dashboard: '/admin/dashboard',

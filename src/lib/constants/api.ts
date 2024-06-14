@@ -12,3 +12,4 @@ export const EXAM_SORTABLE_PROPS = [
   'number_attempts',
   'date_created',
 ]
+export const MEMBER_SORTABLE_PROPS = ['id', 'email', 'full_name']

@@ -1,6 +1,7 @@
 import { Course } from '@/services/courses'
 import { Exam } from '@/services/exams'
 import { ExamImage } from '@/services/images'
+import { Member } from '@/services/members'
 import { Question } from '@/services/questions'
 import { Topic } from '@/services/topics'
 import { useCallback } from 'react'
@@ -20,6 +21,9 @@ export enum Modals {
   VIEW_QUESTION = 'VIEW_QUESTION',
   PREVIEW_IMAGE = 'PREVIEW_IMAGE',
   DELETE_IMAGE = 'DELETE_IMAGE',
+  DELETE_MEMBER = 'DELETE_MEMBER',
+  UPDATE_MEMBER_PROFILE = 'UPDATE_MEMBER_PROFILE',
+  UPDATE_MEMBER_PASSWORD = 'UPDATE_MEMBER_PASSWORD',
 }
 
 type ModalState<T = undefined> = {
@@ -41,6 +45,9 @@ type State = {
     [Modals.VIEW_QUESTION]?: ModalState<{ question: Question }>
     [Modals.PREVIEW_IMAGE]?: ModalState<{ imageUrl: string }>
     [Modals.DELETE_IMAGE]?: ModalState<{ image: ExamImage }>
+    [Modals.DELETE_MEMBER]?: ModalState<{ member: Member }>
+    [Modals.UPDATE_MEMBER_PROFILE]?: ModalState<{ member: Member }>
+    [Modals.UPDATE_MEMBER_PASSWORD]?: ModalState<{ member: Member }>
   }
 }
 

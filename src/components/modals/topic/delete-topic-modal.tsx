@@ -12,6 +12,7 @@ import {
 import { useDeleteTopicMutation } from '@/hooks/services/topics'
 import { Modals, useModalState } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 export function DeleteTopicModal() {
   const { open, closeModal, data } = useModalState(Modals.DELETE_TOPIC)
@@ -24,16 +25,20 @@ export function DeleteTopicModal() {
   const queryClient = useQueryClient()
 
   const handleDeleteTopic = async () => {
-    return deleteTopic(topic?.id!).then(() => {
-      closeModal()
-      const queryKey: any[] = ['topics']
-      if (courseId) {
-        queryKey.push({ courseId })
-      }
-      queryClient.invalidateQueries({
-        queryKey,
+    return deleteTopic(topic?.id!)
+      .then(() => {
+        const queryKey: any[] = ['topics']
+        if (courseId) {
+          queryKey.push({ courseId })
+        }
+        queryClient.invalidateQueries({
+          queryKey,
+        })
       })
-    })
+      .catch((err) => toast.error(err.message))
+      .finally(() => {
+        closeModal()
+      })
   }
 
   return (

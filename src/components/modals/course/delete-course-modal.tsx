@@ -20,6 +20,7 @@ import { Modals, useModalStore } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { ChevronsUpDown } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 export function DeleteCourseModal() {
   const open = useModalStore((state) => state.modal.DELETE_COURSE?.open)
@@ -46,12 +47,16 @@ export function DeleteCourseModal() {
   const handleDeleteCourse = async () => {
     const params = selectedCourse ? { new_course_id: selectedCourse } : undefined
 
-    return deleteCourse(params).then(() => {
-      handleCloseModal(false)
-      queryClient.invalidateQueries({
-        queryKey: ['courses'],
+    return deleteCourse(params)
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['courses'],
+        })
       })
-    })
+      .catch((err) => toast.error(err.message))
+      .finally(() => {
+        handleCloseModal(false)
+      })
   }
 
   const handleCloseModal = useCallback(

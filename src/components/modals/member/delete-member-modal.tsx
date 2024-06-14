@@ -9,30 +9,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useDeleteQuestionMutation } from '@/hooks/services/questions'
+import { useDeleteMemberMutation } from '@/hooks/services/members'
 import { Modals, useModalState } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-export function DeleteQuestionModal() {
-  const { open, closeModal, data } = useModalState(Modals.DELETE_QUESTION)
+export function DeleteMemberModal() {
+  const { open, closeModal, data } = useModalState(Modals.DELETE_MEMBER)
 
-  const question = data?.question
-  const examId = data?.examId
+  const member = data?.member
 
-  const { mutateAsync: deleteQuestion, isPending: isDeleting } = useDeleteQuestionMutation()
+  const { mutateAsync: deleteMember, isPending: isDeleting } = useDeleteMemberMutation()
 
   const queryClient = useQueryClient()
 
-  const handleDeleteQuestion = async () => {
-    return deleteQuestion(question?.id!)
+  const handleDeleteMember = async () => {
+    return deleteMember(member?.id!)
       .then(() => {
-        const queryKey: any[] = ['questions']
-        if (examId) {
-          queryKey.push({ examId })
-        }
         queryClient.invalidateQueries({
-          queryKey,
+          queryKey: ['members'],
         })
       })
       .catch((err) => toast.error(err.message))
@@ -45,14 +40,14 @@ export function DeleteQuestionModal() {
     <Dialog open={open} onOpenChange={closeModal}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Delete Question</DialogTitle>
-          <DialogDescription>Are you sure you want to delete this question?</DialogDescription>
+          <DialogTitle>Delete Member</DialogTitle>
+          <DialogDescription>Are you sure you want to delete this member?</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={closeModal}>
             Cancel
           </Button>
-          <Button variant="destructive" onClick={handleDeleteQuestion} disabled={isDeleting}>
+          <Button variant="destructive" onClick={handleDeleteMember} disabled={isDeleting}>
             Delete
           </Button>
         </DialogFooter>

@@ -12,6 +12,7 @@ import {
 import { useDeleteImageMutation } from '@/hooks/services/images/use-delete-image-mutation'
 import { Modals, useModalState } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 export function DeleteImageModal() {
   const { open, closeModal, data } = useModalState(Modals.DELETE_IMAGE)
@@ -23,12 +24,16 @@ export function DeleteImageModal() {
   const queryClient = useQueryClient()
 
   const handleDeleteImage = async () => {
-    return deleteImage(image?.id!).then(() => {
-      closeModal()
-      queryClient.invalidateQueries({
-        queryKey: ['images'],
+    return deleteImage(image?.id!)
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['images'],
+        })
       })
-    })
+      .catch((err) => toast.error(err.message))
+      .finally(() => {
+        closeModal()
+      })
   }
 
   return (
