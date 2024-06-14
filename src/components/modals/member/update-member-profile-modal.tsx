@@ -16,13 +16,35 @@ import { toast } from 'sonner'
 type FormValue = UpdateMemberProfileSchema
 
 const UpdateMemberProfileModal = () => {
-  const [error, setError] = useState('')
-
   const { open, closeModal, data } = useModalState(Modals.UPDATE_MEMBER_PROFILE)
 
   const member = data?.member
 
+  return (
+    <Dialog open={open} onOpenChange={closeModal}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update member&apos;s profile</DialogTitle>
+          <DialogDescription>
+            Update the profile for <strong>{member?.full_name}</strong>
+          </DialogDescription>
+        </DialogHeader>
+        <UpdateProfileForm />
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const UpdateProfileForm = () => {
+  const [error, setError] = useState('')
+
+  const { closeModal, data } = useModalState(Modals.UPDATE_MEMBER_PROFILE)
+
+  const member = data?.member
+
   const { mutateAsync: updateProfile, isPending } = useUpdateMemberProfileMutation(member?.id!)
+
+  const queryClient = useQueryClient()
 
   const form = useForm<FormValue>({
     resolver: zodResolver(updateMemberProfileSchema),
@@ -35,14 +57,8 @@ const UpdateMemberProfileModal = () => {
 
   const handleCloseModal = () => {
     closeModal()
-    form.reset({
-      full_name: member?.full_name || '',
-      active: member?.active || false,
-      is_admin: member?.is_admin || false,
-    })
+    form.reset()
   }
-
-  const queryClient = useQueryClient()
 
   const handleSubmit = async (formValue: FormValue) => {
     return updateProfile(formValue)
@@ -59,76 +75,66 @@ const UpdateMemberProfileModal = () => {
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleCloseModal}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Update member&apos;s profile</DialogTitle>
-          <DialogDescription>
-            Update the profile for <strong>{member?.full_name}</strong>
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full flex flex-col gap-3">
-            <ErrorAlert show={!!error} message={error} />
-            <FormField
-              control={form.control}
-              name="full_name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage {...field} />
-                </FormItem>
-              )}
-            />
-            <FormField
-              key="active"
-              control={form.control}
-              name="active"
-              render={({ field }) => (
-                <FormItem checkbox>
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full flex flex-col gap-3">
+        <ErrorAlert show={!!error} message={error} />
+        <FormField
+          control={form.control}
+          name="full_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage {...field} />
+            </FormItem>
+          )}
+        />
+        <FormField
+          key="active"
+          control={form.control}
+          name="active"
+          render={({ field }) => (
+            <FormItem checkbox>
+              <FormControl>
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
 
-                  <FormLabel>
-                    <span>Active</span>
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
+              <FormLabel>
+                <span>Active</span>
+              </FormLabel>
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              key="is_admin"
-              control={form.control}
-              name="is_admin"
-              render={({ field }) => (
-                <FormItem checkbox>
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
+        <FormField
+          key="is_admin"
+          control={form.control}
+          name="is_admin"
+          render={({ field }) => (
+            <FormItem checkbox>
+              <FormControl>
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
 
-                  <FormLabel>
-                    <span>Admin</span>
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
+              <FormLabel>
+                <span>Admin</span>
+              </FormLabel>
+            </FormItem>
+          )}
+        />
 
-            <div className="mt-4 w-full flex items-center justify-end gap-2">
-              <Button type="button" variant="outline" onClick={handleCloseModal}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isPending}>
-                Save
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        <div className="mt-4 w-full flex items-center justify-end gap-2">
+          <Button type="button" variant="outline" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            Save
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }
 
