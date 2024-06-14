@@ -25,7 +25,7 @@ import clsx from 'clsx'
 import { CheckCircle, Edit, Key, MoreHorizontal, ShieldBan, Trash, User2 } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 
-const MemberRowDropdownItem = ({ member }: { member: Member }) => {
+const MemberRoleDropdownItem = ({ member }: { member: Member }) => {
   const queryClient = useQueryClient()
 
   const { mutateAsync: updateMember } = useUpdateMemberProfileMutation(member.id)
@@ -236,16 +236,19 @@ const MemberTable = () => {
                   <Key className="mr-2 h-4 w-4" />
                   <span>Update password</span>
                 </DropdownMenuItem>
-                <MemberRowDropdownItem member={row.original} />
-                <MemberActiveStateDropdownItem member={row.original} />
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive/90"
-                  disabled={user?.id === row.original.id}
-                  onClick={() => openDeleteMemberModal({ member: row.original })}
-                >
-                  <Trash className="mr-2 h-4 w-4" />
-                  <span>Delete</span>
-                </DropdownMenuItem>
+                {user?.id !== row.original.id && (
+                  <>
+                    <MemberRoleDropdownItem member={row.original} />
+                    <MemberActiveStateDropdownItem member={row.original} />
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive/90"
+                      onClick={() => openDeleteMemberModal({ member: row.original })}
+                    >
+                      <Trash className="mr-2 h-4 w-4" />
+                      <span>Delete</span>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           )
