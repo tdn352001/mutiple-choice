@@ -10,6 +10,7 @@ import { create } from 'zustand'
 
 export enum Modals {
   LOGOUT = 'LOGOUT',
+  LOGIN_REQUIRED = 'LOGIN_REQUIRED',
   CHANGE_PASSWORD = 'CHANGE_PASSWORD',
   UPDATE_PASSWORD = 'UPDATE_PASSWORD',
   DELETE_COURSE = 'DELETE_COURSE',
@@ -24,6 +25,7 @@ export enum Modals {
   DELETE_MEMBER = 'DELETE_MEMBER',
   UPDATE_MEMBER_PROFILE = 'UPDATE_MEMBER_PROFILE',
   UPDATE_MEMBER_PASSWORD = 'UPDATE_MEMBER_PASSWORD',
+  START_QUIZ = 'START_QUIZ',
 }
 
 type ModalState<T = undefined> = {
@@ -35,6 +37,7 @@ type ModalState<T = undefined> = {
 type State = {
   modal: {
     [Modals.LOGOUT]?: ModalState
+    [Modals.LOGIN_REQUIRED]?: ModalState
     [Modals.CHANGE_PASSWORD]?: ModalState
     [Modals.DELETE_COURSE]?: ModalState<{ course: Course }>
     [Modals.DELETE_TOPIC]?: ModalState<{ topic: Topic; courseId?: string | number }>
@@ -48,6 +51,7 @@ type State = {
     [Modals.DELETE_MEMBER]?: ModalState<{ member: Member }>
     [Modals.UPDATE_MEMBER_PROFILE]?: ModalState<{ member: Member }>
     [Modals.UPDATE_MEMBER_PASSWORD]?: ModalState<{ member: Member }>
+    [Modals.START_QUIZ]?: ModalState<{ exam: Exam }>
   }
 }
 

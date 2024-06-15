@@ -10,6 +10,7 @@ import { dynamicRouters } from '@/lib/constants/routers'
 import { SearchParams } from '@/lib/types/query-params'
 import { Exam } from '@/services/exams'
 import { Modals, useOpenModal } from '@/store/modal'
+import { ExamViewMode, useExamDetailStore } from '@/store/site/exam-detail'
 import { useUserStore } from '@/store/user'
 import {
   ColumnDef,
@@ -98,6 +99,7 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
   )
 
   const openModal = useOpenModal(Modals.DELETE_EXAM)
+  const seExamDetailViewMode = useExamDetailStore((state) => state.setViewMode)
 
   const columns: ColumnDef<Exam>[] = useMemo(() => {
     const columns: ColumnDef<Exam>[] = [
@@ -110,7 +112,11 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
           const { id, exam_name } = row.original
           return (
             <div className="flex items-center space-x-2">
-              <Link className="line-clamp-2" href={dynamicRouters.examById(id)}>
+              <Link
+                className="line-clamp-2"
+                href={dynamicRouters.examById(id)}
+                onClick={() => seExamDetailViewMode(ExamViewMode.VIEW)}
+              >
                 {exam_name}
               </Link>
             </div>
@@ -157,7 +163,7 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
         cell: ({ row }) => {
           return (
             <div className="min-w-28 flex items-center space-x-2">
-              <span className="block whitespace-nowrap">{row.original.number_of_questions}</span>
+              <span className="block whitespace-nowrap">{row.original.number_attempts}</span>
             </div>
           )
         },

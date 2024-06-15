@@ -14,7 +14,6 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, admin }: ProtectedRouteProps) => {
   const isCheckedAuth = useUserStore((state) => state.isCheckedAuth)
   const user = useUserStore.getState().user
-  console.log({ user })
 
   if (isCheckedAuth) {
     const havePermission = admin ? user?.is_admin : user

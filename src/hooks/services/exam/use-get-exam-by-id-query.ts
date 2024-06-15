@@ -17,3 +17,19 @@ export const useGetExamByIdSuspenseQuery = (id: string, options: AppQueryOptions
     ...options,
   })
 }
+
+export const useGetExamByIdV2Query = (id: string, options: AppQueryOptions = {}) => {
+  return useQuery({
+    queryKey: ['exam-v2', id],
+    queryFn: () => examService.getExamByIdV2(id).then((res) => res.data),
+    ...options,
+  })
+}
+
+export const useGetExamByIdV2SuspenseQuery = (id: string, options: AppQueryOptions = {}) => {
+  return useSuspenseQuery({
+    queryKey: ['exam-v2', id],
+    queryFn: () => examService.getExamByIdV2(id).then((res) => res.data),
+    ...options,
+  })
+}
