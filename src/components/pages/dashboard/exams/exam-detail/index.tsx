@@ -1,7 +1,6 @@
 'use client'
 
 import Breadcrumb from '@/components/custom/breadcrumb'
-import ProtectedRoute from '@/components/layout/protected-route'
 import StartQuizModal from '@/components/modals/quiz/start-quiz-modal'
 import ExamEditView from '@/components/pages/dashboard/exams/exam-detail/edit-view'
 import ExamNormalView from '@/components/pages/dashboard/exams/exam-detail/normail-view'
@@ -24,52 +23,50 @@ const ExamDetailPage = ({ id }: { id: string }) => {
   const { exam, current_attempt, quiz_id } = data
 
   return (
-    <ProtectedRoute>
-      <ScrollAreaV2 className="size-full">
-        <Container>
-          <Breadcrumb
-            items={[
-              ...examListBreadcrumb,
-              {
-                title: exam.exam_name,
-                href: '#',
-              },
-            ]}
-          />
-          <Heading
-            title={exam.exam_name}
-            description={exam.description}
-            action={
-              isAdmin && (
-                <Select
-                  value={viewMode}
-                  onValueChange={(mode: ExamViewMode) => {
-                    setViewMode(mode)
-                  }}
-                >
-                  <SelectTrigger className="min-w-40">
-                    <p className="capitalize">
-                      Mode: <span>{viewMode?.toLowerCase()}</span>
-                    </p>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={ExamViewMode.DEFAULT}>Default</SelectItem>
-                    <SelectItem value={ExamViewMode.EDIT}>Edit</SelectItem>
-                  </SelectContent>
-                </Select>
-              )
-            }
-          />
-          <div className="relative">
-            {viewMode === ExamViewMode.DEFAULT && (
-              <ExamNormalView exam={exam} currentAttempt={current_attempt} quizId={quiz_id} />
-            )}
-            {viewMode === ExamViewMode.EDIT && <ExamEditView exam={exam} />}
-          </div>
-        </Container>
-        <StartQuizModal />
-      </ScrollAreaV2>
-    </ProtectedRoute>
+    <ScrollAreaV2 className="size-full">
+      <Container>
+        <Breadcrumb
+          items={[
+            ...examListBreadcrumb,
+            {
+              title: exam.exam_name,
+              href: '#',
+            },
+          ]}
+        />
+        <Heading
+          title={exam.exam_name}
+          description={exam.description}
+          action={
+            isAdmin && (
+              <Select
+                value={viewMode}
+                onValueChange={(mode: ExamViewMode) => {
+                  setViewMode(mode)
+                }}
+              >
+                <SelectTrigger className="min-w-40">
+                  <p className="capitalize">
+                    Mode: <span>{viewMode?.toLowerCase()}</span>
+                  </p>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={ExamViewMode.DEFAULT}>Default</SelectItem>
+                  <SelectItem value={ExamViewMode.EDIT}>Edit</SelectItem>
+                </SelectContent>
+              </Select>
+            )
+          }
+        />
+        <div className="relative">
+          {viewMode === ExamViewMode.DEFAULT && (
+            <ExamNormalView exam={exam} currentAttempt={current_attempt} quizId={quiz_id} />
+          )}
+          {viewMode === ExamViewMode.EDIT && <ExamEditView exam={exam} />}
+        </div>
+      </Container>
+      <StartQuizModal />
+    </ScrollAreaV2>
   )
 }
 
