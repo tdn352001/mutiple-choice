@@ -13,6 +13,7 @@ import { ExamSchema, examSchema } from '@/lib/schemas/exams'
 import { Exam } from '@/services/exams'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -65,6 +66,8 @@ const UpdateExamForm = ({ exam }: UpdateExamFormProps) => {
     mode: 'all',
   })
 
+  const queryClient = useQueryClient()
+
   const handleSubmit = async (formValue: FormValue) => {
     return udpateExam({
       ...formValue,
@@ -72,6 +75,9 @@ const UpdateExamForm = ({ exam }: UpdateExamFormProps) => {
     })
       .then(() => {
         toast.success('Update exam successfully!')
+        queryClient.removeQueries({
+          queryKey: ['exam'],
+        })
         router.push(routers.exams)
       })
       .catch((err) => {

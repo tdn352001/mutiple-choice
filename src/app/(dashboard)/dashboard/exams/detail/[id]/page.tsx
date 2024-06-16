@@ -1,3 +1,4 @@
+import ProtectedRoute from '@/components/layout/protected-route'
 import ExamDetailPage from '@/components/pages/dashboard/exams/exam-detail'
 import { examService } from '@/services/exams'
 import { Metadata } from 'next'
@@ -10,7 +11,11 @@ interface PageProps {
 }
 
 const Page = async ({ params: { id } }: PageProps) => {
-  return <ExamDetailPage id={id} />
+  return (
+    <ProtectedRoute>
+      <ExamDetailPage id={id} />
+    </ProtectedRoute>
+  )
 }
 
 export const generateMetadata = async ({ params: { id } }: PageProps): Promise<Metadata> => {

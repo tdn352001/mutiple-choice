@@ -6,11 +6,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useUpdateCourseMutation } from '@/hooks/services/courses'
-import { useCreateCourseMutation } from '@/hooks/services/courses/use-create-course-mutation'
 import { routers } from '@/lib/constants/routers'
-import { courseSchema, CourseSchema } from '@/lib/schemas/course'
+import { CourseSchema, courseSchema } from '@/lib/schemas/course'
 import { Course } from '@/services/courses'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -50,10 +50,15 @@ const UpdateCourseForm = ({ course }: UpdateCourseFormProps) => {
     },
   })
 
+  const queryClient = useQueryClient()
+
   const handleSubmit = async (formValue: FormValue) => {
     return updateCourse(formValue)
       .then(() => {
-        toast.success('Create course successfully!')
+        toast.success('Update course successfully!')
+        queryClient.removeQueries({
+          queryKey: ['course-by-id'],
+        })
         router.push(routers.courses)
       })
       .catch((err) => {

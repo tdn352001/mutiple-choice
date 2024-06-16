@@ -1,3 +1,5 @@
+'use client'
+
 import ThemeToggle from '@/components/layout/dashboard/theme-toggle'
 import { routers } from '@/lib/constants/routers'
 import { cn } from '@/lib/utils'

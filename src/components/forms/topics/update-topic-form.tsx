@@ -11,6 +11,7 @@ import { dynamicRouters } from '@/lib/constants/routers'
 import { TopicSchema, topicSchema } from '@/lib/schemas/topics'
 import { Topic } from '@/services/topics'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -51,10 +52,15 @@ const UpdateTopicForm = ({ topic }: UpdateTopicFormProps) => {
     },
   })
 
+  const queryClient = useQueryClient()
+
   const handleSubmit = async (formValue: FormValue) => {
     return updateTopic(formValue)
       .then(() => {
         toast.success('Update topic successfully!')
+        queryClient.removeQueries({
+          queryKey: ['topic'],
+        })
         router.push(dynamicRouters.topicById(topic.id))
       })
       .catch((err) => {
