@@ -1,3 +1,4 @@
+import QuizHistory from '@/components/pages/dashboard/exams/exam-detail/normail-view/quiz-history'
 import { Button } from '@/components/ui/button'
 import { useStartQuizMutation } from '@/hooks/services/quiz/use-start-quiz-mutation'
 import { dynamicRouters } from '@/lib/constants/routers'
@@ -7,6 +8,7 @@ import { Modals, useOpenModal } from '@/store/modal'
 import { useQuizStore } from '@/store/site/quiz'
 import { useRouter } from 'next/navigation'
 import { HTMLAttributes, PropsWithChildren } from 'react'
+import { toast } from 'sonner'
 interface ExamNormalViewProps {
   exam: Exam
   currentAttempt?: number
@@ -22,9 +24,13 @@ const ExamNormalView = ({ exam, quizId, currentAttempt = 0 }: ExamNormalViewProp
   const openStartQuizModal = useOpenModal(Modals.START_QUIZ)
 
   const handleAccessToQuiz = () => {
+    setQuiz(undefined)
     if (quizId) {
       router.push(dynamicRouters.quiz(quizId))
     } else {
+      if (currentAttempt >= exam.number_attempts) {
+        toast.error('You have reached the maximum number of attempts for this exam.')
+      }
       const isProtect = exam.protect
       if (isProtect) {
         openStartQuizModal({ exam })
@@ -32,11 +38,15 @@ const ExamNormalView = ({ exam, quizId, currentAttempt = 0 }: ExamNormalViewProp
         startQuiz({
           exam_id: exam.id,
           password: '',
-        }).then((res) => {
-          const quiz = res.data
-          setQuiz(quiz)
-          router.push(dynamicRouters.quiz(quiz.id))
         })
+          .then((res) => {
+            const quiz = res.data
+            setQuiz(quiz)
+            router.push(dynamicRouters.quiz(quiz.id))
+          })
+          .catch((err) => {
+            toast.error(err.message)
+          })
       }
     }
   }
@@ -52,10 +62,13 @@ const ExamNormalView = ({ exam, quizId, currentAttempt = 0 }: ExamNormalViewProp
           <TitleCell>Exam Name</TitleCell>
           <ContentCell>{exam.exam_name}</ContentCell>
         </Row>
-        <Row>
-          <TitleCell>Description</TitleCell>
-          <ContentCell>{exam.description}</ContentCell>
-        </Row>
+        {exam.description && (
+          <Row>
+            <TitleCell>Description</TitleCell>
+            <ContentCell>{exam.description}</ContentCell>
+          </Row>
+        )}
+
         <Row>
           <TitleCell>
             <span>Number of Attempts</span>
@@ -76,9 +89,11 @@ const ExamNormalView = ({ exam, quizId, currentAttempt = 0 }: ExamNormalViewProp
         </Row>
       </div>
 
-      <Button onClick={handleAccessToQuiz} disabled={isPending}>
+      <Button className="mb-2" onClick={handleAccessToQuiz} disabled={isPending}>
         {quizId ? 'Continue Quiz' : 'Start Quiz'}
       </Button>
+
+      <QuizHistory examId={exam.id} />
     </div>
   )
 }

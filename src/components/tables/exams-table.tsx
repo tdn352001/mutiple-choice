@@ -115,7 +115,7 @@ const ExamsTable = ({ topicId }: ExamsTableProps) => {
               <Link
                 className="line-clamp-2"
                 href={dynamicRouters.examById(id)}
-                onClick={() => seExamDetailViewMode(ExamViewMode.VIEW)}
+                onClick={() => seExamDetailViewMode(ExamViewMode.DEFAULT)}
               >
                 {exam_name}
               </Link>

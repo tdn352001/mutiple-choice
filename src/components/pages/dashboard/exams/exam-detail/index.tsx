@@ -13,7 +13,6 @@ import { useGetExamByIdV2SuspenseQuery } from '@/hooks/services/exam'
 import { examListBreadcrumb } from '@/lib/breadcrumb/course'
 import { ExamViewMode, useExamDetailStore } from '@/store/site/exam-detail'
 import { useUserStore } from '@/store/user'
-import { useEffect } from 'react'
 
 const ExamDetailPage = ({ id }: { id: string }) => {
   const isAdmin = useUserStore((state) => state.user?.is_admin)
@@ -23,12 +22,6 @@ const ExamDetailPage = ({ id }: { id: string }) => {
 
   const { data } = useGetExamByIdV2SuspenseQuery(id)
   const { exam, current_attempt, quiz_id } = data
-
-  useEffect(() => {
-    if (!isAdmin) {
-      setViewMode(ExamViewMode.DEFAULT)
-    }
-  }, [isAdmin, setViewMode])
 
   return (
     <ProtectedRoute>
@@ -56,7 +49,7 @@ const ExamDetailPage = ({ id }: { id: string }) => {
                 >
                   <SelectTrigger className="min-w-40">
                     <p className="capitalize">
-                      Mode: <span>{viewMode.toLowerCase()}</span>
+                      Mode: <span>{viewMode?.toLowerCase()}</span>
                     </p>
                   </SelectTrigger>
                   <SelectContent>

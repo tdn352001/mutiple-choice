@@ -109,7 +109,7 @@ const QuestionTable = ({ examId, search }: QuestionTableProps) => {
           )
         },
         meta: {
-          className: 'hidden md:table-cell',
+          className: 'hidden md:table-cell max-w-[200px] lg:max-w-[320px]',
         },
         enableSorting: false,
       },

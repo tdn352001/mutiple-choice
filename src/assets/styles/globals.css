@@ -93,5 +93,5 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-input rounded-lg;
+  @apply bg-border rounded-lg dark:bg-background;
 }

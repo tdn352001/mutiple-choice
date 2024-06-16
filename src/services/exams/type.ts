@@ -34,12 +34,14 @@ export type GetExamByIdResponse = {
   data: Exam
 }
 
+export type GetExamByIdV2ResponseData = {
+  exam: Exam
+  quiz_id?: number | string
+  current_attempt?: number
+}
+
 export type GetExamByIdV2Response = {
-  data: {
-    exam: Exam
-    quiz_id?: number | string
-    current_attempt?: number
-  }
+  data: GetExamByIdV2ResponseData
 }
 
 export type CreateExamRequest = {

@@ -4,8 +4,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useStartQuizMutation } from '@/hooks/services/quiz'
+import { dynamicRouters } from '@/lib/constants/routers'
 import { StartQuizSchema, startQuizSchema } from '@/lib/schemas/quiz'
 import { Modals, useModalState } from '@/store/modal'
+import { useQuizStore } from '@/store/site/quiz'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -21,6 +23,7 @@ const StartQuizModal = () => {
   const exam = data?.exam
 
   const router = useRouter()
+  const setQuiz = useQuizStore((state) => state.setQuiz)
 
   const { mutateAsync: startQuiz, isPending } = useStartQuizMutation()
 
@@ -41,7 +44,10 @@ const StartQuizModal = () => {
       exam_id: exam?.id!,
       password: formValue.password,
     })
-      .then(() => {
+      .then((res) => {
+        const quiz = res.data
+        setQuiz(quiz)
+        router.push(dynamicRouters.quiz(quiz.id))
         handleCloseModal()
       })
       .catch((err) => {
