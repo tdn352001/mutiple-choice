@@ -1,18 +1,21 @@
 import ThemeToggle from '@/components/layout/dashboard/theme-toggle'
+import { routers } from '@/lib/constants/routers'
 import { cn } from '@/lib/utils'
+import { useUserStore } from '@/store/user'
+import Link from 'next/link'
 import { MobileSidebar } from './mobile-sidebar'
 import { UserNav } from './user-nav'
-import Link from 'next/link'
 
 interface HeaderProps {
   className?: string
 }
 export default function Header({ className }: HeaderProps) {
+  const isAdmin = useUserStore((state) => state.user?.is_admin)
   return (
-    <div className="supports-backdrop-blur:bg-background/60 border-b bg-background/95 backdrop-blur z-20">
+    <div className="border-b bg-background/95 backdrop-blur z-20">
       <nav className="h-14 flex items-center justify-between px-4">
         <div className="hidden lg:block">
-          <Link href={'https://github.com/Kiranism/next-shadcn-dashboard-starter'} target="_blank">
+          <Link href={isAdmin ? routers.dashboard : routers.courses}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
