@@ -5,7 +5,7 @@ import { getImagePath } from '@/lib/get-image-path'
 import { QuestionType } from '@/lib/types/question'
 import { cn } from '@/lib/utils'
 import { QuestionLog } from '@/services/quiz'
-import { HTMLAttributes } from 'react'
+import { HTMLAttributes, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import TextareaAutosize from 'react-textarea-autosize'
 
@@ -15,6 +15,7 @@ interface QuestionItemProps {
   question: QuestionLog
   examId?: string | number
   form: UseFormReturn<QuizFormValue>
+  onPreviewImage: (url: string) => void
 }
 
 const getLetterByIndex = (index: number) => {
@@ -22,12 +23,22 @@ const getLetterByIndex = (index: number) => {
   return alphabet[index]
 }
 
-const QuestionItem = ({ className, index, examId, question, form }: QuestionItemProps) => {
-  const Container = ({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) => {
+const QuestionItem = ({ className, index, examId, question, form, onPreviewImage }: QuestionItemProps) => {
+  const [loadError, setLoadError] = useState(false)
+
+  const handleZoomImage = () => {
+    if (question.image || !loadError) {
+      onPreviewImage(getImagePath({ exam_id: examId!, image: question.image }))
+    }
+  }
+
+  console.log('render')
+
+  const Container = ({ className: containerClassName, children, ...props }: HTMLAttributes<HTMLDivElement>) => {
     return (
       <div
         id={`question-${question.question_id}`}
-        className={cn('w-full flex flex-col gap-1 py-6 scroll-mt-20')}
+        className={cn('w-full flex flex-col gap-1 py-6 scroll-mt-20', containerClassName, className)}
         {...props}
       >
         <div className="flex gap-3 lg:gap-4 items-start">
@@ -39,12 +50,21 @@ const QuestionItem = ({ className, index, examId, question, form }: QuestionItem
         <div className="flex-1 flex flex-col gap-4 mt-2 px-2 lg:px-11">
           {question.image && (
             <img
-              className="w-auto h-auto min-h-8 mx-auto mt-2 mb-2 max-w-[min(100%,600px)] rounded-sm"
+              className="w-auto h-auto min-h-8 mx-auto mt-2 mb-2 max-w-[min(100%,600px)] rounded-sm cursor-pointer"
               src={getImagePath({
                 exam_id: examId!,
                 image: question.image,
               })}
               alt={question.question.slice(0, 20)}
+              onClick={handleZoomImage}
+              onLoad={() => {
+                setLoadError(false)
+                console.log('Load image success')
+              }}
+              onError={() => {
+                setLoadError(true)
+                console.log('Load image failed')
+              }}
             />
           )}
           <div className="w-full lg:pr-10">{children}</div>
