@@ -35,6 +35,7 @@ const ExamDetailPage = ({ id }: { id: string }) => {
           ]}
         />
         <Heading
+          className={isAdmin ? 'smu:[&>div:first-child]:flex-col smu:[&>div:first-child]:gap-4' : undefined}
           title={exam.exam_name}
           description={exam.description}
           action={

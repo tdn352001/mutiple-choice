@@ -10,6 +10,7 @@ import { dynamicRouters, routers } from '@/lib/constants/routers'
 import { QuestionType } from '@/lib/types/question'
 import { AnswerLog, QuestionLog, QuizAnswer, quizService } from '@/services/quiz'
 import { useQuizStore } from '@/store/site/quiz'
+import { useQuizResultStore } from '@/store/site/quiz-result'
 import moment from 'moment'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -33,6 +34,8 @@ const ExecuteExam = () => {
   const router = useRouter()
 
   const setQuiz = useQuizStore((state) => state.setQuiz)
+  const setBackForExit = useQuizResultStore((state) => state.setBackForExit)
+  const setQuizResult = useQuizResultStore((state) => state.setQuiz)
 
   const quizIdFromParams = Number(params.id as string)
 
@@ -177,7 +180,9 @@ const ExecuteExam = () => {
         answers_log: answerFormatted,
       })
         .then((quizResult) => {
-          console.log({ quizResult })
+          setBackForExit(false)
+          setQuizResult(quizResult.data)
+          router.replace(dynamicRouters.quizResult(quiz!.id))
           toast.success('Submit successfully')
         })
         .catch((err) => {
@@ -194,7 +199,7 @@ const ExecuteExam = () => {
           setConfirmingSubmit(false)
         })
     },
-    [endQuiz, formatAnswer, quiz?.exam.id, quiz?.id, router]
+    [endQuiz, formatAnswer, quiz, router, setBackForExit, setQuizResult]
   )
 
   const handleFormSubmit = async (value: QuizFormValue) => {
@@ -307,11 +312,6 @@ const ExecuteExam = () => {
     },
     [quiz, getFormValue, formatAnswer]
   )
-
-  console.log({
-    quizIdFromParams,
-    quizId: quiz?.id,
-  })
 
   useEffect(
     function fetchQuiz() {

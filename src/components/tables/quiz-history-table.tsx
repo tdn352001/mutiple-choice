@@ -3,6 +3,7 @@ import LoadingPage from '@/components/templates/loading-page'
 import { buttonVariants } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useGetQuizHistoryQuery } from '@/hooks/services/user'
+import { dynamicRouters } from '@/lib/constants/routers'
 import { QuizHistory } from '@/services/quiz'
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import clsx from 'clsx'
@@ -23,13 +24,13 @@ const QuizHistoryTable = ({ examId }: QuizHistoryTableProps) => {
   const columns: ColumnDef<QuizHistory>[] = useMemo(() => {
     const columns: ColumnDef<QuizHistory>[] = [
       {
-        accessorKey: 'id',
+        accessorKey: 'attempts',
         header: (props) => {
-          return <DataTableColumnHeader title="#ID" {...props} />
+          return <DataTableColumnHeader title="Attemps" {...props} />
         },
         cell: ({ row }) => {
-          const { id } = row.original
-          return <span>#{id}</span>
+          const { attempts } = row.original
+          return <span>{attempts}</span>
         },
         enableSorting: false,
       },
@@ -74,7 +75,10 @@ const QuizHistoryTable = ({ examId }: QuizHistoryTableProps) => {
         id: 'actions',
         cell: ({ row }) => {
           return (
-            <Link className={buttonVariants({ variant: 'link', className: 'text-sky-500' })} href="#">
+            <Link
+              className={buttonVariants({ variant: 'link', className: 'text-sky-500' })}
+              href={dynamicRouters.quizResult(row.original.id)}
+            >
               View
             </Link>
           )

@@ -20,12 +20,6 @@ const Countdown = ({ className }: CountdownProps) => {
     const minutesLimit = quiz.exam.time_limit
     const endTime = startTime.add(minutesLimit, 'minutes')
 
-    console.log({
-      minutesLimit,
-      startTime: startTime.format(),
-      endTime: endTime.format(),
-    })
-
     let interval = 0
 
     const updateCountdown = () => {

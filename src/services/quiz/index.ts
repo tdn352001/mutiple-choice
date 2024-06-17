@@ -1,5 +1,11 @@
 import { getApi, postApi, putApi } from '@/lib/axios'
-import { ContinueQuizResponse, EndQuizRequest, StartQuizRequest, StartQuizResponse } from '@/services/quiz/type'
+import {
+  ContinueQuizResponse,
+  EndQuizRequest,
+  GetQuizResultResponse,
+  StartQuizRequest,
+  StartQuizResponse,
+} from '@/services/quiz/type'
 
 export * from './type'
 
@@ -17,6 +23,10 @@ export const quizService = {
   },
 
   endQuiz(quizId: string | number, request: EndQuizRequest) {
-    return postApi<any>(`/quiz/end_quiz/${quizId}`, request)
+    return postApi<GetQuizResultResponse>(`/quiz/end_quiz/${quizId}`, request)
+  },
+
+  getQuizResult(quizId: string | number) {
+    return getApi<GetQuizResultResponse>(`/quiz/is_completed/${quizId}`)
   },
 }

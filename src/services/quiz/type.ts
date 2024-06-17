@@ -1,4 +1,5 @@
 import { QuestionType } from '@/lib/types/question'
+import { User } from '@/services/auth'
 import { Exam } from '@/services/exams'
 
 export type QuizAnswer = {
@@ -11,6 +12,7 @@ export type QuestionLog = {
   question: string
   image: string
   type: QuestionType
+  correct_answer?: number[]
   answers: QuizAnswer[]
 }
 
@@ -23,11 +25,13 @@ export type Quiz = {
   id: number
   exam: Exam
   attempts: number
+  score?: string
   start_time: string
   end_time?: string
   time_limit: number
   questions_log: QuestionLog[]
   answers_log?: AnswerLog[]
+  user?: User
 }
 
 export type QuizHistory = {
@@ -58,4 +62,8 @@ export type EndQuizRequest = {
 
 export type SaveAnswersRequest = {
   answers_log: AnswerLog[]
+}
+
+export type GetQuizResultResponse = {
+  data: Quiz
 }

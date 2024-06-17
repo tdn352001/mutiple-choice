@@ -1,5 +1,4 @@
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
 import { ReactNode } from 'react'
 
 interface HeadingProps {
@@ -12,7 +11,7 @@ interface HeadingProps {
 
 const Heading = ({ className, title, description, action, secondaryAction }: HeadingProps) => {
   return (
-    <div className={cn('', className)}>
+    <div className={className}>
       <div className="flex items-start justify-between">
         <div className="space-y-2">
           <div className="flex gap-2">
