@@ -12,6 +12,7 @@ export const routers = {
   createTopic: '/dashboard/topics/create',
   createExam: '/dashboard/exams/create',
   members: '/dashboard/members',
+  profile: '/dashboard/profile',
   admin: {
     login: '/admin/login',
     dashboard: '/admin/dashboard',

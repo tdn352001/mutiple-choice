@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -16,13 +15,17 @@ import { sessionManager } from '@/lib/session'
 import { Modals, useOpenModal } from '@/store/modal'
 import { useUserStore } from '@/store/user'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 export function UserNav() {
   const user = useUserStore((state) => state.user)
   const setUser = useUserStore((state) => state.setUser)
 
+  const router = useRouter()
+
   const openChangePasswordModal = useOpenModal(Modals.CHANGE_PASSWORD)
+
+  const viewProfile = () => router.push(routers.profile)
 
   const handleChangePassword = () => openChangePasswordModal()
 
@@ -58,11 +61,13 @@ export function UserNav() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer" onClick={handleChangePassword}>
-            Change password
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
+        <DropdownMenuItem className="cursor-pointer" onClick={viewProfile}>
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer" onClick={handleChangePassword}>
+          Change password
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer">
           <Link className="block w-full h-full" href={routers.login} onClick={handleSignOut}>

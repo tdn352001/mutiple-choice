@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children, admin }: ProtectedRouteProps) => {
     }
 
     if (!havePermission) {
-      redirect(routers.dashboard)
+      redirect(routers.courses)
     }
   }
 

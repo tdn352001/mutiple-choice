@@ -26,6 +26,9 @@ export const DOCUMENT_TITLES = {
     MEMBERS: {
       HOME: 'Members',
     },
+    PROFILE: {
+      HOME: 'Profile',
+    },
   },
 }
 

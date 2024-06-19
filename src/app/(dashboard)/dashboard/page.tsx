@@ -1,10 +1,9 @@
 'use client'
 
-import { routers } from '@/lib/constants/routers'
-import { redirect } from 'next/navigation'
+import DashboardPage from '@/components/pages/dashboard/home'
 
 const Page = () => {
-  return redirect(routers.courses)
+  return <DashboardPage />
 }
 
 export default Page

@@ -1,10 +1,11 @@
 import { getApi, postApi } from '@/lib/axios'
 import {
+  GetExamHistoryParams, GetExamHistoryResponse,
   GetMeResponse,
   GetQuizHistoryParams,
   GetQuizHistoryResponse,
   GetQuizNotCompletedResponse,
-  UpdatePasswordRequest,
+  UpdatePasswordRequest
 } from './types'
 
 export * from './types'
@@ -16,6 +17,10 @@ export const userService = {
 
   updatePassword(request: UpdatePasswordRequest) {
     return postApi('/update_password', request)
+  },
+
+  getExamHistory(params: GetExamHistoryParams) {
+    return getApi<GetExamHistoryResponse>('/get_list_exam_have_been_do', { params })
   },
 
   getQuizHisory(params: GetQuizHistoryParams) {
