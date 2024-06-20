@@ -42,7 +42,9 @@ export type GetQuizHistoryParams = {
 }
 
 export type GetQuizHistoryResponse = {
-  data: QuizHistory[]
+  data: {
+    quizzes: QuizHistory[]
+  }
 }
 
 export type GetQuizNotCompletedResponse = {

@@ -19,7 +19,7 @@ interface QuizHistoryTableProps {
 const QuizHistoryTable = ({ examId }: QuizHistoryTableProps) => {
   const { data } = useGetQuizHistoryQuery(examId)
 
-  const quizHistory = data || []
+  const quizHistory = data?.quizzes || []
 
   const columns: ColumnDef<QuizHistory>[] = useMemo(() => {
     const columns: ColumnDef<QuizHistory>[] = [
