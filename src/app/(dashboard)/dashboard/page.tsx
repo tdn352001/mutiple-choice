@@ -1,9 +1,12 @@
-'use client'
-
+import ProtectedRoute from '@/components/layout/protected-route'
 import DashboardPage from '@/components/pages/dashboard/home'
 
 const Page = () => {
-  return <DashboardPage />
+  return (
+    <ProtectedRoute admin>
+      <DashboardPage />
+    </ProtectedRoute>
+  )
 }
 
 export default Page

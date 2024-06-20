@@ -49,6 +49,12 @@ export function DashboardNav({ setOpen }: DashboardNavProps) {
     const items = [...baseNavItems]
 
     if (isAdmin) {
+      items.unshift({
+        title: 'Dashboard',
+        href: routers.dashboard,
+        icon: 'Home',
+      })
+
       items.push({
         title: 'Members',
         href: routers.members,
