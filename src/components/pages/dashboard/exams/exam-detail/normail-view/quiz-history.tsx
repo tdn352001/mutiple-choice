@@ -9,7 +9,7 @@ interface QuizHistoryProps {
 const QuizHistory = ({ examId }: QuizHistoryProps) => {
   const { data } = useGetQuizHistoryQuery(examId)
 
-  const quizHistory = data || []
+  const quizHistory = data?.quizzes || []
 
   if (quizHistory.length === 0) {
     return null
