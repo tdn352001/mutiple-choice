@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 const Page = () => {
-  return redirect(routers.dashboard)
+  return redirect(routers.courses)
 }
 
 export const metadata: Metadata = {
