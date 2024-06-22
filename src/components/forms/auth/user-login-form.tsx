@@ -3,9 +3,9 @@ import ErrorAlert from '@/components/custom/error-alert'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useClientSearchParams } from '@/hooks/next'
 import { useLoginMutation } from '@/hooks/services/auth'
 import { routers } from '@/lib/constants/routers'
+import { getSearchParams } from '@/lib/get-search-params'
 import { LoginSchema, loginSchema } from '@/lib/schemas/auth'
 import { sessionManager } from '@/lib/session'
 import { useUserStore } from '@/store/user'
@@ -14,7 +14,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { getSearchParams } from '@/lib/get-search-params'
 
 type UserFormValue = LoginSchema
 

@@ -1,9 +1,10 @@
-import { postApi } from '@/lib/axios'
+import { getApi, postApi } from '@/lib/axios'
 import {
   ActiveUserRequest,
   ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
+  RefreshTokenResponse,
   RegisterRequest,
   ResendActiveCodeRequest,
   ResetPasswordRequest,
@@ -19,7 +20,11 @@ export const authService = {
   register(request: RegisterRequest) {
     return postApi('/register', request)
   },
-
+  refreshToken() {
+    return getApi<RefreshTokenResponse>('/refresh_token', {
+      withCredentials: true,
+    })
+  },
   activeUser(request: ActiveUserRequest) {
     return postApi('/activate_user', request)
   },

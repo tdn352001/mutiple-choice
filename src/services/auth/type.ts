@@ -18,6 +18,12 @@ export type LoginResponse = {
   }
 }
 
+export type RefreshTokenResponse = {
+  data: {
+    token: string
+  }
+}
+
 export type RegisterRequest = {
   email: string
   full_name: string

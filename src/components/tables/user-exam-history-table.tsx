@@ -1,8 +1,10 @@
 import { DataTableColumnHeader } from '@/components/custom/data-table/column-header'
 import { DataTablePagination } from '@/components/custom/data-table/pagination'
 import LoadingPage from '@/components/templates/loading-page'
+import { buttonVariants } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useGetUserByExamHistoryQuery } from '@/hooks/services/stats'
+import { dynamicRouters } from '@/lib/constants/routers'
 import { BaseApiQueryParams, OrderParam } from '@/lib/types/query-params'
 import { Exam } from '@/services/exams'
 import { UserByExamHistory } from '@/services/stats'
@@ -15,6 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import clsx from 'clsx'
+import Link from 'next/link'
 import { useMemo, useState } from 'react'
 
 interface ExamStatsViewProps {
@@ -133,9 +136,23 @@ const UserByExamTable = ({ exam, search }: ExamStatsViewProps) => {
         },
         enableSorting: false,
       },
+      {
+        id: 'actions',
+        cell: ({ row }) => {
+          const { id: memberId } = row.original
+          return (
+            <Link
+              className={buttonVariants({ variant: 'link', className: 'text-sky-500' })}
+              href={dynamicRouters.memberQuiz(memberId, exam.id)}
+            >
+              View
+            </Link>
+          )
+        },
+      },
     ]
     return columns
-  }, [])
+  }, [exam.id])
 
   const table = useReactTable({
     data: users,

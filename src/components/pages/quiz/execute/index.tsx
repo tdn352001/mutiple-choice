@@ -6,8 +6,11 @@ import { QuizFormValue } from '@/components/pages/quiz/execute/type'
 import LoadingPage from '@/components/templates/loading-page'
 import { Form } from '@/components/ui/form'
 import { useEndQuizMutation } from '@/hooks/services/quiz/use-end-quiz-mutation'
+import axiosClient from '@/lib/axios'
 import { dynamicRouters, routers } from '@/lib/constants/routers'
+import { sessionManager } from '@/lib/session'
 import { QuestionType } from '@/lib/types/question'
+import { authService } from '@/services/auth'
 import { AnswerLog, QuestionLog, QuizAnswer, quizService } from '@/services/quiz'
 import { useQuizStore } from '@/store/site/quiz'
 import { useQuizResultStore } from '@/store/site/quiz-result'
@@ -341,6 +344,14 @@ const ExecuteExam = () => {
     },
     [quiz, quizIdFromParams, router, setQuiz]
   )
+
+  useEffect(function refreshToken() {
+    authService.refreshToken().then((res) => {
+      const token = res.data.token
+      sessionManager.accessToken = token
+      axiosClient.defaults.headers.common['Authorization'] = 'Bearer ' + token
+    })
+  }, [])
 
   if (loading || !quiz) {
     return (
