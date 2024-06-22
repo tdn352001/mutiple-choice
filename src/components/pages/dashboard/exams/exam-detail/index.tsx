@@ -4,6 +4,7 @@ import Breadcrumb from '@/components/custom/breadcrumb'
 import StartQuizModal from '@/components/modals/quiz/start-quiz-modal'
 import ExamEditView from '@/components/pages/dashboard/exams/exam-detail/edit-view'
 import ExamNormalView from '@/components/pages/dashboard/exams/exam-detail/normail-view'
+import ExamStatsView from '@/components/pages/dashboard/exams/exam-detail/stats-view'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
 import { ScrollAreaV2 } from '@/components/ui/scroll-area'
@@ -54,6 +55,7 @@ const ExamDetailPage = ({ id }: { id: string }) => {
                 <SelectContent>
                   <SelectItem value={ExamViewMode.DEFAULT}>Default</SelectItem>
                   <SelectItem value={ExamViewMode.EDIT}>Edit</SelectItem>
+                  <SelectItem value={ExamViewMode.STATS}>Stats</SelectItem>
                 </SelectContent>
               </Select>
             )
@@ -64,6 +66,7 @@ const ExamDetailPage = ({ id }: { id: string }) => {
             <ExamNormalView exam={exam} currentAttempt={current_attempt} quizId={quiz_id} />
           )}
           {viewMode === ExamViewMode.EDIT && <ExamEditView exam={exam} />}
+          {viewMode === ExamViewMode.STATS && <ExamStatsView exam={exam} />}
         </div>
       </Container>
       <StartQuizModal />

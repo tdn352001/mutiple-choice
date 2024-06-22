@@ -128,3 +128,14 @@ export const createExamsBreadcrumb = [
     href: routers.createExam,
   },
 ]
+
+export const memberBreadcrumb = [
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.HOME,
+    href: routers.dashboard,
+  },
+  {
+    title: DOCUMENT_TITLES.DASHBOARD.MEMBERS.HOME,
+    href: routers.members,
+  },
+]

@@ -1,35 +1,44 @@
-import { deleteApi, getApi, putApi } from "@/lib/axios";
+import { deleteApi, getApi, putApi } from '@/lib/axios'
 import {
+  GetMemberExamHistoryParams,
+  GetMemberExamHistoryResponse,
   GetMemberParams,
+  GetMemberQuizzesParams,
+  GetMemberQuizzesResponse,
   GetMemberResponse,
   UpdateMemberInfoRequest,
   UpdateMemberPasswordRequest,
-} from "@/services/members/type";
+} from '@/services/members/type'
 
-export * from "./type";
+export * from './type'
 
 export const memberService = {
   getMembers(params?: GetMemberParams) {
-    return getApi<GetMemberResponse>("/get_users", {
+    return getApi<GetMemberResponse>('/get_users', {
       params,
-    });
+    })
   },
 
-  updateMemberInfo(
-    memberId: string | number,
-    request: UpdateMemberInfoRequest,
-  ) {
-    return putApi(`/admin/update_user/${memberId}`, request);
+  updateMemberInfo(memberId: string | number, request: UpdateMemberInfoRequest) {
+    return putApi(`/admin/update_user/${memberId}`, request)
   },
 
-  updateMemberPassword(
-    memberId: string | number,
-    request: UpdateMemberPasswordRequest,
-  ) {
-    return putApi(`/admin/update_user_password/${memberId}`, request);
+  updateMemberPassword(memberId: string | number, request: UpdateMemberPasswordRequest) {
+    return putApi(`/admin/update_user_password/${memberId}`, request)
   },
 
   deleteMember(id: string | number) {
-    return deleteApi(`/${id}`);
+    return deleteApi(`/${id}`)
   },
-};
+
+  getMemberExamHistory(id: string | number, params?: GetMemberExamHistoryParams) {
+    return getApi<GetMemberExamHistoryResponse>(`/admin/get_list_exam_by_user/${id}`, {
+      params,
+    })
+  },
+  getMemberQuizzesHistory(params: GetMemberQuizzesParams) {
+    return getApi<GetMemberQuizzesResponse>('/admin/get_list_quiz_by_exam_user_id', {
+      params,
+    })
+  },
+}

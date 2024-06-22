@@ -1,17 +1,13 @@
 import { DataTableColumnHeader } from '@/components/custom/data-table/column-header'
 import { DataTablePagination } from '@/components/custom/data-table/pagination'
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { buttonVariants } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGetMembersSuspenseQuery, useUpdateMemberProfileMutation } from '@/hooks/services/members'
+import { useGetMemberExamHistoryQuery } from '@/hooks/services/members'
 import { useApiQuery } from '@/hooks/use-api-query'
-import { MEMBER_SORTABLE_PROPS } from '@/lib/constants/api'
+import { EXAM_HISTORY_SORTABLE_PROPS } from '@/lib/constants/api'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { SearchParams } from '@/lib/types/query-params'
-import { Member } from '@/services/members'
-import { Modals, useOpenModal } from '@/store/modal'
-import { useUserStore } from '@/store/user'
-import { useQueryClient } from '@tanstack/react-query'
+import { ExamHistory } from '@/services/user'
 import {
   ColumnDef,
   OnChangeFn,
@@ -23,69 +19,21 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import clsx from 'clsx'
-import { CheckCircle, Edit, Key, MoreHorizontal, ShieldBan, Trash, User2 } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useMemo } from 'react'
 
-const MemberRoleDropdownItem = ({ member }: { member: Member }) => {
-  const queryClient = useQueryClient()
-
-  const { mutateAsync: updateMember } = useUpdateMemberProfileMutation(member.id)
-
-  const handleUpdateProfile = () => {
-    updateMember({ ...member, is_admin: !member.is_admin }).then(() => {
-      queryClient.invalidateQueries({
-        queryKey: ['members'],
-      })
-    })
-  }
-
-  return (
-    <DropdownMenuItem onClick={handleUpdateProfile}>
-      <User2 className="mr-2 h-4 w-4" />
-      <span>
-        Set as <span>{member.is_admin ? 'member' : 'admin'}</span>
-      </span>
-    </DropdownMenuItem>
-  )
+interface ExamsHistoryTableProps {
+  memberId: string | number
 }
 
-const MemberActiveStateDropdownItem = ({ member }: { member: Member }) => {
-  const queryClient = useQueryClient()
+const MemberExamHistoryTable = ({ memberId }: ExamsHistoryTableProps) => {
+  const [params, paramsUpdater] = useApiQuery({
+    sortProps: EXAM_HISTORY_SORTABLE_PROPS,
+  })
 
-  const { mutateAsync: updateMember } = useUpdateMemberProfileMutation(member.id)
+  const { data } = useGetMemberExamHistoryQuery({ memberId, params })
 
-  const handleUpdateProfile = () => {
-    updateMember({ ...member, active: !member.active }).then(() => {
-      queryClient.invalidateQueries({
-        queryKey: ['members'],
-      })
-    })
-  }
-
-  return (
-    <DropdownMenuItem onClick={handleUpdateProfile}>
-      {member.active ? (
-        <>
-          <ShieldBan className="mr-2 h-4 w-4" />
-          <span>Inactive</span>
-        </>
-      ) : (
-        <>
-          <CheckCircle className="mr-2 h-4 w-4" />
-          <span>Active</span>
-        </>
-      )}
-    </DropdownMenuItem>
-  )
-}
-
-const MemberTable = () => {
-  const [params, paramsUpdater] = useApiQuery({ sortProps: MEMBER_SORTABLE_PROPS })
-
-  const { data } = useGetMembersSuspenseQuery(params)
-
-  const members = data?.users || []
+  const exams = data?.exams || []
 
   const page = params.page
   const perPage = params.per_page
@@ -129,7 +77,6 @@ const MemberTable = () => {
     (updaterOrValue: Updater<PaginationState>) => {
       if (typeof updaterOrValue === 'function') {
         const newPagination = updaterOrValue(pagination)
-        console.log({ newPagination })
         paramsUpdater.setMany({
           [SearchParams.Page]: newPagination.pageIndex + 1,
           [SearchParams.Limit]: newPagination.pageSize,
@@ -144,62 +91,51 @@ const MemberTable = () => {
     [pagination, paramsUpdater]
   )
 
-  const openDeleteMemberModal = useOpenModal(Modals.DELETE_MEMBER)
-  const openUpdateMemberProfileModal = useOpenModal(Modals.UPDATE_MEMBER_PROFILE)
-  const openUpdateMemberPasswordModal = useOpenModal(Modals.UPDATE_MEMBER_PASSWORD)
-
-  const user = useUserStore((state) => state.user)
-
-  const columns: ColumnDef<Member>[] = useMemo(() => {
-    const columns: ColumnDef<Member>[] = [
+  const columns: ColumnDef<ExamHistory>[] = useMemo(() => {
+    const columns: ColumnDef<ExamHistory>[] = [
       {
-        accessorKey: 'full_name',
+        accessorKey: 'exam_name',
         header: (props) => {
-          return <DataTableColumnHeader title="Full name" {...props} />
+          return <DataTableColumnHeader title="Exam name" {...props} />
         },
         cell: ({ row }) => {
-          const { id, full_name } = row.original
+          const { id, exam_name } = row.original
           return (
             <div className="flex items-center space-x-2">
-              <Link className="line-clamp-2" href={dynamicRouters.memberById(id)}>
-                {full_name}
+              <Link className="line-clamp-2" href={dynamicRouters.memberQuiz(memberId, id)}>
+                {exam_name}
               </Link>
             </div>
           )
         },
-        meta: {
-          className: 'max-w-[300px]',
-        },
       },
       {
-        accessorKey: 'email',
+        accessorKey: 'exam_code',
         header: (props) => {
-          return <DataTableColumnHeader title="Email" {...props} />
+          return <DataTableColumnHeader title="Exam code" {...props} />
         },
         cell: ({ row }) => {
-          const { id, email } = row.original
-          return (
-            <div className="flex items-center space-x-2">
-              <Link className="line-clamp-2" href={dynamicRouters.memberById(id)}>
-                {email}
-              </Link>
-            </div>
-          )
-        },
-        meta: {
-          className: 'hidden md:table-cell max-w-[300px]',
-        },
-      },
-      {
-        accessorKey: 'is_admin',
-        header: (props) => {
-          return <DataTableColumnHeader title="Role" {...props} />
-        },
-        cell: ({ row }) => {
-          const { is_admin } = row.original
+          const { exam_code } = row.original
           return (
             <div className="min-w-28 flex items-center space-x-2">
-              <span className="block whitespace-nowrap first-letter:uppercase">{is_admin ? 'Admin' : 'Member'}</span>
+              <span className="block whitespace-nowrap">{exam_code}</span>
+            </div>
+          )
+        },
+        meta: {
+          className: 'hidden md:table-cell',
+        },
+      },
+      {
+        accessorKey: 'nearest_score',
+        header: (props) => {
+          return <DataTableColumnHeader title="Nearest score" {...props} />
+        },
+        cell: ({ row }) => {
+          const { nearest_score } = row.original
+          return (
+            <div className="min-w-28 flex items-center space-x-2">
+              <span className="block whitespace-nowrap">{nearest_score}</span>
             </div>
           )
         },
@@ -209,68 +145,43 @@ const MemberTable = () => {
         enableSorting: false,
       },
       {
-        accessorKey: 'active',
+        accessorKey: 'best_score',
         header: (props) => {
-          return <DataTableColumnHeader title="Active" {...props} />
+          return <DataTableColumnHeader title="Best score" {...props} />
         },
         cell: ({ row }) => {
-          const { active } = row.original
+          const { best_score } = row.original
           return (
             <div className="min-w-28 flex items-center space-x-2">
-              <span className="block whitespace-nowrap first-letter:uppercase">{`${active}`}</span>
+              <span className="block whitespace-nowrap">{best_score}</span>
             </div>
           )
-        },
-        meta: {
-          className: 'hidden md:table-cell',
         },
         enableSorting: false,
       },
       {
         id: 'actions',
         cell: ({ row }) => {
+          const { id } = row.original
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <MoreHorizontal size={16} />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="min-w-32" align="end">
-                <DropdownMenuItem onClick={() => openUpdateMemberProfileModal({ member: row.original })}>
-                  <Edit className="mr-2 h-4 w-4" />
-                  <span>Update profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => openUpdateMemberPasswordModal({ member: row.original })}>
-                  <Key className="mr-2 h-4 w-4" />
-                  <span>Update password</span>
-                </DropdownMenuItem>
-                {user?.id !== row.original.id && (
-                  <>
-                    <MemberRoleDropdownItem member={row.original} />
-                    <MemberActiveStateDropdownItem member={row.original} />
-                    <DropdownMenuItem
-                      className="text-destructive focus:text-destructive/90"
-                      onClick={() => openDeleteMemberModal({ member: row.original })}
-                    >
-                      <Trash className="mr-2 h-4 w-4" />
-                      <span>Delete</span>
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link
+              className={buttonVariants({ variant: 'link', className: 'text-sky-500' })}
+              href={dynamicRouters.memberQuiz(memberId, id)}
+            >
+              View
+            </Link>
           )
+        },
+        meta: {
+          className: 'hidden md:table-cell',
         },
       },
     ]
-
     return columns
-  }, [openDeleteMemberModal, openUpdateMemberPasswordModal, openUpdateMemberProfileModal, user?.id])
+  }, [memberId])
 
   const table = useReactTable({
-    data: members,
+    data: exams,
     rowCount: itemsCount,
     columns,
     manualPagination: true,
@@ -340,4 +251,4 @@ const MemberTable = () => {
   )
 }
 
-export default MemberTable
+export default MemberExamHistoryTable
