@@ -9,7 +9,7 @@ import { useUserStore } from '@/store/user'
 import ExamHistory from './exam-history'
 
 const ProfilePage = () => {
-  const user = useUserStore((state) => state.user!)
+  const user = useUserStore((state) => state.user)
 
   return (
     <ScrollArea className="size-full">
@@ -19,11 +19,11 @@ const ProfilePage = () => {
           <div>
             <p className="text-lg ">
               <span className="font-medium">Name: </span>
-              <span>{user.full_name}</span>
+              <span>{user?.full_name}</span>
             </p>
             <p className="text-lg ">
               <span className="font-medium">Email: </span>
-              <span>{user.email}</span>
+              <span>{user?.email}</span>
             </p>
           </div>
           <Separator />

@@ -14,7 +14,6 @@ import { routers } from '@/lib/constants/routers'
 import { sessionManager } from '@/lib/session'
 import { Modals, useOpenModal } from '@/store/modal'
 import { useUserStore } from '@/store/user'
-import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
 export function UserNav() {
@@ -32,6 +31,7 @@ export function UserNav() {
   const pathname = usePathname()
 
   const handleSignOut = () => {
+    router.push(routers.login)
     setUser(undefined)
     sessionManager.removeAccessToken()
   }
@@ -69,10 +69,8 @@ export function UserNav() {
           Change password
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
-          <Link className="block w-full h-full" href={routers.login} onClick={handleSignOut}>
-            Log out
-          </Link>
+        <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
+          Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
