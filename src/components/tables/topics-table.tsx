@@ -126,7 +126,7 @@ const TopicTable = ({ courseId }: TopicTableProps) => {
         },
         cell: ({ row }) => {
           return (
-            <div className="min-w-28 flex items-center space-x-2">
+            <div className="min-w-28 2xl:min-w-52 flex items-center space-x-2">
               <span className="block whitespace-nowrap">{row.getValue('topic_code')}</span>
             </div>
           )
@@ -184,7 +184,7 @@ const TopicTable = ({ courseId }: TopicTableProps) => {
         cell: ({ row }) => {
           const { active } = row.original
           return (
-            <div className="min-w-28 flex items-center space-x-2">
+            <div className="min-w-28 2xl:min-w-52 flex items-center space-x-2">
               <span className="block whitespace-nowrap first-letter:uppercase">{`${active}`}</span>
             </div>
           )

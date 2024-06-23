@@ -38,9 +38,13 @@ const MembersCard = () => {
                     <Avatar className="h-9 w-9">
                       <AvatarFallback className="uppercase">{member.full_name.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    <div className="ml-4 space-y-1">
-                      <p className="text-sm font-medium leading-none">{member.full_name}</p>
-                      <p className="text-sm text-muted-foreground">{member.email}</p>
+                    <div className="ml-4 mr-2 space-y-1 max-w-[70%]">
+                      <p className="text-sm font-medium leading-none whitespace-nowrap text-ellipsis overflow-hidden">
+                        {member.full_name}
+                      </p>
+                      <p className="text-sm text-muted-foreground whitespace-nowrap text-ellipsis overflow-hidden">
+                        {member.email}
+                      </p>
                     </div>
                     <div className="ml-auto font-medium text-sm">{member.is_admin ? 'Admin' : 'Member'}</div>
                   </div>

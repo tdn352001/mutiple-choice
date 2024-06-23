@@ -113,8 +113,6 @@ const EditQuestionForm = () => {
     defaultValues: question,
   })
 
-  console.log({ question })
-
   const handleFormSubmit = async (formValue: FormValue) => {}
 
   return (

@@ -36,6 +36,9 @@ const MemberQuizHistoryTable = ({ examId, memberId }: QuizHistoryTableProps) => 
           const { attempts } = row.original
           return <span>{attempts}</span>
         },
+        meta: {
+          className: 'hidden md:table-cell',
+        },
         enableSorting: false,
       },
       {
@@ -46,9 +49,7 @@ const MemberQuizHistoryTable = ({ examId, memberId }: QuizHistoryTableProps) => 
         cell: ({ row }) => {
           return <span className="min-w-28 block">{moment(row.original.start_time).format('DD/MM/YYYY HH:mm:ss')}</span>
         },
-        meta: {
-          className: 'hidden md:table-cell',
-        },
+
         enableSorting: false,
       },
       {

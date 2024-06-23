@@ -219,7 +219,6 @@ const ExecuteExam = () => {
 
   const handleConfirmSubmit = () => {
     if (!isSubmitingForm) {
-      console.log('submit')
       form.handleSubmit(submitQuiz)()
     }
   }
@@ -346,11 +345,20 @@ const ExecuteExam = () => {
   )
 
   useEffect(function refreshToken() {
-    authService.refreshToken().then((res) => {
-      const token = res.data.token
-      sessionManager.accessToken = token
-      axiosClient.defaults.headers.common['Authorization'] = 'Bearer ' + token
-    })
+    const refreshToken = localStorage.getItem('refresh_token')
+    if (refreshToken) {
+      authService
+        .refreshToken({
+          headers: {
+            refresh_token: refreshToken,
+          },
+        })
+        .then((res) => {
+          const token = res.data.token
+          sessionManager.accessToken = token
+          axiosClient.defaults.headers.common['Authorization'] = 'Bearer ' + token
+        })
+    }
   }, [])
 
   if (loading || !quiz) {

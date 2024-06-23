@@ -1,8 +1,14 @@
-'use client'
-import AnswersLog from '@/components/pages/quiz/execute/answers-log'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { MenuIcon } from 'lucide-react'
-import { useState } from 'react'
+"use client";
+import AnswersLog from "@/components/pages/quiz/execute/answers-log";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { MenuIcon } from "lucide-react";
+import React, { useState } from "react";
 
 // import { Playlist } from "../data/playlists";
 
@@ -11,7 +17,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function MobileControlPanel({ className }: SidebarProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Sheet open={open} onOpenChange={setOpen}>
@@ -32,5 +38,5 @@ export function MobileControlPanel({ className }: SidebarProps) {
         </SheetContent>
       </Sheet>
     </>
-  )
+  );
 }

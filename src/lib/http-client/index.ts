@@ -1,4 +1,5 @@
-import { headers } from 'next/headers'
+import { API_URL } from '@/lib/constants/api'
+import isUrl from 'is-url'
 import _ from 'lodash'
 import type {
   ClientRequestConfig,
@@ -7,8 +8,6 @@ import type {
   HttpClientResponse,
   RequestConfig,
 } from './types'
-import isUrl from 'is-url'
-import { API_URL } from '@/lib/constants/api'
 
 export class HttpClient {
   public config: HttpClientRequestConfig
@@ -47,7 +46,6 @@ export class HttpClient {
 
       return url.toString()
     } catch (error: any) {
-      console.log({ err: error.message })
       return urlStr
     }
   }

@@ -1,5 +1,4 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Icon } from "@/components/ui/icon";
 import { AlertCircle } from "lucide-react";
 import React from "react";
 import { AnimatePresence } from "framer-motion";

@@ -10,6 +10,7 @@ import {
   ResetPasswordRequest,
   UpdatePasswordRequest,
 } from '@/services/auth/type'
+import { AxiosRequestConfig } from 'axios'
 
 export * from './type'
 
@@ -20,10 +21,8 @@ export const authService = {
   register(request: RegisterRequest) {
     return postApi('/register', request)
   },
-  refreshToken() {
-    return getApi<RefreshTokenResponse>('/refresh_token', {
-      withCredentials: true,
-    })
+  refreshToken(config?: AxiosRequestConfig) {
+    return getApi<RefreshTokenResponse>('/refresh_token', config)
   },
   activeUser(request: ActiveUserRequest) {
     return postApi('/activate_user', request)

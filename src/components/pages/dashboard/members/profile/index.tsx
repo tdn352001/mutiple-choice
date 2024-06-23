@@ -1,52 +1,53 @@
-'use client'
+"use client";
 
-import Breadcrumb from '@/components/custom/breadcrumb'
-import MemberExamHistory from '@/components/pages/dashboard/members/profile/member-exam-history'
-import Container from '@/components/templates/container'
-import Heading from '@/components/templates/heading'
-import LoadingPage from '@/components/templates/loading-page'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { useGetMemberExamHistoryQuery } from '@/hooks/services/members'
-import { memberBreadcrumb } from '@/lib/breadcrumb/course'
-import { routers } from '@/lib/constants/routers'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { toast } from 'sonner'
+import Breadcrumb from "@/components/custom/breadcrumb";
+import MemberExamHistory from "@/components/pages/dashboard/members/profile/member-exam-history";
+import Container from "@/components/templates/container";
+import Heading from "@/components/templates/heading";
+import LoadingPage from "@/components/templates/loading-page";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useGetMemberExamHistoryQuery } from "@/hooks/services/members";
+import { memberBreadcrumb } from "@/lib/breadcrumb/course";
+import { routers } from "@/lib/constants/routers";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 interface MemberProfileProps {
-  memberId: string | number
+  memberId: string | number;
 }
 
 const MemberProfile = ({ memberId }: MemberProfileProps) => {
-  const { data, isPending, isError } = useGetMemberExamHistoryQuery({ memberId })
+  const { data, isPending, isError } = useGetMemberExamHistoryQuery({
+    memberId,
+  });
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
-    const user = data?.user
+    const user = data?.user;
     if (user) {
-      const currentTitle = window.document.title
-      const newTitle = `${user.full_name} Profile`
-      window.document.title = newTitle
+      const currentTitle = window.document.title;
+      window.document.title = `${user.full_name} Profile`;
 
       return () => {
-        window.document.title = currentTitle
-      }
+        window.document.title = currentTitle;
+      };
     }
-  }, [data?.user])
+  }, [data?.user]);
 
   useEffect(() => {
     if (isError) {
-      toast.error('Failed to get member data')
-      router.replace(routers.courses)
+      toast.error("Failed to get member data");
+      router.replace(routers.courses);
     }
-  }, [isError, router])
+  }, [isError, router]);
 
   if (isPending || !data) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
-  const { user } = data
+  const { user } = data;
 
   return (
     <ScrollArea className="size-full">
@@ -56,7 +57,7 @@ const MemberProfile = ({ memberId }: MemberProfileProps) => {
             ...memberBreadcrumb,
             {
               title: user.full_name,
-              href: '#',
+              href: "#",
             },
           ]}
         />
@@ -76,7 +77,7 @@ const MemberProfile = ({ memberId }: MemberProfileProps) => {
         </div>
       </Container>
     </ScrollArea>
-  )
-}
+  );
+};
 
-export default MemberProfile
+export default MemberProfile;

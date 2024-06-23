@@ -14,6 +14,7 @@ export type LoginRequest = {
 export type LoginResponse = {
   data: {
     token: string
+    refresh_token: string
     user: User
   }
 }

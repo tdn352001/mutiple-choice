@@ -129,7 +129,6 @@ const MemberTable = () => {
     (updaterOrValue: Updater<PaginationState>) => {
       if (typeof updaterOrValue === 'function') {
         const newPagination = updaterOrValue(pagination)
-        console.log({ newPagination })
         paramsUpdater.setMany({
           [SearchParams.Page]: newPagination.pageIndex + 1,
           [SearchParams.Limit]: newPagination.pageSize,
@@ -222,7 +221,7 @@ const MemberTable = () => {
           )
         },
         meta: {
-          className: 'hidden md:table-cell',
+          className: 'hidden lg:table-cell',
         },
         enableSorting: false,
       },

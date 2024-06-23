@@ -32,8 +32,6 @@ const QuestionItem = ({ className, index, examId, question, form, onPreviewImage
     }
   }
 
-  console.log('render')
-
   const Container = ({ className: containerClassName, children, ...props }: HTMLAttributes<HTMLDivElement>) => {
     return (
       <div
@@ -59,11 +57,9 @@ const QuestionItem = ({ className, index, examId, question, form, onPreviewImage
               onClick={handleZoomImage}
               onLoad={() => {
                 setLoadError(false)
-                console.log('Load image success')
               }}
               onError={() => {
                 setLoadError(true)
-                console.log('Load image failed')
               }}
             />
           )}

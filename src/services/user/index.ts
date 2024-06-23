@@ -1,33 +1,33 @@
-import { getApi, postApi } from '@/lib/axios'
+import { getApi } from "@/lib/axios";
 import {
-  GetExamHistoryParams, GetExamHistoryResponse,
+  GetExamHistoryParams,
+  GetExamHistoryResponse,
   GetMeResponse,
   GetQuizHistoryParams,
   GetQuizHistoryResponse,
   GetQuizNotCompletedResponse,
-  UpdatePasswordRequest
-} from './types'
+} from "./types";
 
-export * from './types'
+export * from "./types";
 
 export const userService = {
   getMe() {
-    return getApi<GetMeResponse>('/user/me')
-  },
-
-  updatePassword(request: UpdatePasswordRequest) {
-    return postApi('/update_password', request)
+    return getApi<GetMeResponse>("/user/me");
   },
 
   getExamHistory(params: GetExamHistoryParams) {
-    return getApi<GetExamHistoryResponse>('/get_list_exam_have_been_do', { params })
+    return getApi<GetExamHistoryResponse>("/get_list_exam_have_been_do", {
+      params,
+    });
   },
 
   getQuizHisory(params: GetQuizHistoryParams) {
-    return getApi<GetQuizHistoryResponse>('/quizzes_have_been_do_by_exam', { params })
+    return getApi<GetQuizHistoryResponse>("/quizzes_have_been_do_by_exam", {
+      params,
+    });
   },
 
   getQuizNotCompleted() {
-    return getApi<GetQuizNotCompletedResponse>('/get_list_quiz_is_not_done')
+    return getApi<GetQuizNotCompletedResponse>("/get_list_quiz_is_not_done");
   },
-}
+};

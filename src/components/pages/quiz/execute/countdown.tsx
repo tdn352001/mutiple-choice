@@ -1,45 +1,43 @@
-import { cn } from '@/lib/utils'
-import { useQuizStore } from '@/store/site/quiz'
-import moment from 'moment'
-import { useEffect, useRef, useState } from 'react'
+import { cn } from "@/lib/utils";
+import { useQuizStore } from "@/store/site/quiz";
+import moment from "moment";
+import { useEffect, useRef, useState } from "react";
+
 interface CountdownProps {
-  className?: string
+  className?: string;
 }
 
 const Countdown = ({ className }: CountdownProps) => {
-  const quiz = useQuizStore((state) => state.quiz)
-  const [showWarning, setShowWarning] = useState(false)
-  const ref = useRef<HTMLParagraphElement>(null)
+  const quiz = useQuizStore((state) => state.quiz);
+  const [showWarning, setShowWarning] = useState(false);
+  const ref = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (!quiz) {
-      return
+      return;
     }
 
-    const startTime = moment(quiz.start_time)
-    const minutesLimit = quiz.exam.time_limit
-    const endTime = startTime.add(minutesLimit, 'minutes')
+    const startTime = moment(quiz.start_time);
+    const minutesLimit = quiz.exam.time_limit;
+    const endTime = startTime.add(minutesLimit, "minutes");
 
-    let interval = 0
+    let interval = 0;
 
     const updateCountdown = () => {
-      const now = moment()
-      const remainingTime = Math.max(endTime.diff(now, 'seconds'), 0)
-
-      console.log({ remainingTime })
+      const now = moment();
+      const remainingTime = Math.max(endTime.diff(now, "seconds"), 0);
 
       if (remainingTime <= 60) {
-        setShowWarning(true)
+        setShowWarning(true);
         if (remainingTime === 0) {
-          window.clearInterval(interval)
+          window.clearInterval(interval);
         }
       }
 
       if (ref.current) {
-        const minutes = Math.floor(remainingTime / 60)
-        const seconds = remainingTime % 60
-        const text = `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
-        ref.current.textContent = text
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        ref.current.textContent = `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
         // if (remainingTime === 0) {
 
         //   if (stringFormat === 'HH:mm:ss') {
@@ -51,20 +49,27 @@ const Countdown = ({ className }: CountdownProps) => {
         //   ref.current.textContent = moment.utc(remainingTime * 1000).format(stringFormat)
         // }
       }
-    }
+    };
 
-    interval = window.setInterval(updateCountdown, 1000)
+    interval = window.setInterval(updateCountdown, 1000);
 
-    updateCountdown()
+    updateCountdown();
 
-    return () => clearInterval(interval)
-  }, [quiz])
+    return () => clearInterval(interval);
+  }, [quiz]);
 
-  if (!quiz) return null
+  if (!quiz) return null;
 
   return (
-    <p ref={ref} className={cn('text-2xl text-medium tabular-nums', showWarning && 'text-destructive', className)}></p>
-  )
-}
+    <p
+      ref={ref}
+      className={cn(
+        "text-2xl text-medium tabular-nums",
+        showWarning && "text-destructive",
+        className,
+      )}
+    ></p>
+  );
+};
 
-export default Countdown
+export default Countdown;

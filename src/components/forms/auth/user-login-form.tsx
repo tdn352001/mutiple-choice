@@ -37,10 +37,11 @@ export default function UserLoginForm() {
   const handleSubmit = async (formValue: UserFormValue) => {
     return login(formValue)
       .then((res) => {
-        const { token, user } = res.data
+        const { token, user, refresh_token } = res.data
         if (user.active) {
           setUser(user)
           sessionManager.accessToken = token
+          localStorage.setItem('refresh_token', refresh_token)
           const searchParams = getSearchParams()
           const callbackUrl = searchParams.get('callbackUrl')
           const isValidCallbackUrl = callbackUrl && callbackUrl.startsWith('/')

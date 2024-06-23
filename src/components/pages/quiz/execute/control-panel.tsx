@@ -1,14 +1,10 @@
-import AnswersLog from '@/components/pages/quiz/execute/answers-log'
-import { useIsDesktopMediaQuery } from '@/hooks/use-device'
+import AnswersLog from "@/components/pages/quiz/execute/answers-log";
+import { useIsDesktopMediaQuery } from "@/hooks/use-device";
 
-interface ControlPanelProps {
-  className?: string
-}
-
-export default function ControlPanel({ className }: ControlPanelProps) {
+export default function ControlPanel() {
   const isDesktop = useIsDesktopMediaQuery({
     defaultValue: false,
-  })
+  });
 
   return (
     isDesktop && (
@@ -18,5 +14,5 @@ export default function ControlPanel({ className }: ControlPanelProps) {
         </div>
       </div>
     )
-  )
+  );
 }

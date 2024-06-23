@@ -66,11 +66,9 @@ const QuestionItem = ({
               onClick={handleZoomImage}
               onLoad={() => {
                 setLoadError(false)
-                console.log('Load image success')
               }}
               onError={() => {
                 setLoadError(true)
-                console.log('Load image failed')
               }}
             />
           )}

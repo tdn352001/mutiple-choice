@@ -76,7 +76,6 @@ const CourseTable = () => {
     (updaterOrValue: Updater<PaginationState>) => {
       if (typeof updaterOrValue === 'function') {
         const newPagination = updaterOrValue(pagination)
-        console.log({ newPagination })
         paramsUpdater.setMany({
           [SearchParams.Page]: newPagination.pageIndex + 1,
           [SearchParams.Limit]: newPagination.pageSize,
@@ -183,6 +182,9 @@ const CourseTable = () => {
               <span className="block whitespace-nowrap first-letter:uppercase">{`${active}`}</span>
             </div>
           )
+        },
+        meta: {
+          className: 'hidden md:table-cell',
         },
         enableSorting: false,
       })

@@ -32,7 +32,6 @@ const TopicSelect = ({ className, courseId, value, onValueChange }: CourseSelect
   const [search, setSearch] = useState('')
   const [selectedTopic, setSelectedTopic] = useState<Topic>()
   const [enabledFetchTopic, setEnableFetchTopic] = useState(true)
-  console.log({ courseId })
 
   const getTopicsQuery = useGetTopicsByCourseQuery(
     courseId!,
