@@ -1,122 +1,102 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { Button } from '@/components/ui/button'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
 
-import ErrorAlert from "@/components/custom/error-alert";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import {
-  useResendActiveCodeMutation,
-  useVerifyAccountMutation,
-} from "@/hooks/services/auth";
-import { routers } from "@/lib/constants/routers";
-import { VerifyAccountSchema, verifyAccountSchema } from "@/lib/schemas/auth";
-import { sessionManager } from "@/lib/session";
-import { userService } from "@/services/user";
-import { useUserStore } from "@/store/user";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import ErrorAlert from '@/components/custom/error-alert'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import { useResendActiveCodeMutation, useVerifyAccountMutation } from '@/hooks/services/auth'
+import { routers } from '@/lib/constants/routers'
+import { VerifyAccountSchema, verifyAccountSchema } from '@/lib/schemas/auth'
+import { sessionManager } from '@/lib/session'
+import { userService } from '@/services/user'
+import { useUserStore } from '@/store/user'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-type VerifyAccountFormValue = VerifyAccountSchema;
+type VerifyAccountFormValue = VerifyAccountSchema
 
 interface UseVerifyAccountFormProps {
-  email: string;
-  isAuth?: boolean;
+  email: string
+  isAuth?: boolean
 }
 
-export default function UseVerifyAccountForm({
-  email,
-  isAuth,
-}: UseVerifyAccountFormProps) {
+export default function UseVerifyAccountForm({ email, isAuth }: UseVerifyAccountFormProps) {
   const form = useForm<VerifyAccountFormValue>({
     resolver: zodResolver(verifyAccountSchema),
     defaultValues: {
-      activation_code: "",
+      activation_code: '',
     },
-  });
+  })
 
-  const setUser = useUserStore((state) => state.setUser);
+  const setUser = useUserStore((state) => state.setUser)
 
-  const [error, setError] = useState("");
-  const [resendCountDown, setResendCountDown] = useState(0);
-  const router = useRouter();
-  const { isPending, mutateAsync: verifyAccount } = useVerifyAccountMutation();
-  const { isPending: isResending, mutateAsync: resendActiveCode } =
-    useResendActiveCodeMutation();
+  const [error, setError] = useState('')
+  const [resendCountDown, setResendCountDown] = useState(0)
+  const router = useRouter()
+  const { isPending, mutateAsync: verifyAccount } = useVerifyAccountMutation()
+  const { isPending: isResending, mutateAsync: resendActiveCode } = useResendActiveCodeMutation()
 
   const handleSubmit = async (formValue: VerifyAccountFormValue) => {
     return verifyAccount({ ...formValue, email })
       .then(() => {
-        const tempToken = sessionManager.tempAccessToken;
+        const tempToken = sessionManager.tempAccessToken
         if (isAuth && tempToken) {
-          sessionManager.accessToken = tempToken;
-          sessionManager.tempAccessToken = "";
+          sessionManager.accessToken = tempToken
+          sessionManager.tempAccessToken = ''
           userService
             .getMe()
             .then((res) => {
-              setUser(res.data.user);
-              router.push(routers.dashboard);
+              toast.success('Account verified successfully!')
+              setUser(res.data.user)
+              router.push(routers.dashboard)
             })
             .catch(() => {
-              router.push(routers.login);
-            });
+              router.push(routers.login)
+            })
         } else {
-          router.push(routers.login);
+          router.push(routers.login)
         }
       })
       .catch((err) => {
-        setError(err.message || "Something went wrong!");
-      });
-  };
+        setError(err.message || 'Something went wrong!')
+      })
+  }
 
   const handleResendCode = async () => {
     return resendActiveCode({ email })
       .then(() => {
-        toast.success("OTP sent successfully!");
-        setResendCountDown(60);
+        toast.success('OTP sent successfully!')
+        setResendCountDown(60)
       })
       .catch((err) => {
-        toast.error(err.message || "Resend code failed. Please try later!");
-      });
-  };
+        toast.error(err.message || 'Resend code failed. Please try later!')
+      })
+  }
 
-  const isCountdown = !!resendCountDown;
+  const isCountdown = !!resendCountDown
 
   useEffect(() => {
     if (isCountdown) {
       const interval = setInterval(() => {
         setResendCountDown((prev) => {
           if (prev <= 0) {
-            clearInterval(interval);
-            return 0;
+            clearInterval(interval)
+            return 0
           }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(interval);
+          return prev - 1
+        })
+      }, 1000)
+      return () => clearInterval(interval)
     }
-  }, [isCountdown]);
+  }, [isCountdown])
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-4 w-full"
-      >
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
         <ErrorAlert show={!!error} message={error} />
         <FormField
           control={form.control}
@@ -127,30 +107,12 @@ export default function UseVerifyAccountForm({
               <FormControl>
                 <InputOTP maxLength={6} {...field}>
                   <InputOTPGroup className="w-full justify-between">
-                    <InputOTPSlot
-                      className="flex-1 h-auto aspect-square"
-                      index={0}
-                    />
-                    <InputOTPSlot
-                      className="flex-1 h-auto aspect-square"
-                      index={1}
-                    />
-                    <InputOTPSlot
-                      className="flex-1 h-auto aspect-square"
-                      index={2}
-                    />
-                    <InputOTPSlot
-                      className="flex-1 h-auto aspect-square"
-                      index={3}
-                    />
-                    <InputOTPSlot
-                      className="flex-1 h-auto aspect-square"
-                      index={4}
-                    />
-                    <InputOTPSlot
-                      className="flex-1 h-auto aspect-square"
-                      index={5}
-                    />
+                    <InputOTPSlot className="flex-1 h-auto aspect-square" index={0} />
+                    <InputOTPSlot className="flex-1 h-auto aspect-square" index={1} />
+                    <InputOTPSlot className="flex-1 h-auto aspect-square" index={2} />
+                    <InputOTPSlot className="flex-1 h-auto aspect-square" index={3} />
+                    <InputOTPSlot className="flex-1 h-auto aspect-square" index={4} />
+                    <InputOTPSlot className="flex-1 h-auto aspect-square" index={5} />
                   </InputOTPGroup>
                 </InputOTP>
               </FormControl>
@@ -169,7 +131,7 @@ export default function UseVerifyAccountForm({
             variant="secondary"
             onClick={handleResendCode}
           >
-            {resendCountDown ? `Resend in ${resendCountDown}s` : "Resend OTP"}
+            {resendCountDown ? `Resend in ${resendCountDown}s` : 'Resend OTP'}
           </Button>
           <Button className="flex-1" disabled={isPending}>
             Submit
@@ -177,5 +139,5 @@ export default function UseVerifyAccountForm({
         </div>
       </form>
     </Form>
-  );
+  )
 }
