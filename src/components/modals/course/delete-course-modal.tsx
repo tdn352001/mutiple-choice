@@ -122,13 +122,25 @@ type CourseComboboxProps = {
 
 const CourseCombobox = ({ courses, value, onChange, search, onSearch }: CourseComboboxProps) => {
   const [open, setOpen] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState(courses.find((course) => course.id.toString() === value))
+
+  const displayValue = (() => {
+    if (selectedCourse && selectedCourse.id.toString() === value) {
+      return selectedCourse.course_name
+    }
+
+    if (value) {
+      return courses.find((course) => course.id.toString() === value)?.course_name
+    }
+
+    return 'Choose course to move data to...'
+  })()
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-          {value
-            ? courses.find((course) => course.id.toString() === value)?.course_name
-            : 'Choose course to move data to...'}
+          {displayValue}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -162,6 +174,7 @@ const CourseCombobox = ({ courses, value, onChange, search, onSearch }: CourseCo
                       )}
                       disabled={item.id.toString() === value}
                       onClick={() => {
+                        setSelectedCourse(item)
                         onChange(item.id.toString())
                         onSearch('')
                         setOpen(false)
