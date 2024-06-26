@@ -14,6 +14,7 @@ import { authService } from '@/services/auth'
 import { AnswerLog, QuestionLog, QuizAnswer, quizService } from '@/services/quiz'
 import { useQuizStore } from '@/store/site/quiz'
 import { useQuizResultStore } from '@/store/site/quiz-result'
+import { useQueryClient } from '@tanstack/react-query'
 import moment from 'moment'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -35,6 +36,7 @@ const ExecuteExam = () => {
   const params = useParams()
   const quiz = useQuizStore((state) => state.quiz)
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   const setQuiz = useQuizStore((state) => state.setQuiz)
   const setBackForExit = useQuizResultStore((state) => state.setBackForExit)
@@ -106,7 +108,7 @@ const ExecuteExam = () => {
     defaultValues,
   })
 
-  const { mutateAsync: endQuiz, isPending: isSubmitingForm } = useEndQuizMutation(quiz?.id!)
+  const { mutateAsync: endQuiz, isPending: isSubmittingForm } = useEndQuizMutation(quiz?.id!)
 
   const formatAnswer = useCallback(
     (formValue: QuizFormValue) => {
@@ -185,6 +187,9 @@ const ExecuteExam = () => {
         .then((quizResult) => {
           setBackForExit(false)
           setQuizResult(quizResult.data)
+          queryClient.invalidateQueries({
+            queryKey: ['quiz-history'],
+          })
           router.replace(dynamicRouters.quizResult(quiz!.id))
           toast.success('Submit successfully')
         })
@@ -218,13 +223,13 @@ const ExecuteExam = () => {
   }
 
   const handleConfirmSubmit = () => {
-    if (!isSubmitingForm) {
+    if (!isSubmittingForm) {
       form.handleSubmit(submitQuiz)()
     }
   }
 
   const handleCloseConfirmSubmit = () => {
-    if (!isSubmitingForm) {
+    if (!isSubmittingForm) {
       setConfirmingSubmit(false)
     }
   }
@@ -272,14 +277,14 @@ const ExecuteExam = () => {
 
       const timeout = window.setTimeout(() => {
         setIsTimeUp(true)
-        if (!isSubmitted || !isSubmitingForm) {
+        if (!isSubmitted || !isSubmittingForm) {
           setForceSubmit(true)
         }
       }, remainingTime * 1000)
 
       return () => window.clearTimeout(timeout)
     },
-    [isSubmitingForm, isSubmitted, isTimeUp, quiz]
+    [isSubmittingForm, isSubmitted, isTimeUp, quiz]
   )
 
   useEffect(
@@ -390,7 +395,7 @@ const ExecuteExam = () => {
       </Form>
       <ConfirmSubmitQuizModal
         open={confirmingSubmit}
-        isPending={isSubmitingForm}
+        isPending={isSubmittingForm}
         notAnsweredCount={notAnsweredCount}
         onConfirm={handleConfirmSubmit}
         onClose={handleCloseConfirmSubmit}

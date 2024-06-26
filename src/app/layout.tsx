@@ -1,11 +1,11 @@
 import '@/assets/styles/globals.css'
 import AppProviders from '@/components/layout/providers/app-providers'
+import WebVitals from '@/components/layout/web-vitals'
+import { Toaster } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
-import { Toaster } from '@/components/ui/sonner'
 import React from 'react'
-import WebVitals from '@/components/layout/web-vitals'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -23,7 +23,7 @@ export default function RootLayout({
         <WebVitals />
         <AppProviders>
           {children}
-          <Toaster richColors position="top-right" />
+          <Toaster richColors position="top-right" closeButton />
         </AppProviders>
       </body>
     </html>
