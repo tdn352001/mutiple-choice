@@ -14,7 +14,7 @@ export const quizService = {
     return postApi<StartQuizResponse>('/quiz/start_quiz', request)
   },
 
-  countinueQuiz(quizId: string | number) {
+  continueQuiz(quizId: string | number) {
     return getApi<ContinueQuizResponse>(`/quiz/continue/${quizId}`)
   },
 

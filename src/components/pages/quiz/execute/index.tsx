@@ -332,7 +332,7 @@ const ExecuteExam = () => {
       if (!quiz || quiz.id !== quizIdFromParams) {
         setLoading(true)
         quizService
-          .countinueQuiz(quizIdFromParams)
+          .continueQuiz(quizIdFromParams)
           .then((res) => {
             const quiz = res.data
             setQuiz(quiz)
