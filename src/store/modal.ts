@@ -27,6 +27,8 @@ export enum Modals {
   UPDATE_MEMBER_PASSWORD = 'UPDATE_MEMBER_PASSWORD',
   START_QUIZ = 'START_QUIZ',
   CONFIRM_SUBMIT_QUIZ = 'CONFIRM_SUBMIT_QUIZ',
+  CREATE_MEMBER_FROM_CSV = 'CREATE_MEMBER_FROM_CSV',
+  CREATE_MEMBER = 'CREATE_MEMBER',
 }
 
 type ModalState<T = undefined> = {
@@ -54,6 +56,8 @@ type State = {
     [Modals.UPDATE_MEMBER_PASSWORD]?: ModalState<{ member: Member }>
     [Modals.START_QUIZ]?: ModalState<{ exam: Exam }>
     [Modals.CONFIRM_SUBMIT_QUIZ]?: ModalState<{ notAnsweredCount?: number; onConfirm?: () => Promise<any> }>
+    [Modals.CREATE_MEMBER_FROM_CSV]?: ModalState
+    [Modals.CREATE_MEMBER]?: ModalState
   }
 }
 

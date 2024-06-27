@@ -20,6 +20,18 @@ export type GetMemberResponseData = {
   }
 }
 
+export type CreateMemberRequest = {
+  email: string
+  full_name: string
+  password: string
+  is_admin: boolean
+  active: boolean
+}
+
+export type CreateMemberFromCsvRequest = {
+  csv_file: Blob
+}
+
 export type GetMemberResponse = BaseApiResponse<GetMemberResponseData>
 
 export type UpdateMemberInfoRequest = {

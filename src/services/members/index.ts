@@ -1,5 +1,7 @@
-import { deleteApi, getApi, putApi } from '@/lib/axios'
+import { deleteApi, getApi, postApi, postFormApi, putApi } from '@/lib/axios'
 import {
+  CreateMemberFromCsvRequest,
+  CreateMemberRequest,
   GetMemberExamHistoryParams,
   GetMemberExamHistoryResponse,
   GetMemberParams,
@@ -17,6 +19,14 @@ export const memberService = {
     return getApi<GetMemberResponse>('/get_users', {
       params,
     })
+  },
+
+  createMember(request: CreateMemberRequest) {
+    return postApi('/admin/create_user', request)
+  },
+
+  createMemberFromCsv(request: CreateMemberFromCsvRequest) {
+    return postFormApi('/admin/create_user_from_csv', request)
   },
 
   updateMemberInfo(memberId: string | number, request: UpdateMemberInfoRequest) {
