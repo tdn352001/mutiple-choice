@@ -45,6 +45,10 @@ export type UpdatePasswordRequest = {
   new_password: string
 }
 
+export type UpdateProfileRequest = {
+  full_name: string
+}
+
 export type ForgotPasswordRequest = {
   email: string
 }

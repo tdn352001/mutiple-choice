@@ -12,6 +12,7 @@ export enum Modals {
   LOGOUT = 'LOGOUT',
   LOGIN_REQUIRED = 'LOGIN_REQUIRED',
   CHANGE_PASSWORD = 'CHANGE_PASSWORD',
+  UPDATE_PROFILE = 'UPDATE_PROFILE',
   UPDATE_PASSWORD = 'UPDATE_PASSWORD',
   DELETE_COURSE = 'DELETE_COURSE',
   DELETE_TOPIC = 'DELETE_TOPIC',
@@ -42,6 +43,7 @@ type State = {
     [Modals.LOGOUT]?: ModalState
     [Modals.LOGIN_REQUIRED]?: ModalState
     [Modals.CHANGE_PASSWORD]?: ModalState
+    [Modals.UPDATE_PROFILE]?: ModalState
     [Modals.DELETE_COURSE]?: ModalState<{ course: Course }>
     [Modals.DELETE_TOPIC]?: ModalState<{ topic: Topic; courseId?: string | number }>
     [Modals.DELETE_EXAM]?: ModalState<{ exam: Exam; topicId?: string | number }>

@@ -1,4 +1,4 @@
-import { getApi, postApi } from '@/lib/axios'
+import { getApi, postApi, putApi } from '@/lib/axios'
 import {
   ActiveUserRequest,
   ForgotPasswordRequest,
@@ -9,6 +9,7 @@ import {
   ResendActiveCodeRequest,
   ResetPasswordRequest,
   UpdatePasswordRequest,
+  UpdateProfileRequest,
 } from '@/services/auth/type'
 import { AxiosRequestConfig } from 'axios'
 
@@ -38,5 +39,8 @@ export const authService = {
   },
   updatePassword(request: UpdatePasswordRequest) {
     return postApi('/update_password', request)
+  },
+  updateProfile(request: UpdateProfileRequest) {
+    return putApi('/update_user', request)
   },
 }

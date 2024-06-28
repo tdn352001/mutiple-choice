@@ -23,8 +23,11 @@ export function UserNav() {
   const router = useRouter()
 
   const openChangePasswordModal = useOpenModal(Modals.CHANGE_PASSWORD)
+  const openUpdateProfileModal = useOpenModal(Modals.UPDATE_PROFILE)
 
   const viewProfile = () => router.push(routers.profile)
+
+  const handleUpdateProfile = () => openUpdateProfileModal()
 
   const handleChangePassword = () => openChangePasswordModal()
 
@@ -63,6 +66,10 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={viewProfile}>
           Profile
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer" onClick={handleUpdateProfile}>
+          Update profile
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={handleChangePassword}>

@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 export const userNameSchema = z.object({
-  name: z.string().min(3).max(32),
+  full_name: z.string().min(3).max(32),
 })
 
 export const changePasswordSchema = z
@@ -21,4 +21,5 @@ export const changePasswordSchema = z
     path: ['confirm_password'],
   })
 
+export type UserNameSchema = z.infer<typeof userNameSchema>
 export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>
