@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { DOCUMENT_TITLES } from '@/lib/constants/seo'
 import { useUserStore } from '@/store/user'
 import ExamHistory from './exam-history'
+import IncompleteExams from './incomplete-exams'
 
 const ProfilePage = () => {
   const user = useUserStore((state) => state.user)
@@ -26,6 +27,8 @@ const ProfilePage = () => {
               <span>{user?.email}</span>
             </p>
           </div>
+          <Separator />
+          <IncompleteExams />
           <Separator />
           <ExamHistory />
         </div>

@@ -49,7 +49,7 @@ const CourseSelect = ({ className, value, onValueChange }: CourseSelectProps) =>
   const isMatched = Number(value) === selectedCourse?.id
 
   const courseQuery = useGetCourseByIdQuery(String(value), {
-    enabled: !isMatched,
+    enabled: !!value && !isMatched,
   })
 
   useEffect(() => {

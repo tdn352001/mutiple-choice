@@ -72,7 +72,7 @@ const StartQuizModal = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input invalid={`${invalid}`} {...(field as any)} />
+                    <Input invalid={`${invalid}`} type="password" {...(field as any)} />
                   </FormControl>
                   <FormMessage {...field} />
                 </FormItem>

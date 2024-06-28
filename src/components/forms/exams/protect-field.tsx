@@ -2,7 +2,6 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { ExamSchema } from '@/lib/schemas/exams'
-import { useEffect } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 
 interface ProtectFieldProps {
@@ -12,12 +11,12 @@ interface ProtectFieldProps {
 const ProtectField = ({ form }: ProtectFieldProps) => {
   const protect = form.watch('protect')
 
-  useEffect(() => {
-    if (!protect) {
-      form.setValue('password', '')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [protect])
+  // useEffect(() => {
+  //   if (!protect) {
+  //     form.setValue('password', '')
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [protect])
 
   return (
     <>
