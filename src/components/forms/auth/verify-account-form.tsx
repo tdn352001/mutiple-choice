@@ -59,6 +59,7 @@ export default function UseVerifyAccountForm({ email, isAuth }: UseVerifyAccount
             })
         } else {
           router.push(routers.login)
+          toast.success('Account verified successfully!')
         }
       })
       .catch((err) => {
