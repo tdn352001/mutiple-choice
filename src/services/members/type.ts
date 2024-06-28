@@ -32,6 +32,8 @@ export type CreateMemberFromCsvRequest = {
   csv_file: Blob
 }
 
+export type CreateMemberFromCsvResponse = BaseApiResponse<BaseApiResponse<Member>[]>
+
 export type GetMemberResponse = BaseApiResponse<GetMemberResponseData>
 
 export type UpdateMemberInfoRequest = {

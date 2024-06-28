@@ -1,6 +1,7 @@
 import { deleteApi, getApi, postApi, postFormApi, putApi } from '@/lib/axios'
 import {
   CreateMemberFromCsvRequest,
+  CreateMemberFromCsvResponse,
   CreateMemberRequest,
   GetMemberExamHistoryParams,
   GetMemberExamHistoryResponse,
@@ -26,7 +27,7 @@ export const memberService = {
   },
 
   createMemberFromCsv(request: CreateMemberFromCsvRequest) {
-    return postFormApi('/admin/create_user_from_csv', request)
+    return postFormApi<CreateMemberFromCsvResponse>('/admin/create_user_by_csv', request)
   },
 
   updateMemberInfo(memberId: string | number, request: UpdateMemberInfoRequest) {

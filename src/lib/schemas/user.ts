@@ -9,11 +9,11 @@ export const changePasswordSchema = z
     old_password: z.string().min(1, 'Password is required').max(32),
     new_password: z
       .string()
-      .min(6, 'Password must be at least 6 characters')
+      .min(4, 'Password must be at least 4 characters')
       .max(32, 'Password must be at most 32 characters'),
     confirm_password: z
       .string()
-      .min(6, 'Password must be at least 6 characters')
+      .min(4, 'Password must be at least 4 characters')
       .max(32, 'Password must be at most 32 characters'),
   })
   .refine((data) => data.new_password === data.confirm_password, {

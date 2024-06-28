@@ -1,5 +1,7 @@
 'use client'
 
+import AddMemberFromCSVModal from '@/components/modals/member/add-member-from-csv-modal'
+import AddMemberModal from '@/components/modals/member/add-member-modal'
 import { DeleteMemberModal } from '@/components/modals/member/delete-member-modal'
 import UpdateMemberPasswordModal from '@/components/modals/member/update-member-password-modal'
 import UpdateMemberProfileModal from '@/components/modals/member/update-member-profile-modal'
@@ -40,7 +42,7 @@ const MembersPage = () => {
           action={
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button>Add question</Button>
+                <Button>Add member</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem className="items-center" onClick={openCreateMemberFromCsvModal}>
@@ -63,6 +65,8 @@ const MembersPage = () => {
         <UpdateMemberPasswordModal />
         <UpdateMemberProfileModal />
         <DeleteMemberModal />
+        <AddMemberModal />
+        <AddMemberFromCSVModal />
       </Container>
     </ScrollArea>
   )

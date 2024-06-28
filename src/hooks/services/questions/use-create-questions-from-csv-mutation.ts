@@ -1,18 +1,12 @@
-import { AppMutationOptions } from "@/lib/types/queries";
-import { useMutation } from "@tanstack/react-query";
-import {
-  CreateQuestionFromCsvRequest,
-  questionService,
-} from "@/services/questions";
+import { AppMutationOptions } from '@/lib/types/queries'
+import { CreateQuestionFromCsvRequest, questionService } from '@/services/questions'
+import { useMutation } from '@tanstack/react-query'
 
-export const useCreateQuestionsFromCsvMutation = (
-  examId: string | number,
-  options: AppMutationOptions = {},
-) => {
+export const useCreateQuestionsFromCsvMutation = (examId: string | number, options: AppMutationOptions = {}) => {
   return useMutation({
     mutationFn: (request: CreateQuestionFromCsvRequest) => {
-      return questionService.createQuestionFromCsv(examId, request);
+      return questionService.createQuestionFromCsv(examId, request)
     },
     ...options,
-  });
-};
+  })
+}
