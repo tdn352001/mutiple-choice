@@ -1,5 +1,6 @@
 import { DataTableColumnHeader } from '@/components/custom/data-table/column-header'
 import { DataTablePagination } from '@/components/custom/data-table/pagination'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -210,13 +211,13 @@ const MemberTable = () => {
       {
         accessorKey: 'active',
         header: (props) => {
-          return <DataTableColumnHeader title="Active" {...props} />
+          return <DataTableColumnHeader title="Status" {...props} />
         },
         cell: ({ row }) => {
           const { active } = row.original
           return (
             <div className="min-w-28 flex items-center space-x-2">
-              <span className="block whitespace-nowrap first-letter:uppercase">{`${active}`}</span>
+              <Badge variant={active ? 'success' : 'destructive'}>{active ? 'Active' : 'Inactive'}</Badge>
             </div>
           )
         },
