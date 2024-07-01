@@ -28,6 +28,7 @@ export const examSchema = z
     protect: z.boolean(),
     password: z.string().optional(),
     onsite_scoring: z.boolean(),
+    show_answer: z.boolean().optional(),
     active: z.boolean().optional(),
   })
   .refine(

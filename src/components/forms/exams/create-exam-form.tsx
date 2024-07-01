@@ -73,6 +73,7 @@ const CreateExamForm = () => {
       course_id: initialTopic?.course_id,
       topic_id: initialTopic?.id,
       onsite_scoring: false,
+      show_answer: false,
       active: true,
     },
     mode: 'all',
@@ -132,6 +133,23 @@ const CreateExamForm = () => {
                   <Textarea className="resize-none" {...field} />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            key="show_answer"
+            control={form.control}
+            name="show_answer"
+            render={({ field }) => (
+              <FormItem checkbox>
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+
+                <FormLabel>
+                  <span>Show Answer</span>
+                </FormLabel>
               </FormItem>
             )}
           />
