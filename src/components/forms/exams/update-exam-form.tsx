@@ -137,6 +137,23 @@ const UpdateExamForm = ({ exam }: UpdateExamFormProps) => {
           />
 
           <FormField
+            key="show_answer"
+            control={form.control}
+            name="show_answer"
+            render={({ field }) => (
+              <FormItem checkbox>
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+
+                <FormLabel>
+                  <span>Show Answer</span>
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+
+          <FormField
             key="active"
             control={form.control}
             name="active"
