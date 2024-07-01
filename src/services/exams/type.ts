@@ -12,6 +12,7 @@ export type Exam = {
   time_limit: number
   number_attempts: number
   onsite_scoring: boolean
+  show_answer: boolean
   active: boolean
 }
 

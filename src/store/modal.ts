@@ -3,6 +3,7 @@ import { Exam } from '@/services/exams'
 import { ExamImage } from '@/services/images'
 import { Member } from '@/services/members'
 import { Question } from '@/services/questions'
+import { Quiz } from '@/services/quiz'
 import { Topic } from '@/services/topics'
 import { useCallback } from 'react'
 import { NonUndefined } from 'react-hook-form'
@@ -30,6 +31,7 @@ export enum Modals {
   CONFIRM_SUBMIT_QUIZ = 'CONFIRM_SUBMIT_QUIZ',
   CREATE_MEMBER_FROM_CSV = 'CREATE_MEMBER_FROM_CSV',
   CREATE_MEMBER = 'CREATE_MEMBER',
+  QUIZ_RESULT = 'QUIZ_RESULT',
 }
 
 type ModalState<T = undefined> = {
@@ -60,6 +62,7 @@ type State = {
     [Modals.CONFIRM_SUBMIT_QUIZ]?: ModalState<{ notAnsweredCount?: number; onConfirm?: () => Promise<any> }>
     [Modals.CREATE_MEMBER_FROM_CSV]?: ModalState
     [Modals.CREATE_MEMBER]?: ModalState
+    [Modals.QUIZ_RESULT]?: ModalState<{ quiz: Quiz }>
   }
 }
 
