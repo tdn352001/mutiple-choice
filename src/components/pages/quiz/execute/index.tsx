@@ -2,6 +2,7 @@
 
 import { ConfirmSubmitQuizModal } from '@/components/pages/quiz/execute/confirm-submit-modal'
 import ForceSubmitModal from '@/components/pages/quiz/execute/force-submit-modal'
+import QuizResultModal from '@/components/pages/quiz/execute/quiz-result-modal'
 import { QuizFormValue } from '@/components/pages/quiz/execute/type'
 import LoadingPage from '@/components/templates/loading-page'
 import { Form } from '@/components/ui/form'
@@ -12,6 +13,7 @@ import { sessionManager } from '@/lib/session'
 import { QuestionType } from '@/lib/types/question'
 import { authService } from '@/services/auth'
 import { AnswerLog, QuestionLog, QuizAnswer, quizService } from '@/services/quiz'
+import { Modals, useOpenModal } from '@/store/modal'
 import { useQuizStore } from '@/store/site/quiz'
 import { useQuizResultStore } from '@/store/site/quiz-result'
 import { useQueryClient } from '@tanstack/react-query'
@@ -41,6 +43,7 @@ const ExecuteExam = () => {
   const setQuiz = useQuizStore((state) => state.setQuiz)
   const setBackForExit = useQuizResultStore((state) => state.setBackForExit)
   const setQuizResult = useQuizResultStore((state) => state.setQuiz)
+  const openResultModal = useOpenModal(Modals.QUIZ_RESULT)
 
   const quizIdFromParams = Number(params.id as string)
 
@@ -190,7 +193,19 @@ const ExecuteExam = () => {
           queryClient.invalidateQueries({
             queryKey: ['quiz-history'],
           })
-          router.replace(dynamicRouters.quizResult(quiz!.id))
+
+          setForceSubmit(false)
+          openResultModal({
+            quiz: quizResult.data,
+          })
+          // if (quiz?.exam.show_answer) {
+          //   router.replace(dynamicRouters.quizResult(quiz!.id))
+          // } else {
+          //   openResultModal({
+          //     quiz: quizResult.data,
+          //   })
+          // }
+
           toast.success('Submit successfully')
         })
         .catch((err) => {
@@ -207,7 +222,7 @@ const ExecuteExam = () => {
           setConfirmingSubmit(false)
         })
     },
-    [endQuiz, formatAnswer, quiz, router, setBackForExit, setQuizResult]
+    [endQuiz, formatAnswer, openResultModal, queryClient, quiz, router, setBackForExit, setQuizResult]
   )
 
   const handleFormSubmit = async (value: QuizFormValue) => {
@@ -400,6 +415,7 @@ const ExecuteExam = () => {
         onConfirm={handleConfirmSubmit}
         onClose={handleCloseConfirmSubmit}
       />
+      <QuizResultModal />
       <ForceSubmitModal open={forceSubmit} />
     </div>
   )

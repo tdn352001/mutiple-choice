@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useGetQuizHistoryQuery } from '@/hooks/services/user'
 import { dynamicRouters } from '@/lib/constants/routers'
 import { QuizHistory } from '@/services/quiz'
+import { useUserStore } from '@/store/user'
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import clsx from 'clsx'
 import moment from 'moment'
@@ -20,6 +21,8 @@ const QuizHistoryTable = ({ examId }: QuizHistoryTableProps) => {
   const { data } = useGetQuizHistoryQuery(examId)
 
   const quizHistory = data?.quizzes || []
+
+  const isAdmin = useUserStore((state) => state.user?.is_admin)
 
   const columns: ColumnDef<QuizHistory>[] = useMemo(() => {
     const columns: ColumnDef<QuizHistory>[] = [
@@ -71,7 +74,10 @@ const QuizHistoryTable = ({ examId }: QuizHistoryTableProps) => {
 
         enableSorting: false,
       },
-      {
+    ]
+
+    if (isAdmin) {
+      columns.push({
         id: 'actions',
         cell: ({ row }) => {
           return (
@@ -83,11 +89,11 @@ const QuizHistoryTable = ({ examId }: QuizHistoryTableProps) => {
             </Link>
           )
         },
-      },
-    ]
+      })
+    }
 
     return columns
-  }, [])
+  }, [isAdmin])
 
   const table = useReactTable({
     data: quizHistory,
