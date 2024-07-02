@@ -370,7 +370,7 @@ const ExecuteExam = () => {
       authService
         .refreshToken({
           headers: {
-            refresh_token: refreshToken,
+            'refresh-token': refreshToken,
           },
         })
         .then((res) => {
