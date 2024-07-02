@@ -1,2 +1,6 @@
-export const SVGIcons = {} as const
+import logo from './logo.svg'
+export const SVGIcons = {
+  logo,
+} as const
+
 export type SVGIcon = keyof typeof SVGIcons

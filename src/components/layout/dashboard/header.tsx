@@ -1,7 +1,7 @@
 'use client'
 
 import ThemeToggle from '@/components/layout/dashboard/theme-toggle'
-import { Icon } from '@/components/ui/icon'
+import { SvgIcon } from '@/components/ui/icon'
 import { routers } from '@/lib/constants/routers'
 import { cn } from '@/lib/utils'
 import { useUserStore } from '@/store/user'
@@ -19,7 +19,7 @@ export default function Header({ className }: HeaderProps) {
       <nav className="h-14 flex items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link href={isAdmin ? routers.dashboard : routers.courses}>
-            <Icon name="Command" className="h-6 w-6" />
+            <SvgIcon className="h-6 w-6" icon="logo" />
           </Link>
         </div>
         <div className={cn('block lg:!hidden')}>

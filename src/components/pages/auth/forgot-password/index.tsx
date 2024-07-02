@@ -1,5 +1,5 @@
 import ForgotPasswordForm from '@/components/forms/auth/forgot-password-form'
-import { Icon } from '@/components/ui/icon'
+import { SvgIcon } from '@/components/ui/icon'
 import { routers } from '@/lib/constants/routers'
 import Link from 'next/link'
 
@@ -8,7 +8,7 @@ const ForgotPasswordPage = () => {
     <div className="container flex min-h-dvh min-w-full py-4 flex-col items-center justify-center">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
-          <Icon name="Command" className="mx-auto h-6 w-6" />
+          <SvgIcon className="mx-auto h-6 w-6" icon="logo" />
           <h1 className="text-2xl font-semibold tracking-tight">Forgot Password</h1>
           <p className="text-sm text-muted-foreground">Enter your email to reset password</p>
         </div>

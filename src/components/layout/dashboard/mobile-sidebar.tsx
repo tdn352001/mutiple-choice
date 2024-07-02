@@ -1,18 +1,18 @@
-"use client";
-import { DashboardNav } from "@/components/layout/dashboard/dashboard-nav";
-import { Icon } from "@/components/ui/icon";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { routers } from "@/lib/constants/routers";
-import { useUserStore } from "@/store/user";
-import { MenuIcon } from "lucide-react";
-import Link from "next/link";
-import React, { useState } from "react";
+'use client'
+import { DashboardNav } from '@/components/layout/dashboard/dashboard-nav'
+import { SvgIcon } from '@/components/ui/icon'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { routers } from '@/lib/constants/routers'
+import { useUserStore } from '@/store/user'
+import { MenuIcon } from 'lucide-react'
+import Link from 'next/link'
+import React, { useState } from 'react'
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function MobileSidebar() {
-  const [open, setOpen] = useState(false);
-  const isAdmin = useUserStore((state) => state.user?.is_admin);
+  const [open, setOpen] = useState(false)
+  const isAdmin = useUserStore((state) => state.user?.is_admin)
 
   return (
     <>
@@ -30,7 +30,7 @@ export function MobileSidebar() {
                 href={isAdmin ? routers.dashboard : routers.courses}
                 onClick={() => setOpen(false)}
               >
-                <Icon name="Command" className="h-6 w-6" />
+                <SvgIcon className="h-6 w-6" icon="logo" />
               </Link>
               <div className="space-y-1 pt-8 pb-4">
                 <DashboardNav setOpen={setOpen} />
@@ -40,5 +40,5 @@ export function MobileSidebar() {
         </SheetContent>
       </Sheet>
     </>
-  );
+  )
 }

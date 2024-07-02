@@ -1,5 +1,5 @@
 import UseVerifyAccountForm from '@/components/forms/auth/verify-account-form'
-import { Icon } from '@/components/ui/icon'
+import { SvgIcon } from '@/components/ui/icon'
 import { routers } from '@/lib/constants/routers'
 import Link from 'next/link'
 
@@ -9,7 +9,7 @@ const VerifyAccountPage = ({ email, isAuth }: { email: string; isAuth?: boolean 
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
           <Link href={routers.courses} className="mx-auto">
-            <Icon name="Command" className=" h-6 w-6" />
+            <SvgIcon className=" h-6 w-6" icon="logo" />
           </Link>
           <h1 className="text-2xl font-semibold tracking-tight">Verify your account</h1>
           <p className="text-sm text-muted-foreground">Check your email for the verification code</p>
