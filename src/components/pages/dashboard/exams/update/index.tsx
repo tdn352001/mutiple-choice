@@ -6,12 +6,12 @@ import ProtectedRoute from '@/components/layout/protected-route'
 import Container from '@/components/templates/container'
 import Heading from '@/components/templates/heading'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useGetExamByIdSuspenseQuery } from '@/hooks/services/exam'
+import { useGetExamForEditSuspenseQuery } from '@/hooks/services/exam'
 import { getUpdateExamsBreadcrumb } from '@/lib/breadcrumb/course'
 import { notFound } from 'next/navigation'
 
 const UpdateExamPage = ({ id }: { id: string }) => {
-  const { data } = useGetExamByIdSuspenseQuery(id)
+  const { data } = useGetExamForEditSuspenseQuery(id)
 
   const exam = data?.data
 

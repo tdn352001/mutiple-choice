@@ -52,7 +52,7 @@ interface UpdateExamFormProps {
 const UpdateExamForm = ({ exam }: UpdateExamFormProps) => {
   const [error, setError] = useState('')
 
-  const { mutateAsync: udpateExam, isPending } = useUpdateExamMutation(exam.id)
+  const { mutateAsync: updateExam, isPending } = useUpdateExamMutation(exam.id)
 
   const getTopicQuery = useGetTopicByIdQuery(exam.topic_id)
 
@@ -69,9 +69,8 @@ const UpdateExamForm = ({ exam }: UpdateExamFormProps) => {
   const queryClient = useQueryClient()
 
   const handleSubmit = async (formValue: FormValue) => {
-    return udpateExam({
+    return updateExam({
       ...formValue,
-      password: formValue.protect ? formValue.password : undefined,
     })
       .then(() => {
         toast.success('Update exam successfully!')

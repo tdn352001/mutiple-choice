@@ -29,6 +29,10 @@ export const examService = {
     return getApi<GetExamByIdResponse>(`/exam/${id}`)
   },
 
+  getExamForEdit(id: string | number) {
+    return getApi<GetExamByIdResponse>(`/exam/edit/${id}`)
+  },
+
   getExamByIdV2(id: string | number) {
     return getApi<GetExamByIdV2Response>(`/exam/exam_detail/${id}`)
   },

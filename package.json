@@ -68,6 +68,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@types/is-url": "^1.2.32",
     "@types/lodash": "^4.17.1",
     "@types/node": "^20",
