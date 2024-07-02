@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+    image: mutiple-choice
+    container_name: mutiple-choice-app
+    ports:
+      - '1234:3000'

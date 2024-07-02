@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Docs Frontend
 
-## Getting Started
+# 1. Cập nhật logo
 
-First, run the development server:
+1. Truy cập vào đường dẫn sau từ root project
+    
+    ```bash
+    src/assets/svgs
+    ```
+    
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Thay thế file **logo.svg** thành file logo mong muốn
+    
+    > Note: Vui lòng giữ nguyên tên file để tránh xảy ra lỗi
+    > 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 2. Build Docker Image
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Cập nhật Backend Base URL trong file .env
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    
+    ```xml
+    NEXT_PUBLIC_BASE_URL=https://duane1804.info.vn/api
+    ```
+    
+    > *Note: Nếu file .env không tồn tại thì tạo mới và dán dòng code ở phía trên vào.*
+    > 
+    
+2. Truy cập terminal vào root project
+3. Thực hiện build image docker
+    
+    ```bash
+    docker build -t mutiple-choice .
+    ```
+    
 
-## Learn More
+1. Chạy container
+    
+    ```bash
+    docker run -p 1234:3000 mutiple-choice
+    ```
+    
+    Sau khi chạy container hoàn tất, có thể truy vào frontend theo 1 số cách dưới đây:
+    
+    Option 1:
+    
+    ```bash
+    http://localhost:1234
+    ```
+    
+    Option 2:
+    
+    ```bash
+    http://your_ip:1234
+    ```
+    
+    Với Option 2, các thiết bị truy cập cùng 1 mạng lan có thể cùng truy cập được tới frontend.
+    
+    > Note: có thể thay thế port “1234” thành bất kỳ port nào bạn mong muốn. Trong trường hợp port 1234 đã có người sử dụng thì bắt buộc phải sử dụng một port khác thay thế.
+    > 
 
-To learn more about Next.js, take a look at the following resources:
+Có thể thu gọn các bước trên với phần 3 Docker compose.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 3. Docker compose
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Với docker compose, app sẽ được tự động khởi động lại khi Docker trên máy người cài đặt được khởi động lại.
 
-## Deploy on Vercel
+1. Thực hiện như bước 1 phần 2.
+2. Thực hiện chạy lệch:
+    
+    ```bash
+    docker compose up -d --build
+    ```
+    
+    Sau khi lệnh hoàn tất, cách truy cập frontend tương tự như phần 2.
+    
+3. Lưu ý.
+- Port: Nếu muốn thay đổi port hoặc port mặc định đã bị chiếm dụng, thay đổi port bằng cách chỉnh sửa file **docker-compose.yml** ở **root project**
+    
+    ```bash
+    version: "3.8"
+    
+    services:
+      frontend:
+        build:
+          context: .
+        image: registry.gitlab.com/aioz-dapps/aioz-drive
+        container_name: drive-app
+        ports:
+          - '1234:3000'
+    
+    ```
+    
+    Thay thế port 1234 thành 1 port khác.
+    
+- Nếu chạy compose nhiều lần, chúng ta nên giải phóng bộ nhớ bằng cách xóa các image với tag là none.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 4. Lưu ý
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Nếu có bất kỳ sự thay đổi nào liên quan tới code, hình ảnh (logo, …), … thì frontend bắt buộc phải được build lại để được cập nhật
