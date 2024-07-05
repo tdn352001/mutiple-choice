@@ -195,16 +195,14 @@ const ExecuteExam = () => {
           })
 
           setForceSubmit(false)
-          openResultModal({
-            quiz: quizResult.data,
-          })
-          // if (quiz?.exam.show_answer) {
-          //   router.replace(dynamicRouters.quizResult(quiz!.id))
-          // } else {
-          //   openResultModal({
-          //     quiz: quizResult.data,
-          //   })
-          // }
+
+          if (quiz?.exam.show_answer) {
+            router.replace(dynamicRouters.quizResult(quiz!.id))
+          } else {
+            openResultModal({
+              quiz: quizResult.data,
+            })
+          }
 
           toast.success('Submit successfully')
         })
