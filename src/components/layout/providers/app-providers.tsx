@@ -13,12 +13,17 @@ const AppProviders = ({ children }: PropsWithChildren) => {
     const handlePreventContextMenu = (e: MouseEvent) => e.preventDefault()
 
     const handlePreventShortcut = (e: KeyboardEvent) => {
-      const forbiddenKeys = [
-        { ctrl: true, shift: true, key: 'I' },
-        { ctrl: true, shift: true, key: 'C' },
-        { ctrl: true, key: 'U' },
-      ]
-      if (forbiddenKeys.some((fk) => fk.ctrl === e.ctrlKey && fk.shift === e.shiftKey && fk.key === e.key)) {
+      if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault()
+      }
+      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault()
+      }
+      if (e.ctrlKey && e.key === 'U') {
+        e.preventDefault()
+      }
+
+      if (e.key === 'F12') {
         e.preventDefault()
       }
     }
@@ -43,8 +48,21 @@ const AppProviders = ({ children }: PropsWithChildren) => {
     window.addEventListener('resize', handleDetectDevtools)
 
     const interval = setInterval(() => {
-      console.clear()
-      console.log('DevTools usage is not allowed.')
+      function debug() {
+        debugger
+      }
+
+      let startTime = new Date().getTime()
+      debug()
+      let endTime = new Date().getTime()
+
+      if (endTime - startTime > 100) {
+        document.documentElement.style.display = 'none'
+        console.clear()
+        console.log('DevTools is likely open, please close it to continue')
+      } else {
+        document.documentElement.style.display = 'block'
+      }
     }, 5000)
 
     return () => {
