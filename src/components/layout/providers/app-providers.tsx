@@ -24,11 +24,19 @@ const AppProviders = ({ children }: PropsWithChildren) => {
     }
 
     const handleDetectDevtools = () => {
-      const isDevtoolsOpen =
-        window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160
-      document.body.classList.toggle('hidden', isDevtoolsOpen)
-      if (isDevtoolsOpen) window.alert('DevTools is likely open, please close it to continue')
+      const widthThreshold = window.outerWidth - window.innerWidth > 160
+      const heightThreshold = window.outerHeight - window.innerHeight > 160
+      const isDevtoolsOpen = widthThreshold || heightThreshold
+
+      if (isDevtoolsOpen) {
+        document.documentElement.style.display = 'none'
+        console.log('DevTools is likely open, please close it to continue')
+      } else {
+        document.documentElement.style.display = 'block'
+      }
     }
+
+    handleDetectDevtools()
 
     window.addEventListener('contextmenu', handlePreventContextMenu)
     window.addEventListener('keydown', handlePreventShortcut)
